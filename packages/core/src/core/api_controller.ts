@@ -1,0 +1,114 @@
+import { getStore, getUiConfig } from "../context/context";
+import { WatcherTypeEnum } from "../types";
+import type {
+  ApiResponse,
+  LensEntry as LensEntry,
+  Paginator,
+  RouteDefinitionHandler,
+} from "../types";
+
+export class ApiController {
+  static async getRequests({ qs }: RouteDefinitionHandler) {
+    return await getStore().getAllRequests(this.extractPaginationParams(qs));
+  }
+
+  static async getRequest({
+    params,
+  }: RouteDefinitionHandler): Promise<ApiResponse<LensEntry>> {
+    const request = await getStore().find(WatcherTypeEnum.REQUEST, params.id);
+
+    if (!request) {
+      return this.notFoundResponse();
+    }
+
+    return this.resourceResponse({
+      ...request,
+      queries: await getStore().allByRequestId(
+        request.id,
+        WatcherTypeEnum.QUERY,
+      ),
+    });
+  }
+
+  static async getQueries({
+    qs,
+  }: RouteDefinitionHandler): Promise<ApiResponse<LensEntry[]>> {
+    const queries = await getStore().getAllQueries(
+      this.extractPaginationParams(qs),
+    );
+
+    return this.paginatedResponse(queries);
+  }
+
+  static async getQuery({
+    params,
+  }: RouteDefinitionHandler): Promise<ApiResponse<LensEntry>> {
+    const query = await getStore().find(WatcherTypeEnum.QUERY, params.id);
+
+    if (!query) {
+      return this.notFoundResponse();
+    }
+
+    return this.resourceResponse(query);
+  }
+
+  static fetchUiConfig() {
+    return getUiConfig();
+  }
+
+  private static extractPaginationParams(qs?: Record<string, any>) {
+    if (!qs || Object.keys(qs).length === 0) {
+      return { page: 1, perPage: 100 };
+    }
+
+    let page = Number(qs.page);
+    let perPage = Number(qs.perPage);
+
+    if (!Number.isInteger(perPage) || perPage > 100 || perPage < 5) {
+      perPage = 100;
+    }
+
+    if (!Number.isInteger(page) || page < 1) {
+      page = 1;
+    }
+
+    return { page, perPage };
+  }
+
+  private static resourceResponse<T extends Object>(data: T): ApiResponse<T> {
+    return this.baseResponse<T>(data, 200, "Data fetched successfully");
+  }
+
+  private static notFoundResponse<T extends Object>(
+    message = "Could not find the requested resource",
+  ): ApiResponse<T> {
+    return this.baseResponse<T>(null, 404, message);
+  }
+
+  private static paginatedResponse<T extends Object>(
+    data: Paginator<T>,
+  ): ApiResponse<T> {
+    return this.baseResponse<T>(data, 200, "Data fetched successfully");
+  }
+
+  private static baseResponse<T extends Object>(
+    data: Paginator<T> | T | null,
+    status: number,
+    message: string,
+  ): ApiResponse<T> {
+    if (!data) {
+      return { status, message, data: null };
+    }
+
+    if ("meta" in data) {
+      return {
+        status,
+        message,
+        data: data.data,
+        meta: data.meta,
+      };
+    }
+
+    return { status, message, data };
+  }
+}

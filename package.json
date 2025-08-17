@@ -1,0 +1,24 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MohammedElattar/lens.git"
+  },
+  "dependencies": {
+    "vite": "^7.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.4.0",
+    "lerna": "^8.2.3"
+  },
+  "bugs": {
+    "url": "https://github.com/MohammedElattar/lens/issues"
+  },
+  "homepage": "https://github.com/MohammedElattar/lens#readme"
+}

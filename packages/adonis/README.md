@@ -1,0 +1,1 @@
+- first user should add the running console in bin/console file

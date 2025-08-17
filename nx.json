@@ -1,0 +1,59 @@
+{
+  "targetDefaults": {
+    "clean": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "copy:templates": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "typecheck": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "lint": {
+      "dependsOn": []
+    },
+    "format": {
+      "dependsOn": []
+    },
+    "quick:test": {
+      "dependsOn": []
+    },
+    "pretest": {
+      "dependsOn": []
+    },
+    "test": {
+      "dependsOn": []
+    },
+    "prebuild": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "build": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "postbuild": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "release": {
+      "dependsOn": []
+    },
+    "version": {
+      "dependsOn": []
+    },
+    "prepublishOnly": {
+      "dependsOn": []
+    },
+    "build:ui": {
+      "cache": true,
+      "dependsOn": []
+    },
+    "dev": {
+      "dependsOn": []
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@lens/watcher-handlers",
+  "version": "1.0.0",
+  "description": "Watcher handlers for Lens",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --clean",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@prisma/client": "^6.13.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.4.0"
+  }
+}

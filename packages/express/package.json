@@ -1,0 +1,30 @@
+{
+  "name": "@lens/express-adapter",
+  "version": "1.0.0",
+  "description": "Express adapter for Lens",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --clean"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "utf-8-validate": "^6.0.5"
+  },
+  "trustedDependencies": [
+    "utf-8-validate"
+  ],
+  "devDependencies": {
+    "@types/express": "^5.0.3"
+  }
+}

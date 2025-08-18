@@ -3,13 +3,13 @@ import { defineConfig } from '@lens/adonis-adapter'
 
 const lensConfig = defineConfig({
   appName: env.get('APP_NAME', 'AdonisJs'),
-  enabled: env.get('LENS_ENABLED', true),
+  enabled: env.get('LENS_ENABLED', false),
   path: env.get('LENS_BASE_PATH', 'lens'),
   ignoredPaths: [],
   onlyPaths: [],
   watchers: {
-    requests: true,
-    queries: true,
+    requests: env.get('LENS_ENABLE_REQUEST_WATCHER', true),
+    queries: env.get('LENS_ENABLE_QUERY_WATCHER', true),
   },
   // Optional
   isAuthenticated: async (ctx) => {

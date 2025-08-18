@@ -82,8 +82,9 @@ export default class ExpressAdapter extends LensAdapter {
     if (!self.isRequestWatcherEnabled) return;
 
     this.app.use((req: Request, res: Response, next: NextFunction) => {
-      if (this.shouldIgnorePath(req.path) || !this.config.requestWatcherEnabled)
+      if (self.shouldIgnorePath(req.path)) {
         return next();
+      }
 
       this.queries = [];
 
@@ -204,14 +205,6 @@ export default class ExpressAdapter extends LensAdapter {
 
   private preparePath(path: string) {
     return path.startsWith("/") ? path : `/${path}`;
-  }
-
-  private shouldIgnorePath(pathname: string) {
-    if (this.onlyPaths && this.onlyPaths.length > 0) {
-      return !this.onlyPaths.some((r) => r.test(pathname));
-    }
-
-    return this.ignoredPaths?.some((r) => r.test(pathname)) ?? false;
   }
 
   private sumQueryDurations(queries: { duration: string }[]) {

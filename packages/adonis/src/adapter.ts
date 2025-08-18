@@ -69,7 +69,7 @@ export default class AdonisAdapter extends LensAdapter {
     const self = this
     if (shouldIgnoreLogging(this.app) || !self.isRequestWatcherEnabled) return
     this.emitter.on('http:request_completed', async function (event) {
-      if (await shouldIgnoreCurrentPath(event.ctx)) return
+      if (self.shouldIgnorePath(event.ctx.request.url(false))) return
 
       const request = event.ctx.request
       const requestId = lensUtils.generateRandomUuid()
@@ -130,7 +130,7 @@ export default class AdonisAdapter extends LensAdapter {
         try {
           const queries = getContextQueries()
 
-          if (queries === undefined || ! self.isRequestWatcherEnabled) {
+          if (queries === undefined || !self.isRequestWatcherEnabled) {
             throw new Error('queries container not found')
           }
 

@@ -32,19 +32,6 @@ export const resolveConfigFromContext = async (ctx: HttpContext): Promise<LensCo
   return await ctx.containerResolver.make('lensConfig')
 }
 
-export const shouldIgnoreCurrentPath = async (ctx: HttpContext) => {
-  const config = await resolveConfigFromContext(ctx)
-  const ignoredPaths: RegExp[] = config.ignoredPaths ?? []
-  const onlyPaths: RegExp[] = config.onlyPaths ?? []
-  const currentPath = ctx.request.url(false) // e.g. "/lens/requests"
-
-  if (onlyPaths.length > 0) {
-    return !onlyPaths.some((pattern) => pattern.test(currentPath))
-  }
-
-  return ignoredPaths.some((pattern) => pattern.test(currentPath))
-}
-
 export function parseDuration(durationStr: string): number {
   const [value, unit] = durationStr.trim().split(' ')
   const num = parseFloat(value)

@@ -106,6 +106,18 @@ export function prepareIgnoredPaths(path: string, ignoredPaths: RegExp[]) {
   return { ignoredPaths, normalizedPath };
 }
 
+export function shouldIgnoreCurrentPath(
+  path: string,
+  ignoredPaths: RegExp[],
+  onlyPaths: RegExp[],
+) {
+  if (onlyPaths.length > 0) {
+    return !onlyPaths.some((pattern) => pattern.test(path));
+  }
+
+  return ignoredPaths.some((pattern) => pattern.test(path));
+}
+
 export function prettyHrTime(
   hrtime: [number, number],
   verbose = false,

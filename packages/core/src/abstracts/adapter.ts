@@ -1,5 +1,6 @@
 import type Watcher from "../core/watcher";
 import type { RouteDefinition } from "../types";
+import { shouldIgnoreCurrentPath } from "../utils";
 
 export default abstract class Adapter {
   private watchers: Watcher[] = [];
@@ -25,6 +26,10 @@ export default abstract class Adapter {
 
   getWatchers() {
     return this.watchers;
+  }
+
+  shouldIgnorePath(path: string) {
+    return shouldIgnoreCurrentPath(path, this.ignoredPaths, this.onlyPaths);
   }
 
   abstract registerRoutes(routes: RouteDefinition[]): void;

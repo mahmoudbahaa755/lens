@@ -1,5 +1,6 @@
 import { configProvider } from '@adonisjs/core'
-import { LensWatcher } from '@lens/core'
+import { HttpContext } from '@adonisjs/core/http'
+import { UserEntry } from '../../core/dist/types/index.js'
 
 export type LensConfig = {
   appName: string
@@ -8,9 +9,11 @@ export type LensConfig = {
   ignoredPaths: RegExp[]
   onlyPaths: RegExp[]
   watchers: {
-    enabled: boolean
-    class: LensWatcher
-  }[]
+    requests: boolean
+    queries: boolean
+  },
+  isAuthenticated?: (ctx: HttpContext) => Promise<boolean>,
+  getUser?: (ctx: HttpContext) => Promise<UserEntry>,
 }
 
 export function defineConfig(config: LensConfig) {

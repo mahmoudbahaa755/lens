@@ -1,27 +1,34 @@
-{{{
-  exports({ to: app.configPath('lens.ts') })
-}}}
 import env from '#start/env'
 import { defineConfig } from '@lens/adonis-adapter'
-import { QueryWatcher } from '@lens/core'
-import { RequestWatcher } from '@lens/core'
 
 const lensConfig = defineConfig({
-    appName: env.get('APP_NAME', 'AdonisJs'),
-    enabled: env.get('LENS_ENABLED', true),
-    path: env.get('LENS_BASE_PATH', 'lens'),
-    ignoredPaths: [],
-    onlyPaths: [],
-    watchers: [
-        {
-            enabled: env.get('LENS_ENABLE_REQUEST_WATCHER', true),
-            class: new RequestWatcher(),
-        },
-        {
-            enabled: env.get('LENS_ENABLE_QUERY_WATCHER', true),
-            class: new QueryWatcher(),
-        },
-    ],
+  appName: env.get('APP_NAME', 'AdonisJs'),
+  enabled: env.get('LENS_ENABLED', true),
+  path: env.get('LENS_BASE_PATH', 'lens'),
+  ignoredPaths: [],
+  onlyPaths: [],
+  watchers: {
+    requests: true,
+    queries: true,
+  },
+  // Optional
+  isAuthenticated: async (ctx) => {
+    return await ctx.auth?.check()
+  },
+  // Optional
+  getUser: async (ctx) => {
+    const user = ctx.auth?.user
+
+    if (!user) {
+      return null
+    }
+
+    return {
+      id: user.$primaryKeyValue,
+      name: user.name,
+      email: user.email,
+    }
+  },
 })
 
 export default lensConfig

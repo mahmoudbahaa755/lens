@@ -2,7 +2,7 @@ import { configProvider } from '@adonisjs/core'
 import { RuntimeException } from '@poppinss/utils'
 import type { ApplicationService } from '@adonisjs/core/types'
 import { LensConfig } from '../src/define_config.js'
-import { QueryEntry, Lens, lensUtils } from '@lens/core'
+import { QueryEntry, Lens, lensUtils, RequestWatcher, QueryWatcher } from '@lens/core'
 import AdonisAdapter from '../src/adapter.js'
 
 declare module '@adonisjs/core/types' {
@@ -34,9 +34,15 @@ export default class LensServiceProvider {
 
     this.app.container.bindValue('lensConfig', config)
     this.app.booted(async () => {
-      const allowedWatchers = config.watchers
-        .filter((watcher) => watcher.enabled)
-        .map((watcher) => watcher.class)
+      const watchersMap = {
+        requests: new RequestWatcher(),
+        queries: new QueryWatcher(),
+      }
+
+      const allowedWatchers = Object.keys(config.watchers)
+        .filter((watcher) => config.watchers[watcher as keyof typeof config.watchers])
+        .map((watcher) => watchersMap[watcher as keyof typeof watchersMap])
+        .filter((watcher) => !!watcher)
 
       const adapter = new AdonisAdapter({ app: this.app })
         .setIgnoredPaths(ignoredPaths)

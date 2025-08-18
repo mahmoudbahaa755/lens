@@ -26,6 +26,7 @@ export default class ExpressAdapter extends LensAdapter {
   protected config!: RequiredExpressAdapterConfig;
   protected queryWatcher?: QueryWatcher;
   protected queries?: QueryEntry["data"][];
+  protected isRequestWatcherEnabled = false;
 
   constructor({ app }: { app: Express }) {
     super();
@@ -41,11 +42,12 @@ export default class ExpressAdapter extends LensAdapter {
     for (const watcher of this.getWatchers()) {
       switch ((watcher as any).name) {
         case WatcherTypeEnum.REQUEST:
+          this.isRequestWatcherEnabled = true;
           this.watchRequests(watcher as unknown as RequestWatcher);
           break;
         case WatcherTypeEnum.QUERY:
-          void this.watchQueries(watcher as unknown as QueryWatcher);
           this.queryWatcher = watcher as unknown as QueryWatcher;
+          void this.watchQueries(watcher as unknown as QueryWatcher);
           break;
       }
     }
@@ -65,7 +67,7 @@ export default class ExpressAdapter extends LensAdapter {
           type: query.type ?? "sql",
         };
 
-        if (this.queries !== undefined) {
+        if (this.queries !== undefined && this.config.requestWatcherEnabled) {
           this.queries.push(queryPayload);
         } else {
           await queryWatcher.log({ data: queryPayload });
@@ -75,8 +77,13 @@ export default class ExpressAdapter extends LensAdapter {
   }
 
   private watchRequests(requestWatcher: RequestWatcher) {
+    const self = this;
+
+    if (!self.isRequestWatcherEnabled) return;
+
     this.app.use((req: Request, res: Response, next: NextFunction) => {
-      if (this.shouldIgnorePath(req.path)) return next();
+      if (this.shouldIgnorePath(req.path) || !this.config.requestWatcherEnabled)
+        return next();
 
       this.queries = [];
 
@@ -123,7 +130,9 @@ export default class ExpressAdapter extends LensAdapter {
                 string
               >,
             },
-            user: null, //TODO: accept getUser method from the user
+            user: (await self.config.isAuthenticated?.(req))
+              ? await self.config.getUser?.(req)
+              : null,
             totalQueriesDuration: this.sumQueryDurations(requestQueries),
           };
 
@@ -201,6 +210,7 @@ export default class ExpressAdapter extends LensAdapter {
     if (this.onlyPaths && this.onlyPaths.length > 0) {
       return !this.onlyPaths.some((r) => r.test(pathname));
     }
+
     return this.ignoredPaths?.some((r) => r.test(pathname)) ?? false;
   }
 
@@ -208,7 +218,8 @@ export default class ExpressAdapter extends LensAdapter {
     let total = 0;
 
     queries.forEach((q) => {
-      const durationValue = parseInt(q.duration.split(' ')[0], 10);
+      const durationValue = parseInt(q.duration.split(" ")[0] ?? "", 10);
+
       if (!isNaN(durationValue)) {
         total += durationValue;
       }

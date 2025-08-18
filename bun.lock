@@ -78,6 +78,7 @@
       "devDependencies": {
         "@prisma/client": "^6.13.0",
         "@types/node": "^20.10.0",
+        "kysely": "^0.28.5",
         "tsup": "^8.5.0",
         "typescript": "^5.4.0",
       },
@@ -1608,6 +1609,8 @@
     "knex-dynamic-connection": ["knex-dynamic-connection@3.2.0", "", { "dependencies": { "debug": "^4.3.5", "knex": "^3.1.0" } }, "sha512-+j6KeUSim0FR8EobOqA1a/TZbN9mahjzHzJgOfQVkv6PUnSqJp70c/5n63M2YVNgNHETyBIUhV8stuQ0T/mG3g=="],
 
     "ky": ["ky@1.8.2", "", {}, "sha512-XybQJ3d4Ea1kI27DoelE5ZCT3bSJlibYTtQuMsyzKox3TMyayw1asgQdl54WroAm+fIA3ZCr8zXW2RpR7qWVpA=="],
+
+    "kysely": ["kysely@0.28.5", "", {}, "sha512-rlB0I/c6FBDWPcQoDtkxi9zIvpmnV5xoIalfCMSMCa7nuA6VGA3F54TW9mEgX4DVf10sXAWCF5fDbamI/5ZpKA=="],
 
     "latest-version": ["latest-version@9.0.0", "", { "dependencies": { "package-json": "^10.0.0" } }, "sha512-7W0vV3rqv5tokqkBAFV1LbR7HPOWzXQDpDgEuib/aJ1jsZZx6x3c2mBI+TJhJzOhkGeaLbCKEHXEXLfirtG2JA=="],
 

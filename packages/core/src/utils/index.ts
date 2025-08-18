@@ -48,7 +48,11 @@ export function interpolateQuery(query: string, bindings: any[]): string {
 }
 
 export const formatSqlQuery = (query: string) => {
-  return format(query);
+  return format(query, {
+    dataTypeCase: "upper",
+    keywordCase: "upper",
+    functionCase: "upper",
+  });
 };
 
 export function now() {
@@ -82,11 +86,11 @@ export function getMeta(metaUrl?: string): {
 }
 
 export function isStaticFile(params: string[]) {
-  return params.includes("_app");
+  return params.includes("assets");
 }
 
-export function stripBeforeAppPath(url: string) {
-  const match = url.match(/_app.*/);
+export function stripBeforeAssetsPath(url: string) {
+  const match = url.match(/assets.*/);
   return match ? match[0] : url;
 }
 
@@ -100,4 +104,31 @@ export function prepareIgnoredPaths(path: string, ignoredPaths: RegExp[]) {
   ];
 
   return { ignoredPaths, normalizedPath };
+}
+
+export function prettyHrTime(
+  hrtime: [number, number],
+  verbose = false,
+): string {
+  const seconds = hrtime[0];
+  const nanoseconds = hrtime[1];
+  const ms = seconds * 1000 + nanoseconds / 1e6;
+
+  if (verbose) {
+    if (seconds > 60) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes}m ${remainingSeconds}s`;
+    }
+    if (seconds >= 1) {
+      return `${seconds}.${Math.floor(nanoseconds / 1e7)}s`;
+    }
+    return `${ms.toFixed(3)} ms`;
+  }
+
+  if (ms < 1000) {
+    return `${ms.toFixed(0)} ms`;
+  }
+
+  return `${(ms / 1000).toFixed(1)} s`;
 }

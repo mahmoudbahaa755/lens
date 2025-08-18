@@ -1,11 +1,11 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
-import { asyncContext } from '../utils/async_context.js'
+import { asyncContext, QueryType } from '@lens/core'
 
 declare module '@adonisjs/core/http' {
   interface Request {
     lensEntry?: {
-      queries: { query: string; duration: string; createdAt: string }[]
+      queries: { query: string; duration: string; createdAt: string, type: QueryType}[]
     }
   }
 }

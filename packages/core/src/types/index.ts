@@ -1,8 +1,10 @@
+export type QueryType = "sql" | "mongodb";
 export type QueryEntry = {
   data: {
     query: string;
     duration: string;
     createdAt: string;
+    type: QueryType;
   };
   requestId?: string;
 };
@@ -16,7 +18,7 @@ export type UserEntry = {
 export type RequestEntry = {
   request: {
     id: string;
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
+    method: HttpMethod;
     duration: string;
     path: string;
     headers: Record<string, any>;
@@ -70,7 +72,7 @@ export type RouteDefinitionHandler = {
   qs?: Record<string, any>;
 };
 export type RouteDefinition = {
-  method: "GET" | "POST";
+  method: "GET" | "POST" | "DELETE";
   path: string;
   handler: (data: RouteDefinitionHandler) => any;
 };
@@ -96,4 +98,5 @@ export type ApiResponse<T> = {
   meta?: Paginator<T>["meta"];
 };
 
-export type HttpMethod = "get" | "post" | "put" | "delete" | "patch";
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
+export type RouteHttpMethod = "get" | "post" | "put" | "delete" | "patch";

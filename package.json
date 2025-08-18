@@ -9,16 +9,23 @@
     "url": "git+https://github.com/MohammedElattar/lens.git"
   },
   "dependencies": {
+    "dayjs": "^1.11.13",
     "vite": "^7.0.6"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "tsup": "^8.5.0",
     "typescript": "^5.4.0",
+    "husky": "^9.1.7",
     "lerna": "^8.2.3"
   },
   "bugs": {
     "url": "https://github.com/MohammedElattar/lens/issues"
   },
-  "homepage": "https://github.com/MohammedElattar/lens#readme"
+  "homepage": "https://github.com/MohammedElattar/lens#readme",
+  "scripts": {
+    "prepare": "husky",
+    "dev:front": "cd packages/core/src/ui && npm run dev",
+    "build:front": "cd packages/core/src/ui && npm run build"
+  }
 }

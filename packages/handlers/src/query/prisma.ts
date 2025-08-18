@@ -1,21 +1,44 @@
 import { PrismaClient } from "@prisma/client";
-import { lensUtils } from "@lens/core";
+import { lensUtils, QueryType} from "@lens/core";
 import { QueryWatcherHandler } from "../types";
 
-function shouldIgnorePrismaQuery(query: string) {
+function shouldIgnorePrismaQuery(query: string, provider: QueryType) {
+  if (provider === "mongodb") {
+    return false;
+  }
+
   const ignoredQueries = ["COMMIT", "BEGIN", "ROLLBACK", "SAVEPOINT"];
 
   return ignoredQueries.includes(query);
 }
 
-export function createPrismaHandler(prisma: PrismaClient): QueryWatcherHandler {
+function formatQuery(query: string, params: any, provider: QueryType) {
+  switch (provider) {
+    case "mongodb":
+      return query;
+
+    default:
+      return lensUtils.formatSqlQuery(
+        lensUtils.interpolateQuery(query, params),
+      );
+  }
+}
+
+export function createPrismaHandler({
+  prisma,
+  provider = "sql",
+}: {
+  prisma: PrismaClient;
+  provider?: "sql" | "mongodb";
+}): QueryWatcherHandler {
   return async ({ onQuery }) => {
-    prisma.$on("query", (e: any) => {
-      if (!shouldIgnorePrismaQuery(e.query)) {
-        onQuery({
-          query: lensUtils.interpolateQuery(e.query.toLowerCase(), JSON.parse(e.params)),
-          duration: e.duration,
+    prisma.$on("query", async (e: any) => {
+      if (!shouldIgnorePrismaQuery(e.query, provider)) {
+        await onQuery({
+          query: formatQuery(e.query, JSON.parse(e.params), provider),
+          duration: `${e.duration} ms`,
           createdAt: e.timestamp,
+          type: provider,
         });
       }
     });

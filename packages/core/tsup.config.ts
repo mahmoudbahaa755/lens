@@ -9,6 +9,7 @@ export default defineConfig({
   target: "node18",
   splitting: true,
   clean: true,
-  shims: true,
+  shims: false,
+  // shims: true,
   skipNodeModulesBundle: true,
 });

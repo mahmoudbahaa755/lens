@@ -6,15 +6,16 @@ import {
   RequestWatcher,
   RequestEntry,
   QueryWatcher,
+  asyncContext,
+  getContextQueries,
+  RouteHttpMethod,
+  QueryEntry
 } from '@lens/core'
 import * as path from 'path'
 import type { ApplicationService, EmitterService, HttpRouterService } from '@adonisjs/core/types'
 import { parseDuration, shouldIgnoreCurrentPath, shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
-import { asyncContext, getContextQueries } from './utils/async_context.js'
 import { HttpContext } from '@adonisjs/core/http'
-
-type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch'
 
 export default class AdonisAdapter extends LensAdapter {
   protected app: ApplicationService
@@ -47,7 +48,7 @@ export default class AdonisAdapter extends LensAdapter {
   registerRoutes(routes: RouteDefinition[]): void {
     this.app.booted(async () => {
       routes.forEach((route) => {
-        this.router[route.method.toLowerCase() as HttpMethod](route.path, async (ctx: any) => {
+        this.router[route.method.toLowerCase() as RouteHttpMethod](route.path, async (ctx: any) => {
           const data = await route.handler({ params: ctx.params, qs: ctx.request.qs() })
           return ctx.response.json(data)
         })
@@ -127,12 +128,13 @@ export default class AdonisAdapter extends LensAdapter {
       this.emitter.on('db:query', async function (query: any) {
         const duration: string = query.duration ? string.prettyHrTime(query.duration) : '0 ms'
 
-        const payload = {
+        const payload: QueryEntry["data"] = {
           query: lensUtils.formatSqlQuery(
             lensUtils.interpolateQuery(query.sql, query.bindings as string[])
           ),
           duration,
-          createdAt: lensUtils.sqlDateTime() as string,
+          createdAt: lensUtils.sqlDateTime(),
+          type: 'sql' //TODO: support other providers like mongodb
         }
 
         try {
@@ -158,12 +160,16 @@ export default class AdonisAdapter extends LensAdapter {
         return ctx.response.download(path.join(uiPath, 'favicon.svg'))
       })
 
+      this.router.get(`/${spaRoute}`, (ctx: HttpContext) => {
+        return ctx.response.redirect(`/${spaRoute}/requests`)
+      })
+
       this.router.get(`/${spaRoute}/*`, (ctx: HttpContext) => {
         if (lensUtils.isStaticFile(ctx.params['*'])) {
           return this.matchStaticFiles(
             ctx,
             uiPath,
-            lensUtils.stripBeforeAppPath(ctx.params['*'].join('/'))
+            lensUtils.stripBeforeAssetsPath(ctx.params['*'].join('/'))
           )
         }
 
@@ -172,8 +178,10 @@ export default class AdonisAdapter extends LensAdapter {
       })
     })
   }
+
   private matchStaticFiles(ctx: HttpContext, uiPath: string, subPath: string) {
     const assetPath = path.join(uiPath, subPath)
+
     return ctx.response.download(assetPath)
   }
 }

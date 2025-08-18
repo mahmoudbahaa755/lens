@@ -9,7 +9,9 @@ import type {
 
 export class ApiController {
   static async getRequests({ qs }: RouteDefinitionHandler) {
-    return await getStore().getAllRequests(this.extractPaginationParams(qs));
+    return this.paginatedResponse(
+      await getStore().getAllRequests(this.extractPaginationParams(qs)),
+    );
   }
 
   static async getRequest({
@@ -50,6 +52,12 @@ export class ApiController {
     }
 
     return this.resourceResponse(query);
+  }
+
+  static async truncate() {
+    await getStore().truncate();
+
+    return this.baseResponse({}, 200, "All entries cleared");
   }
 
   static fetchUiConfig() {

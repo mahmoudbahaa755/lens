@@ -87,6 +87,7 @@ export default class Lens {
         api: {
           requests: `/${config.basePath}/api/requests`,
           queries: `/${config.basePath}/api/queries`,
+          truncate: `/${config.basePath}/api/truncate`,
         },
       };
     });
@@ -122,6 +123,11 @@ export default class Lens {
         path: `${basePath}/api/queries/:id`,
         handler: async (data: RouteDefinitionHandler) =>
           await ApiController.getQuery(data),
+      },
+      {
+        method: "DELETE" as const,
+        path: `${basePath}/api/truncate`,
+        handler: async () => await ApiController.truncate(),
       },
     ];
 

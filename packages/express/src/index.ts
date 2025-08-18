@@ -19,12 +19,12 @@ const defaultConfig = {
 export const lens = async (config: ExpressAdapterConfig) => {
   const adapter = new ExpressAdapter({ app: config.app });
   const watchers: LensWatcher[] = [new RequestWatcher()];
-  const mergedConfig = {
-    ...config,
+  const mergedConfig: RequiredExpressAdapterConfig = {
     ...defaultConfig,
-  } as RequiredExpressAdapterConfig;
+    ...config,
+  };
 
-  if (config.queryWatcher.enabled) {
+  if (config.queryWatcher?.enabled) {
     watchers.push(new QueryWatcher());
   }
 

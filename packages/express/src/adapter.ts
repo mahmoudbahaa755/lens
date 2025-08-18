@@ -12,20 +12,17 @@ import { RequiredExpressAdapterConfig } from "./types";
 import { Express, NextFunction, Request, Response } from "express";
 import * as path from "path";
 import express from "express";
+import { AsyncLocalStorage } from "async_hooks";
 
-declare module "express-serve-static-core" {
-  interface Request {
-    lensEntry?: {
-      queries: { query: string; duration: string; createdAt: string }[];
-    };
-  }
-}
+const lensContext = new AsyncLocalStorage<{
+  requestId: string;
+  queries: QueryEntry["data"][];
+}>();
 
 export default class ExpressAdapter extends LensAdapter {
   protected app!: Express;
   protected config!: RequiredExpressAdapterConfig;
   protected queryWatcher?: QueryWatcher;
-  protected queries?: QueryEntry["data"][];
   protected isRequestWatcherEnabled = false;
 
   constructor({ app }: { app: Express }) {
@@ -52,6 +49,7 @@ export default class ExpressAdapter extends LensAdapter {
       }
     }
   }
+
   private async watchQueries(queryWatcher: QueryWatcher) {
     if (!this.config?.queryWatcher?.enabled) return;
 
@@ -60,6 +58,8 @@ export default class ExpressAdapter extends LensAdapter {
 
     await handler({
       onQuery: async (query: QueryEntry["data"]) => {
+        const store = lensContext.getStore();
+
         const queryPayload = {
           query: query.query,
           duration: query.duration || "0 ms",
@@ -67,8 +67,8 @@ export default class ExpressAdapter extends LensAdapter {
           type: query.type ?? "sql",
         };
 
-        if (this.queries !== undefined && this.config.requestWatcherEnabled) {
-          this.queries.push(queryPayload);
+        if (store && this.config.requestWatcherEnabled) {
+          store.queries.push(queryPayload);
         } else {
           await queryWatcher.log({ data: queryPayload });
         }
@@ -77,77 +77,81 @@ export default class ExpressAdapter extends LensAdapter {
   }
 
   private watchRequests(requestWatcher: RequestWatcher) {
-    const self = this;
-
-    if (!self.isRequestWatcherEnabled) return;
+    if (!this.isRequestWatcherEnabled) return;
 
     this.app.use((req: Request, res: Response, next: NextFunction) => {
-      if (self.shouldIgnorePath(req.path)) {
+      if (this.shouldIgnorePath(req.path)) {
         return next();
       }
 
-      this.queries = [];
+      const context = {
+        requestId: lensUtils.generateRandomUuid(),
+        queries: [],
+      };
 
-      const start = process.hrtime();
-      const originalJson = res.json.bind(res);
-      const originalSend = res.send.bind(res);
+      lensContext.run(context, () => {
+        const start = process.hrtime();
+        const originalJson = res.json.bind(res);
+        const originalSend = res.send.bind(res);
 
-      (res as any)._body = undefined;
+        (res as any)._body = undefined;
 
-      res.json = function (body?: any) {
-        (res as any)._body = body;
-        return originalJson(body);
-      } as typeof res.json;
-
-      res.send = function (body?: any) {
-        // only overwrite if not a buffer/stream where storing might be undesirable
-        try {
+        res.json = function (body?: any) {
           (res as any)._body = body;
-        } catch {}
-        return originalSend(body);
-      } as typeof res.send;
+          return originalJson(body);
+        } as typeof res.json;
 
-      res.on("finish", async () => {
-        try {
-          const duration = lensUtils.prettyHrTime(process.hrtime(start));
-          const requestId = lensUtils.generateRandomUuid();
-          const requestQueries = this.queries ?? [];
-          const logPayload = {
-            request: {
-              id: requestId,
-              method: req.method as any,
-              duration,
-              path: req.originalUrl,
-              headers: req.headers as Record<string, string>,
-              body: req.body ?? {},
-              status: res.statusCode,
-              ip: (req.ip as string) ?? req.socket?.remoteAddress,
-              createdAt: lensUtils.now().toISO({ includeOffset: false }),
-            },
-            response: {
-              json: (res as any)._body ?? null,
-              headers: (res.getHeaders ? res.getHeaders() : {}) as Record<
-                string,
-                string
-              >,
-            },
-            user: (await self.config.isAuthenticated?.(req))
-              ? await self.config.getUser?.(req)
-              : null,
-            totalQueriesDuration: this.sumQueryDurations(requestQueries),
-          };
+        res.send = function (body?: any) {
+          try {
+            (res as any)._body = body;
+          } catch {}
+          return originalSend(body);
+        } as typeof res.send;
 
-          await requestWatcher.log(logPayload);
+        res.on("finish", async () => {
+          try {
+            const store = lensContext.getStore();
+            if (!store) return;
 
-          for (const q of requestQueries) {
-            await this.queryWatcher?.log({ data: q, requestId });
-          }
-        } catch (err) {}
+            const duration = lensUtils.prettyHrTime(process.hrtime(start));
+            const logPayload = {
+              request: {
+                id: store.requestId,
+                method: req.method as any,
+                duration,
+                path: req.originalUrl,
+                headers: req.headers as Record<string, string>,
+                body: req.body ?? {},
+                status: res.statusCode,
+                ip: (req.ip as string) ?? req.socket?.remoteAddress,
+                createdAt: lensUtils.now().toISO({ includeOffset: false }),
+              },
+              response: {
+                json: (res as any)._body ?? null,
+                headers: (res.getHeaders ? res.getHeaders() : {}) as Record<
+                  string,
+                  string
+                >,
+              },
+              user: (await this.config.isAuthenticated?.(req))
+                ? await this.config.getUser?.(req)
+                : null,
+              totalQueriesDuration: this.sumQueryDurations(store.queries),
+            };
 
-        this.queries = undefined;
+            await requestWatcher.log(logPayload);
+
+            for (const q of store.queries) {
+              await this.queryWatcher?.log({
+                data: q,
+                requestId: store.requestId,
+              });
+            }
+          } catch (err) {}
+        });
+
+        next();
       });
-
-      next();
     });
   }
 

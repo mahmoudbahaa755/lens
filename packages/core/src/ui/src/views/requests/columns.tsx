@@ -32,6 +32,10 @@ const getColumns = (): TableColumn<RequestTableRow>[] => {
       render: (row) => <StatusCode status={row.data.status} />,
     },
     {
+      name: "Duration",
+      value: (row) => row.data.duration,
+    },
+    {
       name: "Happened",
       render: (row) => {
         const { label, exact } = humanDifferentDate(row.data.createdAt);

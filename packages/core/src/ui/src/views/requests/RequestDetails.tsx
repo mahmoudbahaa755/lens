@@ -32,6 +32,38 @@ const RequestDetails = ({ request }: { request: OneRequest }) => {
     },
   ];
 
+  const otherDataTabs = [
+    {
+      id: `Queries`,
+      label: `Queries (${request.queries.length})`,
+      content: (
+        <>
+          <div className="flex justify-between items-start rounded-lg mb-4 p-2  ">
+            <div>
+              <h3 className="text-sm font-semibold mb-1 tracking-wide text-zinc-200">
+                Queries
+              </h3>
+              <span className="text-xs font-medium text-zinc-400">
+                ({request.queries.length}) Queries
+              </span>
+            </div>
+
+            <div className="flex flex-col items-end text-right">
+              <span className="text-xs font-semibold mb-1  text-zinc-400 uppercase tracking-wide">
+                Duration
+              </span>
+              <span className="text-sm font-bold text-zinc-100">
+                {request.data.totalQueriesDuration}
+              </span>
+            </div>
+          </div>
+
+          <Table data={request?.queries} columns={getColumns()} />
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-3">
       <BasicRequestDetails request={request} />
@@ -65,7 +97,7 @@ const RequestDetails = ({ request }: { request: OneRequest }) => {
         title="Response Data"
         defaultActiveTab="response-body"
       />
-      <Table data={request?.queries} columns={getColumns()} />
+      <TabbedDataViewer tabs={otherDataTabs} defaultActiveTab="Queries" />
     </div>
   );
 };

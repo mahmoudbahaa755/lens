@@ -13,7 +13,7 @@ export interface TabbedDataProps {
 export interface TabItem {
   id: string;
   label: string;
-  data: Record<string, any>;
+  data?: Record<string, any>;
   content?: React.ReactNode;
 }
 
@@ -27,10 +27,10 @@ const TabbedDataViewer: React.FC<TabbedDataProps> = ({
   );
 
   return (
-    <div className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-sm">
+    <div className="border  border-neutral-200 dark:border-neutral-700 rounded-[15px] shadow-sm">
       {/* Header */}
       {title && (
-        <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
+        <div className="px-6 py-4 rounded-t-[15px] border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
             {title}
           </h2>
@@ -38,7 +38,7 @@ const TabbedDataViewer: React.FC<TabbedDataProps> = ({
       )}
 
       {/* Tabs */}
-      <div className="border-b border-neutral-200 dark:border-neutral-700">
+      <div className="border-b rounded-[15px] border-neutral-200 dark:border-neutral-700">
         <nav className="flex space-x-8 px-6" aria-label="Tabs">
           {tabs.map((tab) => (
             <button
@@ -56,7 +56,7 @@ const TabbedDataViewer: React.FC<TabbedDataProps> = ({
         </nav>
       </div>
 
-      <div className="p-6 bg-white dark:bg-neutral-800">
+      <div className={"p-6 "}>
         {tabs.map((tab) => (
           <div
             key={tab.id}
@@ -65,7 +65,7 @@ const TabbedDataViewer: React.FC<TabbedDataProps> = ({
             {tab.content ? (
               <div>{tab.content}</div>
             ) : (
-              <JsonViewer data={tab.data} />
+              <>{tab.data && <JsonViewer data={tab.data} />}</>
             )}
           </div>
         ))}

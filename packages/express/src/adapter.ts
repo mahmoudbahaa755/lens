@@ -124,7 +124,7 @@ export default class ExpressAdapter extends LensAdapter {
                 body: req.body ?? {},
                 status: res.statusCode,
                 ip: (req.ip as string) ?? req.socket?.remoteAddress,
-                createdAt: lensUtils.now().toISO({ includeOffset: false }),
+                createdAt: lensUtils.nowISO(),
               },
               response: {
                 json: (res as any)._body ?? null,

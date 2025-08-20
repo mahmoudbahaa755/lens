@@ -45,6 +45,7 @@ export default class LensServiceProvider {
         .filter((watcher) => !!watcher)
 
       const adapter = new AdonisAdapter({ app: this.app })
+        .setConfig(config)
         .setIgnoredPaths(ignoredPaths)
         .setOnlyPaths(config.onlyPaths)
 

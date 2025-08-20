@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { format } from "sql-formatter";
+import { format, SqlLanguage } from "sql-formatter";
 import { randomUUID } from "crypto";
 import { fileURLToPath } from "url";
 import path from "path/posix";
@@ -8,47 +8,67 @@ export const generateRandomUuid = () => {
   return randomUUID();
 };
 
-export function interpolateQuery(query: string, bindings: any[]): string {
-  let i = 0;
-  return query.replace(/\?/g, () => {
-    if (i >= bindings.length) {
-      throw new Error("Not enough bindings for placeholders");
-    }
+type Bindings = any[] | Record<string, any>;
 
-    const value = bindings[i++];
-
-    if (value === null || value === undefined) {
-      return "NULL";
-    }
-
-    if (typeof value === "string") {
-      return `'${value.replace(/'/g, "''")}'`;
-    }
-
-    if (value instanceof DateTime) {
-      return `'${value.toISO()}'`;
-    }
-
-    if (value instanceof Date) {
-      return `'${value.toISOString()}'`;
-    }
-
-    if (Array.isArray(value)) {
+/**
+ * Interpolates SQL query placeholders with actual values.
+ * Supports:
+ *   - ? (array-based)
+ *   - $1, $name (numeric or named)
+ *   - :name (named)
+ */
+export function interpolateQuery(query: string, bindings: Bindings): string {
+  // Helper to convert a value into a safe SQL literal
+  const formatValue = (value: any): string => {
+    if (value === null || value === undefined) return "NULL";
+    if (typeof value === "string") return `'${value.replace(/'/g, "''")}'`;
+    if (value instanceof DateTime) return `'${value.toISO()}'`;
+    if (value instanceof Date) return `'${value.toISOString()}'`;
+    if (Array.isArray(value))
       return value
         .map((v) => (typeof v === "string" ? `'${v.replace(/'/g, "''")}'` : v))
         .join(", ");
-    }
-
-    if (typeof value === "object") {
+    if (typeof value === "object")
       return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+    return value.toString();
+  };
+
+  // Case 1: Array-based bindings for '?' placeholders
+  if (Array.isArray(bindings)) {
+    let i = 0;
+    return query.replace(/\?/g, () => {
+      if (i >= bindings.length)
+        throw new Error("Not enough bindings for placeholders");
+      return formatValue(bindings[i++]);
+    });
+  }
+
+  // Case 2: Named or numeric placeholders ($1, $name, :name)
+  return query.replace(/(\$|\:)(\w+)/g, (match, prefix, keyOrIndex) => {
+    let value;
+
+    if (prefix === "$" && /^\d+$/.test(keyOrIndex)) {
+      // Numeric placeholder: $1, $2, ...
+      const index = parseInt(keyOrIndex, 10) - 1;
+      const keys = Object.keys(bindings);
+      if (index < 0 || index >= keys.length)
+        throw new Error(`Missing binding for ${match}`);
+      // @ts-expect-error
+      value = bindings[keys[index]];
+    } else {
+      // Named placeholder: $name or :name
+      if (!(keyOrIndex in bindings))
+        throw new Error(`Missing binding for ${match}`);
+      value = bindings[keyOrIndex];
     }
 
-    return value;
+    return formatValue(value);
   });
 }
 
-export const formatSqlQuery = (query: string) => {
+export const formatSqlQuery = (query: string, language: SqlLanguage) => {
   return format(query, {
+    language,
     dataTypeCase: "upper",
     keywordCase: "upper",
     functionCase: "upper",
@@ -56,13 +76,23 @@ export const formatSqlQuery = (query: string) => {
 };
 
 export function now() {
-  return DateTime.now();
+  return DateTime.now().setZone("utc");
+}
+
+export function nowISO() {
+  return now().toISO({ includeOffset: false }) as string;
 }
 
 export function sqlDateTime(dateTime?: DateTime | null) {
   const time = dateTime ?? now();
 
   return time.toSQL({ includeOffset: false });
+}
+
+export function convertToUTC(dateTime: string) {
+  return DateTime.fromISO(dateTime)
+    .setZone("utc")
+    .toISO({ includeOffset: false }) as string;
 }
 
 export function getMeta(metaUrl?: string): {

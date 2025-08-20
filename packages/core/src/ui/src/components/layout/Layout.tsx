@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import Footer from "./Footer";
 
 const Layout = () => {
   const location = useLocation();
@@ -34,8 +35,9 @@ const Layout = () => {
         />
 
         {/* Main content */}
-        <div className="w-full min-w-0 overflow-hidden">
+        <div className="w-full min-w-0 pb-5 overflow-hidden">
           <Outlet />
+          <Footer />
         </div>
       </div>{" "}
     </>

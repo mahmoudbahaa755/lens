@@ -8,13 +8,10 @@ interface QueryFormatterProps {
 
 const QueryViewer = ({ queryPayload }: QueryFormatterProps) => {
   switch (queryPayload.type) {
-    case "sql":
-      return <SqlViewer sql={queryPayload.query} />;
     case "mongodb":
       return <MongbDbViewer query={queryPayload.query} />;
-
     default:
-      return <pre>{queryPayload.query}</pre>;
+      return <SqlViewer sql={queryPayload.query} />;
   }
 };
 

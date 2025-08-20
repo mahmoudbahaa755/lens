@@ -1,4 +1,7 @@
-export type QueryType = "sql" | "mongodb";
+import { SqlLanguage } from "sql-formatter";
+
+export type QueryType = Required<SqlLanguage | "mongodb">;
+export type SqlQueryType = Exclude<QueryType, "mongodb">;
 export type QueryEntry = {
   data: {
     query: string;
@@ -98,5 +101,12 @@ export type ApiResponse<T> = {
   meta?: Paginator<T>["meta"];
 };
 
-export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
+export type HttpMethod =
+  | "GET"
+  | "POST"
+  | "PUT"
+  | "DELETE"
+  | "PATCH"
+  | "HEAD"
+  | "OPTIONS";
 export type RouteHttpMethod = "get" | "post" | "put" | "delete" | "patch";

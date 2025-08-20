@@ -13,14 +13,10 @@ import {
 } from '@lens/core'
 import * as path from 'path'
 import type { ApplicationService, EmitterService, HttpRouterService } from '@adonisjs/core/types'
-import {
-  parseDuration,
-  resolveConfigFromContext,
-  shouldIgnoreCurrentPath,
-  shouldIgnoreLogging,
-} from './utils/index.js'
+import { parseDuration, shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
 import { HttpContext } from '@adonisjs/core/http'
+import { LensConfig } from './define_config.js'
 
 export default class AdonisAdapter extends LensAdapter {
   protected app: ApplicationService
@@ -28,6 +24,7 @@ export default class AdonisAdapter extends LensAdapter {
   protected emitter!: EmitterService
   protected isRequestWatcherEnabled = false
   protected queryWatcher?: QueryWatcher
+  protected config!: LensConfig
 
   constructor({ app }: { app: ApplicationService }) {
     super()
@@ -54,6 +51,11 @@ export default class AdonisAdapter extends LensAdapter {
     })
   }
 
+  public setConfig(config: LensConfig) {
+    this.config = config
+    return this
+  }
+
   registerRoutes(routes: RouteDefinition[]): void {
     this.app.booted(async () => {
       routes.forEach((route) => {
@@ -67,6 +69,7 @@ export default class AdonisAdapter extends LensAdapter {
 
   protected watchRequests(requestWatcher: RequestWatcher): void {
     const self = this
+
     if (shouldIgnoreLogging(this.app) || !self.isRequestWatcherEnabled) return
     this.emitter.on('http:request_completed', async function (event) {
       if (self.shouldIgnorePath(event.ctx.request.url(false))) return
@@ -84,9 +87,7 @@ export default class AdonisAdapter extends LensAdapter {
           body: request.hasBody() ? request.body() : {},
           status: event.ctx.response.response.statusCode,
           ip: request.ip(),
-          createdAt: lensUtils.now().toISO({
-            includeOffset: false,
-          }),
+          createdAt: lensUtils.nowISO(),
         },
         response: {
           json: event.ctx.response.getBody(),
@@ -95,7 +96,7 @@ export default class AdonisAdapter extends LensAdapter {
         user: await self.getUserFromContext(event.ctx),
       }
 
-      logPayload.totalQueriesDuration = `${self.calculateQueriesDuration(requestQueries)}`
+      logPayload.totalQueriesDuration = self.calculateQueriesDuration(requestQueries)
 
       await requestWatcher.log(logPayload)
 
@@ -120,10 +121,11 @@ export default class AdonisAdapter extends LensAdapter {
 
         const payload: QueryEntry['data'] = {
           query: lensUtils.formatSqlQuery(
-            lensUtils.interpolateQuery(query.sql, query.bindings as string[])
+            lensUtils.interpolateQuery(query.sql, query.bindings as string[]),
+            self.config.watchers.queries.provider
           ),
           duration,
-          createdAt: lensUtils.sqlDateTime(),
+          createdAt: lensUtils.sqlDateTime() as string,
           type: query.type,
         }
 
@@ -182,14 +184,12 @@ export default class AdonisAdapter extends LensAdapter {
       totalQueriesDuration = parseDuration(query.duration)
     }
 
-    return totalQueriesDuration
+    return `${totalQueriesDuration} ms`
   }
 
   private async getUserFromContext(ctx: HttpContext) {
-    const config = await resolveConfigFromContext(ctx)
-
-    return (await config.isAuthenticated?.(ctx)) && config.getUser
-      ? await config.getUser?.(ctx)
+    return (await this.config.isAuthenticated?.(ctx)) && this.config.getUser
+      ? await this.config.getUser?.(ctx)
       : null
   }
 }

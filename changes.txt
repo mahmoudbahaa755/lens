@@ -1,0 +1,3 @@
+- don't forget to mention that user should put ACE_COMMAND in kernel.ts adonis
+- don't forget that user should enable the debug option if he wants to enable the query logging adonis
+- don't forget to update the sql provider parts in query handlers

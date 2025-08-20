@@ -1,8 +1,16 @@
-import { lensUtils } from "@lens/core";
+import { lensUtils, SqlQueryType } from "@lens/core";
 import { QueryWatcherHandler } from "../types";
 import { watcherEmitter } from "../utils/emitter";
 
-export function createKyselyHandler(): QueryWatcherHandler {
+export type KyselyQueryType = Extract<
+  SqlQueryType,
+  "mysql" | "postgresql" | "sqlite" | "mssql"
+>;
+export function createKyselyHandler({
+  provider,
+}: {
+  provider: KyselyQueryType;
+}): QueryWatcherHandler {
   return async ({ onQuery }) => {
     watcherEmitter.on("kyselyQuery", async (payload) => {
       const sql = lensUtils.interpolateQuery(
@@ -11,9 +19,9 @@ export function createKyselyHandler(): QueryWatcherHandler {
       );
 
       await onQuery({
-        query: lensUtils.formatSqlQuery(sql),
+        query: lensUtils.formatSqlQuery(sql, provider),
         duration: `${payload.event.queryDurationMillis.toFixed(1)} ms`,
-        type: "sql",
+        type: provider,
         createdAt: payload.date,
       });
     });

@@ -21,7 +21,7 @@ export default class RequestWatcher extends Watcher {
         ...data.request,
         user: data.user,
         response: data.response,
-        totalQueriesDurations: data.totalQueriesDuration,
+        totalQueriesDuration: data.totalQueriesDuration,
       },
     });
   }

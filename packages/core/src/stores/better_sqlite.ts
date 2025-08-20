@@ -6,6 +6,7 @@ import {
   type LensEntry,
 } from "../types/index";
 import Database from "libsql";
+import { sqlDateTime } from "../utils";
 
 const TABLE_NAME = "lens_entries";
 
@@ -39,7 +40,7 @@ export default class BetterSqliteStore extends Store {
         id: entry.id ?? randomUUID(),
         data: JSON.stringify(entry.data),
         type: entry.type,
-        created_at: entry.timestamp ?? new Date().toISOString(),
+        created_at: entry.timestamp ?? sqlDateTime(),
         lens_entry_id: entry.requestId || null,
         minimalData: JSON.stringify(entry.minimal_data ?? {}),
       });

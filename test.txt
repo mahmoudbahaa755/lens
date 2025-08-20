@@ -1,4 +1,0 @@
-rm -rf dist && npm run build && cd ../adonis && bun link @lens/core && npm run build && cd ../core
-
-
-node ace serve

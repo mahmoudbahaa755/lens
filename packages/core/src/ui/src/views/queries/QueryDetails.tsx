@@ -31,6 +31,11 @@ export default function QueryDetails({ query }: { query: QueryEntry }) {
       value: <span>{query.data.duration}</span>,
       className: "text-gray-900 dark:text-gray-100",
     },
+    {
+      label: "Provider",
+      value: <span>{query.data.type}</span>,
+      className: "text-gray-900 dark:text-gray-100",
+    },
   ].filter((item) => !!item);
 
   return (

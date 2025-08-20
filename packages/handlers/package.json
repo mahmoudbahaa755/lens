@@ -21,8 +21,11 @@
   "devDependencies": {
     "@prisma/client": "^6.13.0",
     "@types/node": "^20.10.0",
-    "kysely": "^0.28.5",
     "tsup": "^8.5.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "kysely": "^0.28.5"
+  },
+  "dependencies": {
+    "@lens/core": "*"
   }
 }

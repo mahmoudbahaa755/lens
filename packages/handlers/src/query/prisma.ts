@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { lensUtils, QueryType} from "@lens/core";
+import { lensUtils, QueryType } from "@lens/core";
 import { QueryWatcherHandler } from "../types";
 
 function shouldIgnorePrismaQuery(query: string, provider: QueryType) {
@@ -20,16 +20,17 @@ function formatQuery(query: string, params: any, provider: QueryType) {
     default:
       return lensUtils.formatSqlQuery(
         lensUtils.interpolateQuery(query, params),
+        provider,
       );
   }
 }
 
 export function createPrismaHandler({
   prisma,
-  provider = "sql",
+  provider,
 }: {
   prisma: PrismaClient;
-  provider?: "sql" | "mongodb";
+  provider: QueryType;
 }): QueryWatcherHandler {
   return async ({ onQuery }) => {
     prisma.$on("query", async (e: any) => {

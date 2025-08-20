@@ -17,6 +17,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/node": "^20.10.0",
+    "commitlint": "19.8.1",
     "husky": "^9.1.7",
     "lerna": "^8.2.3",
     "tsup": "^8.5.0",
@@ -35,6 +36,7 @@
     "build:core": "cd packages/core && bun run build",
     "build:express": "cd packages/express && bun run build",
     "build:handlers": "cd packages/handlers && bun run build",
-    "build:adonis": "cd packages/adonis && bun run build"
+    "build:adonis": "cd packages/adonis && bun run build",
+    "init": "powershell  scripts/init.sh"
   }
 }

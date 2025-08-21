@@ -12,13 +12,13 @@ export function createKyselyHandler({
   provider: KyselyQueryType;
 }): QueryWatcherHandler {
   return async ({ onQuery }) => {
-    watcherEmitter.on("kyselyQuery", async (payload) => {
+    watcherEmitter.on("kyselyQuery", (payload) => {
       const sql = lensUtils.interpolateQuery(
         payload.event.query.sql,
         payload.event.query.parameters as any[],
       );
 
-      await onQuery({
+      onQuery({
         query: lensUtils.formatSqlQuery(sql, provider),
         duration: `${payload.event.queryDurationMillis.toFixed(1)} ms`,
         type: provider,

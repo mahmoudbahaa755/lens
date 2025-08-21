@@ -45,7 +45,7 @@ export function createSequelizeHandler({
   provider: SequelizeQueryType;
 }): QueryWatcherHandler {
   return async ({ onQuery }) => {
-    watcherEmitter.on("sequelizeQuery", async (payload) => {
+    watcherEmitter.on("sequelizeQuery", (payload) => {
       if (typeof payload.sql !== "string") {
         throw new Error("payload.sql must be a string");
       }
@@ -56,7 +56,7 @@ export function createSequelizeHandler({
 
       const { sql, params } = normalizeQuery(payload.sql);
 
-      await onQuery({
+      onQuery({
         query: lensUtils.formatSqlQuery(
           lensUtils.interpolateQuery(sql, params),
           provider,

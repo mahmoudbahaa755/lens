@@ -54,21 +54,20 @@ export default class ExpressAdapter extends LensAdapter {
     if (!this.config?.queryWatcher?.enabled) return;
 
     const handler = this.config.queryWatcher.handler;
+
     if (!handler) return;
 
     await handler({
       onQuery: async (query: QueryEntry["data"]) => {
-        const store = lensContext.getStore();
-
         const queryPayload = {
           query: query.query,
           duration: query.duration || "0 ms",
           createdAt: lensUtils.sqlDateTime() as string,
-          type: query.type ?? "sql",
+          type: query.type,
         };
 
-        if (store && this.config.requestWatcherEnabled) {
-          store.queries.push(queryPayload);
+        if (lensContext.getStore() && this.config.requestWatcherEnabled) {
+          lensContext.getStore()?.queries.push(queryPayload);
         } else {
           await queryWatcher.log({ data: queryPayload });
         }

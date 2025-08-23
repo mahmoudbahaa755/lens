@@ -29,7 +29,7 @@
   "scripts": {
     "prepare": "husky",
     "build": "lerna run build",
-    "dev": "bun --watch packages/example-express/index.ts",
+    "dev": "bun --watch packages/example-express/src/index.ts",
     "dev:front": "cd packages/core/src/ui && bun run dev",
     "build:front": "cd packages/core/src/ui && bun run build",
     "build:core": "cd packages/core && bun run build",

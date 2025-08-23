@@ -42,14 +42,6 @@ export type Entry =
   | { type: "query"; data: QueryEntry }
   | { type: "request"; data: RequestEntry };
 
-export type AsyncLocalStorageType = {
-  requestId: string;
-  queries: QueryEntry[];
-  user?: UserEntry;
-  startedAt: Date;
-  [key: string]: any;
-};
-
 export enum WatcherTypeEnum {
   REQUEST = "request",
   QUERY = "query",

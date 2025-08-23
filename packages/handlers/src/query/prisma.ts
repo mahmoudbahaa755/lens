@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { lensUtils, QueryType } from "@lens/core";
-import { QueryWatcherHandler } from "../types";
+import { LensALS, lensEmitter, lensUtils, QueryType } from "@lens/core";
+import { PrismaProvider, QueryWatcherHandler } from "../types";
 
 function shouldIgnorePrismaQuery(query: string, provider: QueryType) {
   if (provider === "mongodb") {
@@ -30,18 +30,25 @@ export function createPrismaHandler({
   provider,
 }: {
   prisma: PrismaClient;
-  provider: QueryType;
+  provider: PrismaProvider;
 }): QueryWatcherHandler {
-  return async ({ onQuery }) => {
+  const prismaCallback = (store?: LensALS) =>
     prisma.$on("query", async (e: any) => {
       if (!shouldIgnorePrismaQuery(e.query, provider)) {
-        await onQuery({
-          query: formatQuery(e.query, JSON.parse(e.params), provider),
-          duration: `${e.duration} ms`,
-          createdAt: e.timestamp,
-          type: provider,
+        lensEmitter.emit("query", {
+          query: {
+            query: formatQuery(e.query, JSON.parse(e.params), provider),
+            duration: `${e.duration} ms`,
+            createdAt: e.timestamp,
+            type: provider,
+          },
+          store,
         });
       }
     });
+
+  return {
+    listen: (s) => prismaCallback(s),
+    clean: (s) => prismaCallback(s),
   };
 }

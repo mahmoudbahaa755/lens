@@ -8,4 +8,5 @@ export { default as LensStore } from "./abstracts/store";
 export { default as LensWatcher } from "./core/watcher";
 export { getStore as getLensStore } from "./context/context";
 export * as lensUtils from "./utils/index";
-export * from './utils/async_context'
+export * from "./utils/async_context";
+export { lensEmitter, lensResource} from "./utils/event_emitter";

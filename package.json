@@ -36,7 +36,6 @@
     "build:core": "cd packages/core && bun run build",
     "build:express": "cd packages/express && bun run build",
     "build:handlers": "cd packages/handlers && bun run build",
-    "build:adonis": "cd packages/adonis && bun run build",
-    "init": "powershell  scripts/init.sh"
+    "build:adonis": "cd packages/adonis && bun run build"
   }
 }

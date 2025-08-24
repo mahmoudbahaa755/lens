@@ -6,7 +6,7 @@ import {
   RequestWatcher,
   RequestEntry,
   QueryWatcher,
-  asyncContext,
+  lensContext,
   getContextQueries,
   RouteHttpMethod,
   QueryEntry,
@@ -74,9 +74,13 @@ export default class AdonisAdapter extends LensAdapter {
     this.emitter.on('http:request_completed', async function (event) {
       if (self.shouldIgnorePath(event.ctx.request.url(false))) return
 
+      if (!event.ctx.request.lensEntry?.requestId) {
+        throw new Error('requestId mest be defined in lens middleware')
+      }
+
       const request = event.ctx.request
-      const requestId = lensUtils.generateRandomUuid()
       const requestQueries = event.ctx.request.lensEntry?.queries ?? []
+      const requestId = event.ctx.request.lensEntry.requestId;
       const logPayload: RequestEntry = {
         request: {
           id: requestId,
@@ -136,7 +140,7 @@ export default class AdonisAdapter extends LensAdapter {
             throw new Error('queries container not found')
           }
 
-          asyncContext.getStore()?.lensEntry?.queries.push(payload)
+          lensContext.getStore()?.lensEntry?.queries.push(payload)
         } catch (e) {
           await queryWatcher.log({
             data: payload,

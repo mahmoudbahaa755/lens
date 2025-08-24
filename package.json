@@ -29,8 +29,8 @@
   "homepage": "https://github.com/MohammedElattar/lens#readme",
   "scripts": {
     "prepare": "husky",
-    "build": "lerna run build",
-    "dev": "bun --watch packages/example-express/index.ts",
+    "build": "lerna run build --stream --since",
+    "dev": "bun --watch packages/example-express/src/index.ts",
     "dev:front": "cd packages/core/src/ui && bun run dev",
     "build:front": "cd packages/core/src/ui && bun run build",
     "build:core": "cd packages/core && bun run build",

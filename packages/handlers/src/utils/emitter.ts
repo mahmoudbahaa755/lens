@@ -1,7 +1,7 @@
 import { LogEvent } from "kysely";
 
-interface AppEvents {
-  kyselyQuery: { event: LogEvent; date: string };
+export interface LensWatcherEvents {
+  kyselyQuery: LogEvent;
   sequelizeQuery: { sql: string; timing?: number };
 }
 
@@ -34,4 +34,4 @@ class TypedEventEmitter<Events extends Record<string, any>> {
   }
 }
 
-export const watcherEmitter = new TypedEventEmitter<AppEvents>();
+export const watcherEmitter = new TypedEventEmitter<LensWatcherEvents>();

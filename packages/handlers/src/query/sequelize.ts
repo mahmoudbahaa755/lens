@@ -1,11 +1,10 @@
-import { lensUtils, SqlQueryType } from "@lens/core";
-import { QueryWatcherHandler } from "../types";
-import { watcherEmitter } from "../utils/emitter";
-
-type SequelizeQueryType = Extract<
-  SqlQueryType,
-  "mysql" | "postgresql" | "sqlite" | "mariadb"
->;
+import {
+  lensUtils,
+  lensEmitter,
+} from "@lens/core";
+import { LensWatcherEvents, watcherEmitter } from "../utils/emitter";
+import { QueryWatcherHandler, SequelizeQueryType } from "../types";
+import { LensALS } from "@lens/core";
 
 function normalizeSql(sql: string) {
   return sql.replace(/^Executed \(default\):\s*/, "");
@@ -39,32 +38,58 @@ function normalizeQuery(query: string): { sql: string; params: any } {
   return { sql, params };
 }
 
+function sequelizeEventHandler({
+  payload,
+  provider,
+}: {
+  payload: { sql: string; timing?: number };
+  provider: SequelizeQueryType;
+}) {
+  if (typeof payload.sql !== "string") {
+    throw new Error("payload.sql must be a string");
+  }
+
+  if (typeof payload.timing !== "number") {
+    throw new Error("payload.timing must be a number");
+  }
+
+  const { sql, params } = normalizeQuery(payload.sql);
+  return {
+    query: lensUtils.formatSqlQuery(
+      lensUtils.interpolateQuery(sql, params),
+      provider,
+    ),
+    duration: `${payload.timing.toFixed(1)} ms`,
+    type: provider,
+    createdAt: `${lensUtils.now()}`,
+  };
+}
+
 export function createSequelizeHandler({
   provider,
 }: {
   provider: SequelizeQueryType;
 }): QueryWatcherHandler {
-  return async ({ onQuery }) => {
-    watcherEmitter.on("sequelizeQuery", async (payload) => {
-      if (typeof payload.sql !== "string") {
-        throw new Error("payload.sql must be a string");
-      }
+  const sequelizeCallback = ({
+    payload,
+    store,
+  }: {
+    payload: LensWatcherEvents["sequelizeQuery"];
+    store?: LensALS;
+  }) => {
+    const normalizedEvent = sequelizeEventHandler({ payload, provider });
 
-      if (typeof payload.timing !== "number") {
-        throw new Error("payload.timing must be a number");
-      }
+    lensEmitter.emit("query", { query: normalizedEvent, store });
+  };
 
-      const { sql, params } = normalizeQuery(payload.sql);
-
-      await onQuery({
-        query: lensUtils.formatSqlQuery(
-          lensUtils.interpolateQuery(sql, params),
-          provider,
-        ),
-        duration: `${payload.timing.toFixed(1)} ms`,
-        type: provider,
-        createdAt: `${lensUtils.now()}`,
-      });
-    });
+  return {
+    listen: (s) =>
+      watcherEmitter.on("sequelizeQuery", (payload) =>
+        sequelizeCallback({ payload, store: s }),
+      ),
+    clean: (s) =>
+      watcherEmitter.off("sequelizeQuery", (payload) =>
+        sequelizeCallback({ payload, store: s }),
+      ),
   };
 }

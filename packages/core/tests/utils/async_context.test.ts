@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import {
-  asyncContext,
+  lensContext,
   getContextQueries,
-  LensEntryContext,
+  LensALS,
 } from "../../src/utils/async_context";
 import { QueryEntry } from "../../src/types";
 
@@ -21,33 +21,35 @@ describe("async_context", () => {
       },
     ];
 
-    const context: LensEntryContext = {
+    const context: LensALS = {
       lensEntry: {
         queries,
+        requestId: "123",
       },
     };
 
-    asyncContext.run(context, () => {
+    lensContext.run(context, () => {
       expect(getContextQueries()).toEqual(queries);
     });
   });
 
   it("should return undefined for queries if lensEntry is missing", () => {
-    const context: LensEntryContext = {};
+    const context: LensALS = {};
 
-    asyncContext.run(context, () => {
+    lensContext.run(context, () => {
       expect(getContextQueries()).toBeUndefined();
     });
   });
 
   it("should return undefined for queries if queries array is missing", () => {
-    const context: LensEntryContext = {
+    const context: LensALS = {
       lensEntry: {
         queries: undefined as any,
+        requestId: "123"
       },
     };
 
-    asyncContext.run(context, () => {
+    lensContext.run(context, () => {
       expect(getContextQueries()).toBeUndefined();
     });
   });

@@ -29,7 +29,7 @@ export const lens = async (config: ExpressAdapterConfig) => {
     watchers.push(new RequestWatcher());
   }
 
-  if (config.queryWatcher?.enabled) {
+  if (config.handlers?.query?.enabled) {
     watchers.push(new QueryWatcher());
   }
 

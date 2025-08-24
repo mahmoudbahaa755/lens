@@ -1,25 +1,19 @@
-import { QueryEntry } from "@lens/core";
-import { queryHandlers } from "../query";
+import { LensALS, QueryType, SqlQueryType } from "@lens/core";
 
-export type QueryWatcherHandler = (args: {
-  onQuery: (query: QueryEntry["data"]) => Promise<void>;
-}) => Promise<void>;
+type ListenerCallback = (store?: LensALS) => void;
 
-export type QueryHandlerKey = keyof typeof queryHandlers;
-export type QueryHandlerMap = {
-  [K in keyof typeof queryHandlers]: ReturnType<(typeof queryHandlers)[K]>;
+export type WatcherHandler = {
+  listen: ListenerCallback;
+  clean: ListenerCallback;
 };
 
-type MatchedQueryWatcherHandlerEntry = {
-  [K in QueryHandlerKey]: {
-    key: K;
-    handler: QueryHandlerMap[K];
-  };
-}[QueryHandlerKey];
-
-export type QueryWatcherHandlerEntry =
-  | MatchedQueryWatcherHandlerEntry
-  | {
-      key?: undefined;
-      handler: QueryWatcherHandler;
-    };
+export type QueryWatcherHandler = WatcherHandler;
+export type PrismaProvider = QueryType;
+export type SequelizeQueryType = Extract<
+  SqlQueryType,
+  "mysql" | "postgresql" | "sqlite" | "mariadb"
+>
+export type KyselyQueryType = Extract<
+  SqlQueryType,
+  "mysql" | "postgresql" | "sqlite" | "mssql"
+>;

@@ -1,29 +1,43 @@
-import { lensUtils, SqlQueryType } from "@lens/core";
-import { QueryWatcherHandler } from "../types";
-import { watcherEmitter } from "../utils/emitter";
+import { LensALS, lensEmitter, lensUtils } from "@lens/core";
+import { LensWatcherEvents, watcherEmitter } from "../utils/emitter";
+import { KyselyQueryType, QueryWatcherHandler } from "../types";
 
-export type KyselyQueryType = Extract<
-  SqlQueryType,
-  "mysql" | "postgresql" | "sqlite" | "mssql"
->;
 export function createKyselyHandler({
   provider,
 }: {
   provider: KyselyQueryType;
 }): QueryWatcherHandler {
-  return async ({ onQuery }) => {
-    watcherEmitter.on("kyselyQuery", async (payload) => {
-      const sql = lensUtils.interpolateQuery(
-        payload.event.query.sql,
-        payload.event.query.parameters as any[],
-      );
+  const kyselyCallback = ({
+    payload,
+    store,
+  }: {
+    payload: LensWatcherEvents["kyselyQuery"];
+    store?: LensALS;
+  }) => {
+    const sql = lensUtils.interpolateQuery(
+      payload.query.sql,
+      payload.query.parameters as any[],
+    );
 
-      await onQuery({
+    lensEmitter.emit("query", {
+      query: {
         query: lensUtils.formatSqlQuery(sql, provider),
-        duration: `${payload.event.queryDurationMillis.toFixed(1)} ms`,
+        duration: `${payload.queryDurationMillis.toFixed(1)} ms`,
         type: provider,
-        createdAt: payload.date,
-      });
+        createdAt: lensUtils.nowISO(),
+      },
+      store,
     });
+  };
+
+  return {
+    listen: (s) =>
+      watcherEmitter.on("kyselyQuery", (payload) =>
+        kyselyCallback({ payload, store: s }),
+      ),
+    clean: (s) =>
+      watcherEmitter.off("kyselyQuery", (payload) =>
+        kyselyCallback({ payload, store: s }),
+      ),
   };
 }

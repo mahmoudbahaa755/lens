@@ -76,7 +76,7 @@ const BasicRequestDetails = ({ request }: { request: OneRequest }) => {
         ? [
             {
               label: "Query Duration",
-              value: `${request?.data?.totalQueriesDuration} ms`,
+              value: `${request?.data?.totalQueriesDuration}`,
               className: "text-gray-900 dark:text-gray-100",
             },
           ]

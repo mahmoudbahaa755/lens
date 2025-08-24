@@ -17,11 +17,11 @@ const port = 3000;
 await lens({
   app,
   requestWatcherEnabled: true,
-  queryWatcher: {
-    enabled: true,
-    handler: createSequelizeHandler({
-      provider: "sqlite",
-    }),
+  handlers: {
+    query: {
+      enabled: true,
+      handler: createSequelizeHandler({ provider: "sqlite" }),
+    },
   },
 });
 
@@ -65,10 +65,10 @@ User.init(
 );
 
 // Sync DB
-await sequelize.sync();
+await sequelize.sync({force: true});
 
 // Example route to add user via Sequelize
-app.get("/create-user", async (_req, res) => {
+app.get("/add-user", async (_req, res) => {
   await User.create({ name: "John Doe" });
   res.send("User added");
 });

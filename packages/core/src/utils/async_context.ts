@@ -1,15 +1,15 @@
-import { AsyncLocalStorage } from 'node:async_hooks'
-import { QueryEntry } from '../types'
+import { AsyncLocalStorage } from "node:async_hooks";
+import { QueryEntry } from "../types";
 
-export type LensEntryContext = {
-  lensEntry?: {
-    queries: QueryEntry['data'][]
-  }
-}
+export type LensALS = {
+  lensEntry: {
+    requestId: string;
+    queries: QueryEntry["data"][];
+  };
+};
 
-export const asyncContext = new AsyncLocalStorage<LensEntryContext>()
-
+export const lensContext = new AsyncLocalStorage<LensALS>();
 export const getContextQueries = () => {
-  const context = asyncContext.getStore()
-  return context?.lensEntry?.queries
-}
+  const context = lensContext.getStore();
+  return context?.lensEntry?.queries;
+};

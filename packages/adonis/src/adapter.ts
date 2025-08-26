@@ -6,14 +6,12 @@ import {
   RequestWatcher,
   RequestEntry,
   QueryWatcher,
-  lensContext,
-  getContextQueries,
   RouteHttpMethod,
   QueryEntry,
 } from '@lens/core'
 import * as path from 'path'
 import type { ApplicationService, EmitterService, HttpRouterService } from '@adonisjs/core/types'
-import { parseDuration, shouldIgnoreLogging } from './utils/index.js'
+import { shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
 import { HttpContext } from '@adonisjs/core/http'
 import { LensConfig } from './define_config.js'
@@ -74,13 +72,8 @@ export default class AdonisAdapter extends LensAdapter {
     this.emitter.on('http:request_completed', async function (event) {
       if (self.shouldIgnorePath(event.ctx.request.url(false))) return
 
-      if (!event.ctx.request.lensEntry?.requestId) {
-        throw new Error('requestId mest be defined in lens middleware')
-      }
-
       const request = event.ctx.request
-      const requestQueries = event.ctx.request.lensEntry?.queries ?? []
-      const requestId = event.ctx.request.lensEntry.requestId;
+      const requestId = lensUtils.generateRandomUuid()
       const logPayload: RequestEntry = {
         request: {
           id: requestId,
@@ -100,16 +93,7 @@ export default class AdonisAdapter extends LensAdapter {
         user: await self.getUserFromContext(event.ctx),
       }
 
-      logPayload.totalQueriesDuration = self.calculateQueriesDuration(requestQueries)
-
       await requestWatcher.log(logPayload)
-
-      for (const query of requestQueries) {
-        await self.queryWatcher?.log({
-          data: query,
-          requestId,
-        })
-      }
     })
   }
 
@@ -133,19 +117,9 @@ export default class AdonisAdapter extends LensAdapter {
           type: query.type,
         }
 
-        try {
-          const queries = getContextQueries()
-
-          if (queries === undefined || !self.isRequestWatcherEnabled) {
-            throw new Error('queries container not found')
-          }
-
-          lensContext.getStore()?.lensEntry?.queries.push(payload)
-        } catch (e) {
-          await queryWatcher.log({
-            data: payload,
-          })
-        }
+        await queryWatcher.log({
+          data: payload,
+        })
       })
     })
   }
@@ -179,16 +153,6 @@ export default class AdonisAdapter extends LensAdapter {
     const assetPath = path.join(uiPath, subPath)
 
     return ctx.response.download(assetPath)
-  }
-
-  private calculateQueriesDuration(requestQueries: QueryEntry['data'][]) {
-    let totalQueriesDuration = 0
-
-    for (const query of requestQueries) {
-      totalQueriesDuration = parseDuration(query.duration)
-    }
-
-    return `${totalQueriesDuration} ms`
   }
 
   private async getUserFromContext(ctx: HttpContext) {

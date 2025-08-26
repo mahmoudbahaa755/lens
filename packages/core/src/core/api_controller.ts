@@ -23,13 +23,7 @@ export class ApiController {
       return this.notFoundResponse();
     }
 
-    return this.resourceResponse({
-      ...request,
-      queries: await getStore().allByRequestId(
-        request.id,
-        WatcherTypeEnum.QUERY,
-      ),
-    });
+    return this.resourceResponse(request);
   }
 
   static async getQueries({

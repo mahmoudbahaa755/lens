@@ -32,24 +32,10 @@ const registerEnvValidation = async (codemods: Codemods) => {
   }
 }
 
-const registerMiddleware = async (codemods: Codemods) => {
-  try {
-    codemods.registerMiddleware('router', [
-      {
-        path: '@lens/adonis-adapter/lens_middleware',
-      },
-    ])
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 export async function configure(command: ConfigureCommand) {
   const codemods = await command.createCodemods()
 
   await registerEnvValidation(codemods)
-  await registerMiddleware(codemods)
-
   await codemods.makeUsingStub(stubsRoot, 'config/lens.stub', {})
   await codemods.updateRcFile((rcFile) => {
     rcFile.addProvider('@lens/adonis-adapter/lens_provider')

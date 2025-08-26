@@ -1,7 +1,4 @@
-import {
-  lensUtils,
-  lensEmitter,
-} from "@lens/core";
+import { lensUtils, lensEmitter, LensEmitterStore } from "@lens/core";
 import { LensWatcherEvents, watcherEmitter } from "../utils/emitter";
 import { QueryWatcherHandler, SequelizeQueryType } from "../types";
 import { LensALS } from "@lens/core";
@@ -75,11 +72,17 @@ export function createSequelizeHandler({
     store,
   }: {
     payload: LensWatcherEvents["sequelizeQuery"];
-    store?: LensALS;
+    store?: LensEmitterStore;
   }) => {
     const normalizedEvent = sequelizeEventHandler({ payload, provider });
 
-    lensEmitter.emit("query", { query: normalizedEvent, store });
+    if (store?.lensEntry.asyncResource) {
+      store.lensEntry.asyncResource.runInAsyncScope(() => {
+        lensEmitter.emit("query", { query: normalizedEvent, store });
+      });
+    } else {
+      lensEmitter.emit("query", { query: normalizedEvent, store });
+    }
   };
 
   return {

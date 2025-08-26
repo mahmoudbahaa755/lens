@@ -1,5 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import { LensALS, lensEmitter, lensUtils, QueryType } from "@lens/core";
+import {
+  lensEmitter,
+  LensEmitterStore,
+  lensUtils,
+  QueryType,
+} from "@lens/core";
 import { PrismaProvider, QueryWatcherHandler } from "../types";
 
 function shouldIgnorePrismaQuery(query: string, provider: QueryType) {
@@ -32,7 +37,7 @@ export function createPrismaHandler({
   prisma: PrismaClient;
   provider: PrismaProvider;
 }): QueryWatcherHandler {
-  const prismaCallback = (store?: LensALS) =>
+  const prismaCallback = (store?: LensEmitterStore) =>
     prisma.$on("query", async (e: any) => {
       if (!shouldIgnorePrismaQuery(e.query, provider)) {
         lensEmitter.emit("query", {

@@ -1,11 +1,11 @@
 import express from "express";
-import { lens } from "@lens/express-adapter";
 import cors from "cors";
 import { Sequelize, DataTypes, Model } from "sequelize";
-import { createSequelizeHandler, watcherEmitter } from "@lens/watcher-handlers";
 import path from "path";
+import { AsyncLocalStorage } from "async_hooks";
 
 const app = express();
+const router = express.Router();
 app.use(
   cors({
     origin: "*",
@@ -14,29 +14,20 @@ app.use(
 
 const port = 3000;
 
-await lens({
-  app,
-  requestWatcherEnabled: true,
-  handlers: {
-    query: {
-      enabled: true,
-      handler: createSequelizeHandler({ provider: "sqlite" }),
-    },
-  },
+app.use(async (req, res, next) => {
+  // context.run({ name: "Elattar" }, () => {
+  //   next();
+  // });
 });
 
-// Initialize Sequelize with SQLite
+const context = new AsyncLocalStorage<Record<string, any>>();
+function logging(sql: string, timing?: number) {}
+
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: path.join(__dirname, "database.sqlite"),
   benchmark: true,
   logQueryParameters: true,
-  logging: (sql: string, timing?: number) => {
-    watcherEmitter.emit("sequelizeQuery", {
-      sql,
-      timing,
-    });
-  },
 });
 
 class User extends Model {
@@ -65,12 +56,28 @@ User.init(
 );
 
 // Sync DB
-await sequelize.sync({force: true});
+await sequelize.sync();
 
 // Example route to add user via Sequelize
 app.get("/add-user", async (_req, res) => {
-  await User.create({ name: "John Doe" });
+  await User.create(
+    { name: "John Doe" },
+    {
+      logging: (sql) => {
+        console.log(context.getStore());
+      },
+    },
+  );
   res.send("User added");
+});
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+app.get("/long-add-user", async (_req, res) => {
+  await User.create({ name: "John Doe" });
+
+  await sleep(5000);
+
+  return res.send("User added");
 });
 
 app.listen(port, () => {

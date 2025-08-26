@@ -129,8 +129,7 @@ export default class BetterSqliteStore extends Store {
         type TEXT NOT NULL,
         created_at TEXT NOT NULL,
         updated_at TEXT,
-        lens_entry_id TEXT NULL,
-        FOREIGN KEY(lens_entry_id) REFERENCES ${TABLE_NAME}(id)
+        lens_entry_id TEXT NULL
       );
     `;
 

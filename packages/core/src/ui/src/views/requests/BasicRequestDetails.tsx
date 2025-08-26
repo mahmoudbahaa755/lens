@@ -72,15 +72,6 @@ const BasicRequestDetails = ({ request }: { request: OneRequest }) => {
         value: request.data.ip || "N/A",
         className: "text-gray-900 dark:text-gray-100 font-mono",
       },
-      ...(request?.data?.totalQueriesDuration
-        ? [
-            {
-              label: "Query Duration",
-              value: `${request?.data?.totalQueriesDuration}`,
-              className: "text-gray-900 dark:text-gray-100",
-            },
-          ]
-        : []),
     ],
     [request.data, formattedTime],
   );

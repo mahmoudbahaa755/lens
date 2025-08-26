@@ -1,4 +1,4 @@
-import { LensALS, lensEmitter, lensUtils } from "@lens/core";
+import { lensEmitter, LensEmitterStore, lensUtils } from "@lens/core";
 import { LensWatcherEvents, watcherEmitter } from "../utils/emitter";
 import { KyselyQueryType, QueryWatcherHandler } from "../types";
 
@@ -12,7 +12,7 @@ export function createKyselyHandler({
     store,
   }: {
     payload: LensWatcherEvents["kyselyQuery"];
-    store?: LensALS;
+    store?: LensEmitterStore;
   }) => {
     const sql = lensUtils.interpolateQuery(
       payload.query.sql,

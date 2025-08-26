@@ -64,7 +64,6 @@ export type RequestEntry = {
   status: number;
   ip: string;
   createdAt: string;
-  totalQueriesDuration?: string;
   response: {
     json: Record<string, any>;
     headers: Record<string, string>;
@@ -80,7 +79,6 @@ export type GenericLensEntry<T> = {
   created_at: string;
   lens_entry_id: string | null;
   data: T;
-  queries: QueryEntry[];
 };
 
 export type HasMoreType<T> = {

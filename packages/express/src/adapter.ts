@@ -6,9 +6,6 @@ import {
   RouteDefinition,
   WatcherTypeEnum,
   RouteHttpMethod,
-  lensEmitter,
-  lensContext,
-  LensALS,
 } from "@lens/core";
 import { RequiredExpressAdapterConfig } from "./types";
 import { Express, Request, Response } from "express";
@@ -18,8 +15,6 @@ import express from "express";
 export default class ExpressAdapter extends LensAdapter {
   protected app!: Express;
   protected config!: RequiredExpressAdapterConfig;
-  protected queryWatcher?: QueryWatcher;
-  protected isRequestWatcherEnabled = false;
 
   constructor({ app }: { app: Express }) {
     super();
@@ -31,33 +26,60 @@ export default class ExpressAdapter extends LensAdapter {
     return this;
   }
 
-  setup(): void {
+  override async setup() {
     for (const watcher of this.getWatchers()) {
-      switch ((watcher as any).name) {
+      switch (watcher.name) {
         case WatcherTypeEnum.REQUEST:
-          this.isRequestWatcherEnabled = true;
-          this.watchRequests(watcher as RequestWatcher);
+          this.watchRequests(watcher);
           break;
         case WatcherTypeEnum.QUERY:
-          this.queryWatcher = watcher as QueryWatcher;
-          void this.watchQueries();
+          await this.watchQueries(watcher);
           break;
       }
     }
+  }
 
-    this.registerListeners();
+  protected async watchQueries(queryWatcher: QueryWatcher) {
+    if (!this.config.queryWatcher.enabled) return;
+
+    const handler = this.config.queryWatcher.handler;
+
+    await handler({
+      onQuery: async (query) => {
+        query.query = lensUtils.formatSqlQuery(query.query);
+        console.log("query", query);
+        await queryWatcher.log({
+          data: query,
+        });
+        // try {
+        //   const queries = getContextQueries();
+        //
+        //   if (queries === undefined) {
+        //     throw new Error("queries container not found");
+        //   }
+        //
+        //   asyncContext.getStore()?.lensEntry?.queries.push(query);
+        // } catch (e) {
+        //   await queryWatcher.log({
+        //     data: query,
+        //   });
+        // }
+      },
+    });
+  }
+
+  protected async watchRequests(_requestWatcher: RequestWatcher) {
+    this.app.on("finish", async () => {});
   }
 
   registerRoutes(routes: RouteDefinition[]): void {
     routes.forEach((route) => {
       this.app[route.method.toLowerCase() as RouteHttpMethod](
-        this.normalizePath(route.path),
+        this.preparePath(route.path),
         async (req: Request, res: Response) => {
-          const result = await route.handler({
-            params: req.params,
-            qs: req.query,
-          });
-          return res.json(result);
+          return res.json(
+            await route.handler({ params: req.params, qs: req.query }),
+          );
         },
       );
     });
@@ -68,188 +90,41 @@ export default class ExpressAdapter extends LensAdapter {
     spaRoute: string,
     _dataToInject: Record<string, any>,
   ): void {
-    this.app.use(this.normalizePath(spaRoute), express.static(uiPath));
-
+    this.app.use(this.preparePath(spaRoute), express.static(uiPath));
     this.app.get(
-      this.normalizePath(`${spaRoute}/favicon.svg`),
-      (_: Request, res: Response) =>
-        res.sendFile(path.join(uiPath, "favicon.svg")),
+      this.preparePath(`${spaRoute}/favicon.svg`),
+      (_: Request, res: Response) => {
+        return res.sendFile(path.join(uiPath, "favicon.svg"));
+      },
     );
+    this.app.get(
+      new RegExp(`^/${spaRoute}(?!/api)(/.*)?$`),
+      (req: Request, res: Response) => {
+        const reqPath = req.path;
 
-    this.app.get(new RegExp(`^/${spaRoute}(?!/api)(/.*)?$`), (req, res) => {
-      if (lensUtils.isStaticFile(req.path.split("/"))) {
-        return res.download(
-          path.join(uiPath, lensUtils.stripBeforeAssetsPath(req.path)),
-        );
-      }
-      return res.sendFile(path.join(uiPath, "index.html"));
-    });
-  }
-
-  private registerListeners() {
-    this.app.use((_, __, next) => {
-      const store = lensContext.getStore();
-
-      if (!this.config?.handlers || !store) {
-        return next();
-      }
-
-      Object.values(this.config.handlers).forEach((handler) => {
-        if (!handler || !handler.enabled || !handler.handler) {
-          return next();
+        if (lensUtils.isStaticFile(reqPath.split("/"))) {
+          return this.matchStaticFiles(
+            res,
+            uiPath,
+            lensUtils.stripBeforeAssetsPath(reqPath),
+          );
         }
 
-        handler.handler?.listen(lensContext.getStore());
-      });
-
-      next();
-    });
+        return res.sendFile(path.join(uiPath, "index.html"));
+      },
+    );
   }
 
-  private unregisterListeners() {
-    this.app.use((_, __, next) => {
-      const store = lensContext.getStore();
-
-      if (!this.config?.handlers || !store) {
-        return next();
-      }
-
-      Object.values(this.config.handlers).forEach((handler) => {
-        if (!handler || !handler.enabled || !handler.handler) {
-          return next();
-        }
-        handler?.handler?.clean(lensContext.getStore());
-      });
-
-      next();
-    });
-  }
-
-  private async watchQueries() {
-    lensEmitter.on("query", async ({ query, store}) => {
-      const queryPayload = {
-        query: query.query,
-        duration: query.duration || "0 ms",
-        createdAt: query.createdAt || (lensUtils.sqlDateTime() as string),
-        type: query.type,
-      };
-
-      if (store && this.isRequestWatcherEnabled) {
-        store.lensEntry?.queries?.push(query);
-        return;
-      }
-
-      await this.queryWatcher?.log({ data: queryPayload });
-    });
-  }
-
-  private watchRequests(requestWatcher: RequestWatcher) {
-    if (!this.isRequestWatcherEnabled) return;
-
-    this.app.use((req, res, next) => {
-      if (this.shouldIgnorePath(req.path)) return next();
-
-      const context = {
-        lensEntry: {
-          requestId: lensUtils.generateRandomUuid(),
-          queries: [],
-        },
-      };
-
-      lensContext.run(context, () => {
-        const store = lensContext.getStore();
-        if (!store) return next();
-
-        const start = process.hrtime();
-        const unregisterCallback = this.unregisterListeners;
-
-        this.patchResponseMethods(res);
-
-        res.on("finish", async () => {
-          await this.finalizeRequestLog(req, res, requestWatcher, store, start);
-        });
-
-        res.on("finish", unregisterCallback);
-        res.on("close", unregisterCallback);
-        res.on("error", unregisterCallback);
-
-        next();
-      });
-    });
-  }
-
-  private patchResponseMethods(res: Response) {
-    const originalJson = res.json.bind(res);
-    const originalSend = res.send.bind(res);
-    (res as any)._body = undefined;
-
-    res.json = function (body?: any) {
-      (res as any)._body = body;
-      return originalJson(body);
-    } as typeof res.json;
-
-    res.send = function (body?: any) {
-      (res as any)._body = body;
-      return originalSend(body);
-    } as typeof res.send;
-  }
-
-  private async finalizeRequestLog(
-    req: Request,
-    res: Response,
-    requestWatcher: RequestWatcher,
-    store: LensALS,
-    start: [number, number],
+  private matchStaticFiles(
+    response: Response,
+    uiPath: string,
+    subPath: string,
   ) {
-    try {
-      const duration = lensUtils.prettyHrTime(process.hrtime(start));
-      const requestQueries = store.lensEntry?.queries ?? [];
-      const logPayload = {
-        request: {
-          id: store.lensEntry.requestId,
-          method: req.method as any,
-          duration,
-          path: req.originalUrl,
-          headers: req.headers,
-          body: req.body ?? {},
-          status: res.statusCode,
-          ip: req.socket?.remoteAddress ?? "",
-          createdAt: lensUtils.nowISO(),
-        },
-        response: {
-          json: (res as any)._body ?? null,
-          headers: res.getHeaders?.() as Record<string, string>,
-        },
-        user: (await this.config.isAuthenticated?.(req))
-          ? await this.config.getUser?.(req)
-          : null,
-        totalQueriesDuration: this.sumQueryDurations(requestQueries),
-      };
-
-      await requestWatcher.log(logPayload);
-
-      // Log queries
-      for (const q of store.lensEntry.queries) {
-        await this.queryWatcher?.log({
-          data: q,
-          requestId: store.lensEntry.requestId,
-        });
-      }
-    } catch (err) {
-      console.error("Error finalizing request log:", err);
-    }
+    const assetPath = path.join(uiPath, subPath);
+    return response.download(assetPath);
   }
 
-  private normalizePath(pathStr: string) {
-    return pathStr.startsWith("/") ? pathStr : `/${pathStr}`;
-  }
-
-  private sumQueryDurations(queries: { duration: string }[]) {
-    return (
-      queries.reduce((acc, q) => {
-        const n = parseFloat((q.duration || "").split(" ")[0] ?? "0");
-        return isNaN(n) ? acc : acc + n;
-      }, 0) + " ms"
-    );
+  private preparePath(path: string) {
+    return path.startsWith("/") ? path : `/${path}`;
   }
 }

@@ -30,7 +30,6 @@ export type RequestEntry = {
     ip: string;
     createdAt: string;
   };
-  totalQueriesDuration?: string;
   response: {
     json: Record<string, any>;
     headers: Record<string, string>;

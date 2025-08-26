@@ -28,6 +28,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "emittery": "^1.2.0",
     "libsql": "^0.5.17",
     "sql-formatter": "^15.6.6",
     "tailwind-merge": "^3.3.1"

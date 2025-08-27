@@ -6,7 +6,7 @@ First off, thank you for considering contributing to lens! It's people like you 
 
 ### Reporting Bugs
 
-If you find a bug, please open an issue on our [GitHub repository](https://github.com/MohammedElattar/lens/issues). Please include as much detail as possible, including:
+If you find a bug, please open an issue on our [GitHub repository](https://github.com/lensjs/lens/issues). Please include as much detail as possible, including:
 
 - A clear and descriptive title.
 - A step-by-step description of how to reproduce the bug.
@@ -15,7 +15,7 @@ If you find a bug, please open an issue on our [GitHub repository](https://githu
 
 ### Suggesting Enhancements
 
-If you have an idea for a new feature or an improvement to an existing one, please open an issue on our [GitHub repository](https://github.com/MohammedElattar/lens/issues). Please provide a clear and detailed explanation of the feature you're suggesting and why it would be useful.
+If you have an idea for a new feature or an improvement to an existing one, please open an issue on our [GitHub repository](https://github.com/lensjs/lens/issues). Please provide a clear and detailed explanation of the feature you're suggesting and why it would be useful.
 
 ### Code Contributions
 
@@ -33,7 +33,7 @@ This project is a monorepo managed with Lerna and Bun. To get started with devel
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/MohammedElattar/lens.git
+    git clone https://github.com/lensjs/lens/issues
     cd lens
     ```
 

@@ -114,7 +114,7 @@ export default class AdonisAdapter extends LensAdapter {
           ),
           duration,
           createdAt: lensUtils.sqlDateTime() as string,
-          type: query.type,
+          type: self.config.watchers.queries.provider,
         }
 
         await queryWatcher.log({

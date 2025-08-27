@@ -1,11 +1,11 @@
 import {
   LensAdapter,
   lensUtils,
-  QueryWatcher,
   RequestWatcher,
   RouteDefinition,
   WatcherTypeEnum,
   RouteHttpMethod,
+  QueryWatcher,
 } from "@lens/core";
 import { RequiredExpressAdapterConfig } from "./types";
 import { Express, Request, Response } from "express";
@@ -26,60 +26,29 @@ export default class ExpressAdapter extends LensAdapter {
     return this;
   }
 
-  override async setup() {
+  setup(): void {
     for (const watcher of this.getWatchers()) {
-      switch (watcher.name) {
+      switch ((watcher as any).name) {
         case WatcherTypeEnum.REQUEST:
-          this.watchRequests(watcher);
+          this.watchRequests(watcher as RequestWatcher);
           break;
         case WatcherTypeEnum.QUERY:
-          await this.watchQueries(watcher);
+          void this.watchQueries(watcher as QueryWatcher);
           break;
       }
     }
   }
 
-  protected async watchQueries(queryWatcher: QueryWatcher) {
-    if (!this.config.queryWatcher.enabled) return;
-
-    const handler = this.config.queryWatcher.handler;
-
-    await handler({
-      onQuery: async (query) => {
-        query.query = lensUtils.formatSqlQuery(query.query);
-        console.log("query", query);
-        await queryWatcher.log({
-          data: query,
-        });
-        // try {
-        //   const queries = getContextQueries();
-        //
-        //   if (queries === undefined) {
-        //     throw new Error("queries container not found");
-        //   }
-        //
-        //   asyncContext.getStore()?.lensEntry?.queries.push(query);
-        // } catch (e) {
-        //   await queryWatcher.log({
-        //     data: query,
-        //   });
-        // }
-      },
-    });
-  }
-
-  protected async watchRequests(_requestWatcher: RequestWatcher) {
-    this.app.on("finish", async () => {});
-  }
-
   registerRoutes(routes: RouteDefinition[]): void {
     routes.forEach((route) => {
       this.app[route.method.toLowerCase() as RouteHttpMethod](
-        this.preparePath(route.path),
+        this.normalizePath(route.path),
         async (req: Request, res: Response) => {
-          return res.json(
-            await route.handler({ params: req.params, qs: req.query }),
-          );
+          const result = await route.handler({
+            params: req.params,
+            qs: req.query,
+          });
+          return res.json(result);
         },
       );
     });
@@ -90,41 +59,115 @@ export default class ExpressAdapter extends LensAdapter {
     spaRoute: string,
     _dataToInject: Record<string, any>,
   ): void {
-    this.app.use(this.preparePath(spaRoute), express.static(uiPath));
-    this.app.get(
-      this.preparePath(`${spaRoute}/favicon.svg`),
-      (_: Request, res: Response) => {
-        return res.sendFile(path.join(uiPath, "favicon.svg"));
-      },
-    );
-    this.app.get(
-      new RegExp(`^/${spaRoute}(?!/api)(/.*)?$`),
-      (req: Request, res: Response) => {
-        const reqPath = req.path;
+    this.app.use(this.normalizePath(spaRoute), express.static(uiPath));
 
-        if (lensUtils.isStaticFile(reqPath.split("/"))) {
-          return this.matchStaticFiles(
-            res,
-            uiPath,
-            lensUtils.stripBeforeAssetsPath(reqPath),
-          );
-        }
-
-        return res.sendFile(path.join(uiPath, "index.html"));
-      },
+    this.app.get(
+      this.normalizePath(`${spaRoute}/favicon.svg`),
+      (_: Request, res: Response) =>
+        res.sendFile(path.join(uiPath, "favicon.svg")),
     );
+
+    this.app.get(new RegExp(`^/${spaRoute}(?!/api)(/.*)?$`), (req, res) => {
+      if (lensUtils.isStaticFile(req.path.split("/"))) {
+        return res.download(
+          path.join(uiPath, lensUtils.stripBeforeAssetsPath(req.path)),
+        );
+      }
+      return res.sendFile(path.join(uiPath, "index.html"));
+    });
   }
 
-  private matchStaticFiles(
-    response: Response,
-    uiPath: string,
-    subPath: string,
+  private async watchQueries(watcher: QueryWatcher) {
+    if (!this.config.queryWatcher.enabled) return;
+
+    const handler = this.config.queryWatcher.handler;
+
+    await handler({
+      onQuery: async (query) => {
+        const queryPayload = {
+          query: query.query,
+          duration: query.duration || "0 ms",
+          createdAt: query.createdAt || (lensUtils.sqlDateTime() as string),
+          type: query.type,
+        };
+
+        await watcher?.log({
+          data: queryPayload,
+        });
+      },
+    });
+  }
+
+  private watchRequests(requestWatcher: RequestWatcher) {
+    if (!this.config.requestWatcherEnabled) return;
+
+    this.app.use((req, res, next) => {
+      if (this.shouldIgnorePath(req.path)) return next();
+
+      const start = process.hrtime();
+
+      this.patchResponseMethods(res);
+
+      res.on("finish", async () => {
+        await this.finalizeRequestLog(req, res, requestWatcher, start);
+      });
+
+      next();
+    });
+  }
+
+  private patchResponseMethods(res: Response) {
+    const originalJson = res.json.bind(res);
+    const originalSend = res.send.bind(res);
+    (res as any)._body = undefined;
+
+    res.json = function (body?: any) {
+      (res as any)._body = body;
+      return originalJson(body);
+    } as typeof res.json;
+
+    res.send = function (body?: any) {
+      (res as any)._body = body;
+      return originalSend(body);
+    } as typeof res.send;
+  }
+
+  private async finalizeRequestLog(
+    req: Request,
+    res: Response,
+    requestWatcher: RequestWatcher,
+    start: [number, number],
   ) {
-    const assetPath = path.join(uiPath, subPath);
-    return response.download(assetPath);
+    try {
+      const duration = lensUtils.prettyHrTime(process.hrtime(start));
+      const logPayload = {
+        request: {
+          id: lensUtils.generateRandomUuid(),
+          method: req.method as any,
+          duration,
+          path: req.originalUrl,
+          headers: req.headers,
+          body: req.body ?? {},
+          status: res.statusCode,
+          ip: req.socket?.remoteAddress ?? "",
+          createdAt: lensUtils.nowISO(),
+        },
+        response: {
+          json: (res as any)._body ?? null,
+          headers: res.getHeaders?.() as Record<string, string>,
+        },
+        user: (await this.config.isAuthenticated?.(req))
+          ? await this.config.getUser?.(req)
+          : null,
+      };
+
+      await requestWatcher.log(logPayload);
+    } catch (err) {
+      console.error("Error finalizing request log:", err);
+    }
   }
 
-  private preparePath(path: string) {
-    return path.startsWith("/") ? path : `/${path}`;
+  private normalizePath(pathStr: string) {
+    return pathStr.startsWith("/") ? pathStr : `/${pathStr}`;
   }
 }

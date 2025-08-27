@@ -1,7 +1,6 @@
-import { lensUtils, lensEmitter, LensEmitterStore } from "@lens/core";
-import { LensWatcherEvents, watcherEmitter } from "../utils/emitter";
+import { lensUtils } from "@lens/core";
+import { watcherEmitter } from "../utils/emitter";
 import { QueryWatcherHandler, SequelizeQueryType } from "../types";
-import { LensALS } from "@lens/core";
 
 function normalizeSql(sql: string) {
   return sql.replace(/^Executed \(default\):\s*/, "");
@@ -67,32 +66,9 @@ export function createSequelizeHandler({
 }: {
   provider: SequelizeQueryType;
 }): QueryWatcherHandler {
-  const sequelizeCallback = ({
-    payload,
-    store,
-  }: {
-    payload: LensWatcherEvents["sequelizeQuery"];
-    store?: LensEmitterStore;
-  }) => {
-    const normalizedEvent = sequelizeEventHandler({ payload, provider });
-
-    if (store?.lensEntry.asyncResource) {
-      store.lensEntry.asyncResource.runInAsyncScope(() => {
-        lensEmitter.emit("query", { query: normalizedEvent, store });
-      });
-    } else {
-      lensEmitter.emit("query", { query: normalizedEvent, store });
-    }
-  };
-
-  return {
-    listen: (s) =>
-      watcherEmitter.on("sequelizeQuery", (payload) =>
-        sequelizeCallback({ payload, store: s }),
-      ),
-    clean: (s) =>
-      watcherEmitter.off("sequelizeQuery", (payload) =>
-        sequelizeCallback({ payload, store: s }),
-      ),
+  return async ({ onQuery }) => {
+    watcherEmitter.on("sequelizeQuery", (e) => {
+      onQuery(sequelizeEventHandler({ payload: e, provider }));
+    });
   };
 }

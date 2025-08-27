@@ -1,10 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import {
-  lensEmitter,
-  LensEmitterStore,
-  lensUtils,
-  QueryType,
-} from "@lens/core";
+import { lensUtils, QueryType } from "@lens/core";
 import { PrismaProvider, QueryWatcherHandler } from "../types";
 
 function shouldIgnorePrismaQuery(query: string, provider: QueryType) {
@@ -37,23 +32,16 @@ export function createPrismaHandler({
   prisma: PrismaClient;
   provider: PrismaProvider;
 }): QueryWatcherHandler {
-  const prismaCallback = (store?: LensEmitterStore) =>
+  return async ({ onQuery }) => {
     prisma.$on("query", async (e: any) => {
       if (!shouldIgnorePrismaQuery(e.query, provider)) {
-        lensEmitter.emit("query", {
-          query: {
-            query: formatQuery(e.query, JSON.parse(e.params), provider),
-            duration: `${e.duration} ms`,
-            createdAt: e.timestamp,
-            type: provider,
-          },
-          store,
+        onQuery({
+          query: formatQuery(e.query, JSON.parse(e.params), provider),
+          duration: `${e.duration} ms`,
+          createdAt: e.timestamp,
+          type: provider,
         });
       }
     });
-
-  return {
-    listen: (s) => prismaCallback(s),
-    clean: (s) => prismaCallback(s),
   };
 }

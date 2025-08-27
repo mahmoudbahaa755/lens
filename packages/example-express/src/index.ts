@@ -2,32 +2,44 @@ import express from "express";
 import cors from "cors";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import path from "path";
-import { AsyncLocalStorage } from "async_hooks";
+import { createSequelizeHandler, watcherEmitter } from "@lens/watcher-handlers";
+import { lens } from "@lens/express-adapter";
 
 const app = express();
-const router = express.Router();
+const port = 3000;
+const sequelize = new Sequelize({
+  dialect: "sqlite",
+  storage: path.join(__dirname, "database.sqlite"),
+  benchmark: true,
+  logQueryParameters: true,
+  logging: (sql, timing) => {
+    watcherEmitter.emit("sequelizeQuery", { sql, timing });
+  },
+});
+
 app.use(
   cors({
     origin: "*",
   }),
 );
 
-const port = 3000;
-
-app.use(async (req, res, next) => {
-  // context.run({ name: "Elattar" }, () => {
-  //   next();
-  // });
-});
-
-const context = new AsyncLocalStorage<Record<string, any>>();
-function logging(sql: string, timing?: number) {}
-
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: path.join(__dirname, "database.sqlite"),
-  benchmark: true,
-  logQueryParameters: true,
+await lens({
+  app,
+  requestWatcherEnabled: true,
+  queryWatcher: {
+    enabled: true,
+    handler: createSequelizeHandler({ provider: "sqlite" }),
+  },
+  isAuthenticated: async (_req) => {
+    return true;
+  },
+  getUser: async (_req) => {
+    return {
+      id: 1,
+      name: "John Doe",
+      email: "john@example.com",
+    };
+  },
 });
 
 class User extends Model {
@@ -55,29 +67,11 @@ User.init(
   },
 );
 
-// Sync DB
 await sequelize.sync();
 
-// Example route to add user via Sequelize
 app.get("/add-user", async (_req, res) => {
-  await User.create(
-    { name: "John Doe" },
-    {
-      logging: (sql) => {
-        console.log(context.getStore());
-      },
-    },
-  );
-  res.send("User added");
-});
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-app.get("/long-add-user", async (_req, res) => {
   await User.create({ name: "John Doe" });
-
-  await sleep(5000);
-
-  return res.send("User added");
+  res.send("User added");
 });
 
 app.listen(port, () => {

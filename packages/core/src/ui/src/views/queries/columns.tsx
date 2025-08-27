@@ -33,12 +33,24 @@ const getColumns = (): TableColumn<QueryTableRow>[] => {
     {
       name: "Duration",
       render: (row) => (
-        <div className="col-span-3 text-right">
+        <div className="col-span-1 text-right">
           <span className="text-sm text-slate-600 dark:text-slate-400 font-mono">
             {row.data.duration}
           </span>
         </div>
       ),
+    },
+    {
+      name: "Provider",
+      render: (row) => {
+        return (
+          <div className="col-span-2 text-right">
+            <span className="text-sm text-slate-600 dark:text-slate-400 font-mono">
+              {row.data.type}
+            </span>
+          </div>
+        );
+      },
     },
     {
       name: "Happened",

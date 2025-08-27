@@ -1,13 +1,7 @@
+import { Express } from "express";
 import { QueryWatcherHandler } from "@lens/watcher-handlers";
-import { Express, Request } from "express";
 import { UserEntry } from "@lens/core";
-
-export type ExpressWatcherHandlers = {
-  query?: {
-    enabled?: boolean;
-    handler?: QueryWatcherHandler;
-  };
-};
+import { Request } from "express";
 
 export type ExpressAdapterConfig = {
   app: Express;
@@ -17,13 +11,16 @@ export type ExpressAdapterConfig = {
   ignoredPaths?: RegExp[];
   onlyPaths?: RegExp[];
   requestWatcherEnabled?: boolean;
-  handlers?: ExpressWatcherHandlers;
-};
-
-export type RequiredExpressAdapterConfig = Required<
-  Omit<ExpressAdapterConfig, "handlers">
-> & {
+  queryWatcher?: {
+    enabled: boolean;
+    handler: QueryWatcherHandler;
+  };
   isAuthenticated?: (request: Request) => Promise<boolean>;
   getUser?: (request: Request) => Promise<UserEntry>;
-  handlers?: ExpressAdapterConfig["handlers"];
+};
+
+export type RequiredExpressAdapterConfig = Required<ExpressAdapterConfig> & {
+  queryWatcher?: ExpressAdapterConfig["queryWatcher"];
+  isAuthenticated?: ExpressAdapterConfig["isAuthenticated"];
+  getUser?: ExpressAdapterConfig["getUser"];
 };

@@ -1,5 +1,5 @@
-import { lensEmitter, LensEmitterStore, lensUtils } from "@lens/core";
-import { LensWatcherEvents, watcherEmitter } from "../utils/emitter";
+import { lensUtils } from "@lens/core";
+import { watcherEmitter } from "../utils/emitter";
 import { KyselyQueryType, QueryWatcherHandler } from "../types";
 
 export function createKyselyHandler({
@@ -7,37 +7,19 @@ export function createKyselyHandler({
 }: {
   provider: KyselyQueryType;
 }): QueryWatcherHandler {
-  const kyselyCallback = ({
-    payload,
-    store,
-  }: {
-    payload: LensWatcherEvents["kyselyQuery"];
-    store?: LensEmitterStore;
-  }) => {
-    const sql = lensUtils.interpolateQuery(
-      payload.query.sql,
-      payload.query.parameters as any[],
-    );
+  return async ({ onQuery }) => {
+    watcherEmitter.on("kyselyQuery", (payload) => {
+      const sql = lensUtils.interpolateQuery(
+        payload.query.sql,
+        payload.query.parameters as any[],
+      );
 
-    lensEmitter.emit("query", {
-      query: {
+      onQuery({
         query: lensUtils.formatSqlQuery(sql, provider),
         duration: `${payload.queryDurationMillis.toFixed(1)} ms`,
         type: provider,
         createdAt: lensUtils.nowISO(),
-      },
-      store,
+      });
     });
-  };
-
-  return {
-    listen: (s) =>
-      watcherEmitter.on("kyselyQuery", (payload) =>
-        kyselyCallback({ payload, store: s }),
-      ),
-    clean: (s) =>
-      watcherEmitter.off("kyselyQuery", (payload) =>
-        kyselyCallback({ payload, store: s }),
-      ),
   };
 }

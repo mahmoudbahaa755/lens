@@ -11,7 +11,7 @@ const lensConfig = defineConfig({
     requests: env.get('LENS_ENABLE_REQUEST_WATCHER', true),
     queries: {
       enabled: env.get('LENS_ENABLE_QUERY_WATCHER', true),
-      provider: 'sqlite', // Change to your database provider
+      provider: 'sqlite',
     }
   },
   // Optional

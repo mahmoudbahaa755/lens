@@ -18,8 +18,7 @@ class TestBetterSqliteStore extends BetterSqliteStore {
         type TEXT NOT NULL,
         created_at TEXT NOT NULL,
         updated_at TEXT,
-        lens_entry_id TEXT NULL,
-        FOREIGN KEY(lens_entry_id) REFERENCES lens_entries(id)
+        lens_entry_id TEXT NULL
       );
     `;
 

@@ -1,3 +1,0 @@
-- first i want the user to provide different configurations like name, path, ignoredPaths, onlyPaths
-
-- i want to provide to the user a way to extend the handler of the watcher like handleRequest or whatever you know

@@ -1,41 +1,37 @@
 # Query Watcher Handlers
 
-The `@lens/watcher-handlers` package provides **pre-built and
-customizable handlers** for capturing and processing database queries
-observed by `@lens/core`.\
-These handlers let you monitor queries (SQL, MongoDB, etc.) and
-visualize them in the **Lens UI**.
+The `@lens/watcher-handlers` package provides **ready-to-use and customizable handlers** for capturing and processing database queries observed by [`@lens/core`](https://www.npmjs.com/package/@lens/core).  
 
-------------------------------------------------------------------------
+These handlers let you **monitor queries (SQL, MongoDB, etc.)** and visualize them directly in the **Lens UI**.
 
-## 🚀 Installation
+---
 
-Install via npm:
+## Installation
 
-``` bash
+```bash
 npm install @lens/watcher-handlers
 ```
 
-------------------------------------------------------------------------
+---
 
-## 🔌 Supported Integrations
+## Built-in Handlers
 
-We provide ready-to-use integrations for **Prisma**, **Kysely**, and
-**Sequelize**.
+This package supports popular ORMs out of the box.  
+Pick your integration and plug it into the Lens ecosystem.
 
 ### 1. Prisma
 
-Capture queries from **Prisma** using `createPrismaHandler`.
+Capture queries from **Prisma** with `createPrismaHandler`.
 
-**Requirements:**
+**Dependencies:**
 
-``` bash
+```bash
 npm install @prisma/client
 ```
 
-**Example (Express + Prisma):**
+**Usage Example (Express + Prisma):**
 
-``` ts
+```ts
 import express from "express";
 import { lens } from "@lens/express-adapter";
 import { createPrismaHandler } from "@lens/watcher-handlers";
@@ -46,35 +42,31 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 await lens({
   app,
-  handlers: {
-    query: {
-      enabled: true,
-      handler: createPrismaHandler({
-        prisma,
-        provider: "mysql",
-      }),
-    },
+  queryWatcher: {
+    enabled: true,
+    handler: createPrismaHandler({
+      prisma,
+      provider: "mysql",
+    }),
   },
 });
-
-app.listen(3000);
 ```
 
-------------------------------------------------------------------------
+---
 
 ### 2. Kysely
 
-Capture queries from **Kysely** using `createKyselyHandler`.
+Capture queries from **Kysely** with `createKyselyHandler`.
 
-**Requirements:**
+**Dependencies:**
 
-``` bash
+```bash
 npm install kysely mysql2
 ```
 
-**Example (Express + Kysely):**
+**Usage Example (Express + Kysely):**
 
-``` ts
+```ts
 import express from "express";
 import { lens } from "@lens/express-adapter";
 import { Kysely, MysqlDialect } from "kysely";
@@ -85,11 +77,12 @@ const app = express();
 
 await lens({
   app,
-  handlers: {
-    query: {
-      enabled: true,
-      handler: createKyselyHandler({ provider: "mysql" }),
-    },
+  queryWatcher: {
+    enabled: true,
+    handler: createKyselyHandler({ 
+       provider: "mysql" ,
+       logQueryErrorsToConsole: true, // Log query errors to the console, default is true
+    }),
   },
 });
 
@@ -107,52 +100,38 @@ const db = new Kysely<Database>({
     }),
   }),
   log(event) {
-    if (event.level === "query") {
-      watcherEmitter.emit("kyselyQuery", {
-        event,
-        date: new Date().toISOString(),
-      });
-    }
+    watcherEmitter.emit("kyselyQuery", event);
   },
 });
-
-app.get("/add-user", async (_req, res) => {
-  await db.insertInto("user").values({ name: "John Doe" }).execute();
-  res.send("User added");
-});
-
-app.listen(3000);
 ```
 
-------------------------------------------------------------------------
+---
 
 ### 3. Sequelize
 
-Capture queries from **Sequelize** using `createSequelizeHandler`.
+Capture queries from **Sequelize** with `createSequelizeHandler`.
 
-**Requirements:**
+**Dependencies:**
 
-``` bash
+```bash
 npm install sequelize
 ```
 
-**Example (Express + Sequelize):**
+**Usage Example (Express + Sequelize):**
 
-``` ts
+```ts
 import express from "express";
 import { lens } from "@lens/express-adapter";
-import { Sequelize, DataTypes, Model } from "sequelize";
+import { Sequelize } from "sequelize";
 import { createSequelizeHandler, watcherEmitter } from "@lens/watcher-handlers";
 
 const app = express();
 
 await lens({
   app,
-  handlers: {
-    query: {
-      enabled: true,
-      handler: createSequelizeHandler({ provider: "mysql" }),
-    },
+  queryWatcher: {
+    enabled: true,
+    handler: createSequelizeHandler({ provider: "mysql" }),
   },
 });
 
@@ -165,54 +144,40 @@ const sequelize = new Sequelize("DB_NAME", "DB_USER", "DB_PASSWORD", {
     watcherEmitter.emit("sequelizeQuery", { sql, timing });
   },
 });
-
-class User extends Model {}
-User.init(
-  { name: { type: DataTypes.STRING(100), allowNull: false } },
-  { sequelize, modelName: "User", tableName: "users", timestamps: false },
-);
-
-await sequelize.sync();
-
-app.get("/add-user", async (_req, res) => {
-  await User.create({ name: "John Doe" });
-  res.send("User added");
-});
-
-app.listen(3000);
 ```
 
-------------------------------------------------------------------------
+---
 
-## 🛠 Creating a Custom Handler
+## Custom Handlers
 
-If you're using another ORM/query builder, you can write your own
-handler.
+You can create your own handler for unsupported ORMs or raw query clients.
 
-### Handler Basics
+### Handler Essentials
 
--   Return a `QueryWatcherHandler`.
--   Call `onQuery` whenever you capture a query.
--   Use `lensUtils` to:
-    -   `interpolateQuery(sql, params)` → inject parameters into SQL.
-    -   `formatSqlQuery(query)` → format SQL for better UI display.
-    -   `now()` → timestamp.
+A handler must:
+
+- Return a `QueryWatcherHandler`
+- Call `onQuery` whenever a query is captured
+- Optionally use `lensUtils`:
+  - `interpolateQuery(sql, params)` → inject parameters  
+  - `formatSqlQuery(query)` → pretty-print SQL  
+  - `now()` → timestamp  
+
+---
 
 ### Example: Custom Kysely Handler
 
-``` ts
+```ts
 import express from "express";
 import { lens } from "@lens/express-adapter";
 import { type QueryWatcherHandler } from "@lens/watcher-handlers";
-import { lensUtils, LensALS, lensEmitter } from "@lens/core";
-import { EventEmitter } from "events";
-import { Kysely, MysqlDialect, type LogEvent } from "kysely";
+import { lensUtils } from "@lens/core";
+import { Kysely, MysqlDialect } from "kysely";
 import mysql from "mysql2";
+import Emittery from "emittery";
 
 const app = express();
-
-// create a custom EventEmitter to capture queries
-const eventEmitter = new EventEmitter();
+const eventEmitter = new Emittery();
 
 interface Database {
   users: { name: string };
@@ -227,48 +192,45 @@ const db = new Kysely<Database>({
       database: process.env.DB_NAME,
     }),
   }),
-  logging: (sql: string, timing?: number) => {
-    eventEmitter.emit("customQuery", { sql, timing });
+  log: (event) => {
+    eventEmitter.emit("customQuery", event);
   },
 });
 
 function customQueryHandler(): QueryWatcherHandler {
-  const kyselyHandlerCallback = (store?: LensALS) =>
-    eventEmitter.on("customQuery", async (payload: { sql: string; timing?: number }) => {
-      const queryPayload = {
-        query: lensUtils.formatSqlQuery(payload.sql),
-        duration: `${payload.timing ?? 0} ms`,
-        type: "mysql",
-        createdAt: lensUtils.now(),
-      };
-      lensEmitter.emit("query", { ...queryPayload, store });
-    });
+  return async ({ onQuery }) => {
+    const databaseType = "mysql";
 
-  return {
-    listen: (store) => () => kyselyHandlerCallback(store),
-    clean: (store) => () => eventEmitter.removeListener("customQuery", kyselyHandlerCallback(store)),
+    eventEmitter.on("customQuery", (payload) => {
+      onQuery({
+        query: lensUtils.formatSqlQuery(
+          lensUtils.interpolateQuery(
+            payload.query.sql,
+            payload.query.parameters as any[],
+          ),
+          databaseType,
+        ),
+        duration: `${payload.queryDurationMillis ?? 0} ms`,
+        type: databaseType,
+        createdAt: lensUtils.nowISO(),
+      });
+    });
   };
 }
 
 await lens({
   app,
-  handlers: {
-    query: { enabled: true, handler: customQueryHandler() },
+  queryWatcher: {
+    enabled: true,
+    handler: customQueryHandler(),
   },
 });
-
-app.get("/add-user", async (_req, res) => {
-  await db.insertInto("users").values({ name: "John Doe" }).execute();
-  res.send("User added");
-});
-
-app.listen(3000);
 ```
 
-------------------------------------------------------------------------
+---
 
-## ✅ Summary
+## Summary
 
--   Use built-in handlers for Prisma, Kysely, and Sequelize.\
--   Or create a custom handler for your own DB client.\
--   Queries are automatically captured and displayed in the Lens UI.
+- Use **built-in handlers** for Prisma, Kysely, and Sequelize  
+- Or build a **custom handler** for your ORM/client  
+- All queries are automatically captured and displayed in the **Lens UI**

@@ -9,7 +9,7 @@ The **Express adapter** integrates LensJS into your Express app.
 Install the Express adapter:
 
 ```bash
-npm install @lens/express-adapter @lens/core
+npm install @lens/express-adapter
 ```
 
 👉 If you want to use pre-built watcher handlers (e.g., Prisma), also install:
@@ -36,14 +36,12 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 await lens({
   app,
-  handlers: {
-    query: {
-      enabled: true,
-      handler: createPrismaHandler({
-        prisma,
-        provider: "mysql",
-      }),
-    },
+  queryWatcher: {
+    enabled: true,
+    handler: createPrismaHandler({
+      prisma,
+      provider: "mysql",
+    }),
   },
 });
 

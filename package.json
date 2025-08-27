@@ -7,7 +7,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MohammedElattar/lens.git"
+    "url": "git+https://github.com/lensjs/lens.git"
   },
   "dependencies": {
     "dayjs": "^1.11.13",
@@ -24,13 +24,15 @@
     "typescript": "^5.4.0"
   },
   "bugs": {
-    "url": "https://github.com/MohammedElattar/lens/issues"
+    "url": "https://github.com/lensjs/lens/issues"
   },
-  "homepage": "https://github.com/MohammedElattar/lens#readme",
+  "homepage": "https://github.com/lensjs/lens#readme",
   "scripts": {
     "build": "lerna run build --stream --since",
     "dev": "bun --watch packages/example-express/src/index.ts",
     "dev:front": "cd packages/core/src/ui && bun run dev",
+    "dev:docs": "cd packages/docs && bun run dev",
+    "build:docs": "cd packages/docs && bun run build",
     "build:front": "cd packages/core/src/ui && bun run build",
     "build:core": "cd packages/core && bun run build",
     "build:express": "cd packages/express && bun run build",

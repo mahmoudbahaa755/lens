@@ -26,7 +26,10 @@ export default defineConfig({
             text: "Express",
             items: [
               { text: "Installation", link: "/adapters/express/installation" },
-              { text: "Configuration", link: "/adapters/express/configuration" },
+              {
+                text: "Configuration",
+                link: "/adapters/express/configuration",
+              },
             ],
           },
           {
@@ -40,19 +43,12 @@ export default defineConfig({
       {
         text: "Watchers",
         collapsed: true,
-        items: [
-          { text: "Query Watcher", link: "/handlers/query" },
-        ],
-      },
-      {
-        text: "Extending",
-        collapsed: true,
-        items: [{ text: "Using @lens/core", link: "/extending/core" }],
+        items: [{ text: "Query Watcher", link: "/handlers/query" }],
       },
     ],
 
     socialLinks: [
-      { icon: "github", link: "https://github.com/MohammedElattar/lens" },
+      { icon: "github", link: "https://github.com/lensjs/lens" },
     ],
   },
 });

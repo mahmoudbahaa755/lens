@@ -1,6 +1,7 @@
 import type { ApplicationService } from '@adonisjs/core/types'
 import { HttpContext } from '@adonisjs/core/http'
 import { LensConfig } from '../define_config.js'
+import chalk from 'chalk'
 
 export const runningInConsole = (app: ApplicationService) => {
   return ['console', 'repl', 'test'].includes(app.getEnvironment())
@@ -10,9 +11,19 @@ export const getRunningCommand = () => {
   const cmd = process.env.ACE_CLI_COMMAND
 
   if (!cmd) {
-    throw new Error(
-      "Could not determine running command, please set ACE_CLI_COMMAND environment variable in 'start/server.ts file'"
-    )
+    const message = `
+${chalk.red.bold('✖ Could not determine running command')}
+
+Make sure to set the environment variable:
+
+  ${chalk.cyan("process.env.ACE_CLI_COMMAND = process.argv[2] ?? ''")}
+
+before creating a new Ignitor instance in:
+
+  ${chalk.yellow('start/server.ts')}
+    `
+
+    throw new Error(message)
   }
 
   return cmd

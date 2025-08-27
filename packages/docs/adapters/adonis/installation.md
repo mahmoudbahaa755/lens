@@ -24,7 +24,6 @@ This will automatically:
 
 - Create `config/lens.ts`
 - Add the `LensServiceProvider` to `adonisrc.ts`
-- Register the Lens middleware in `start/kernel.ts`
 - Add Lens environment variables validation inside `start/env.ts`
 
 ---
@@ -38,17 +37,6 @@ providers: [
   () => import('@lens/adonis-adapter/lens_provider'),
 ],
 ```
-
-### `start/kernel.ts`
-```ts
-import router from '@adonisjs/core/services/router'
-
-router.use([
-  // ... other middlewares
-  () => import('@lens/adonis-adapter/lens_middleware'),
-])
-```
-
 ### `start/env.ts`
 ```ts
 import { Env } from '@adonisjs/core/env'
@@ -88,9 +76,11 @@ const lensConfig = defineConfig({
 
   watchers: {
     requests: env.get('LENS_ENABLE_REQUEST_WATCHER', true),
-    queries: env.get('LENS_ENABLE_QUERY_WATCHER', true),
+    queries: {
+      enabled: env.get('LENS_ENABLE_QUERY_WATCHER', true),
+      provider: 'sqlite',
+    }
   },
-
   // Optional authentication
   isAuthenticated: async (ctx) => {
     return await ctx.auth?.check()

@@ -14,17 +14,22 @@ const defaultConfig = {
   path: "/lens",
   ignoredPaths: [],
   onlyPaths: [],
+  requestWatcherEnabled: true,
 };
 
 export const lens = async (config: ExpressAdapterConfig) => {
   const adapter = new ExpressAdapter({ app: config.app });
-  const watchers: LensWatcher[] = [new RequestWatcher()];
+  const watchers: LensWatcher[] = [];
   const mergedConfig = {
     ...config,
     ...defaultConfig,
   } as RequiredExpressAdapterConfig;
 
-  if (config.queryWatcher?.enabled) {
+  if (mergedConfig.requestWatcherEnabled) {
+    watchers.push(new RequestWatcher());
+  }
+
+  if (mergedConfig.queryWatcher?.enabled) {
     watchers.push(new QueryWatcher());
   }
 

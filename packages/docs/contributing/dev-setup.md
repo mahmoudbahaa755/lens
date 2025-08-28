@@ -8,6 +8,7 @@ First off, thank you for considering contributing to Lens! It's people like you 
 
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [Git](https://git-scm.com/)
+- [Bun](https://bun.sh)
 
 ### Setup
 
@@ -23,14 +24,14 @@ First off, thank you for considering contributing to Lens! It's people like you 
     This project uses `bun` as a package manager and `lerna` with workspaces. Running `bun install` at the root will install dependencies for all packages and link them together.
 
     ```bash
-    npm install && npx install husky
+    bun install && bunx install husky
     ```
 3.  **Build all packages:**
 
     This command will build all the packages in the correct order.
 
     ```bash
-    npm run build
+    bun run build
     ```
 
 4.  **Run the example application:**
@@ -38,7 +39,7 @@ First off, thank you for considering contributing to Lens! It's people like you 
     This will start the Express server with hot-reloading.
 
     ```bash
-    npm run dev
+    bun run dev
     ```
 
     The server will be running at `http://localhost:3000`. You can visit `http://localhost:3000/add-user` to trigger a database query that will be captured by Lens.

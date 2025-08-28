@@ -25,7 +25,6 @@ app.use(
 
 await lens({
   app,
-  requestWatcherEnabled: true,
   queryWatcher: {
     enabled: true,
     handler: createSequelizeHandler({ provider: "sqlite" }),

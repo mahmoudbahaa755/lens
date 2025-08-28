@@ -30,8 +30,11 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "@lensjs/core": "*",
+    "@lensjs/core": "workspace:*",
     "emittery": "latest"
+  },
+  "peerDependencies": {
+    "@lensjs/core": "^1.0.2"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"
 }

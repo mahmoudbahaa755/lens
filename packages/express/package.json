@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/express",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Express adapter for Lens",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,8 +21,12 @@
     "build": "tsup --clean"
   },
   "dependencies": {
+    "@lensjs/core": "workspace:*",
     "express": "^5.1.0",
     "utf-8-validate": "^6.0.5"
+  },
+  "peerDependencies": {
+    "@lensjs/core": "^1.0.2"
   },
   "trustedDependencies": [
     "utf-8-validate"

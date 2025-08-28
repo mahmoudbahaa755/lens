@@ -45,14 +45,11 @@ export default function DeleteButton() {
       </Modal>
       <button
         onClick={() => setIsOpen(true)}
-        className="relative p-2.5 rounded-[10px] border border-neutral-800 hover:bg-gray-800 bg-neutral-900 transition-all duration-200 shadow-sm hover:shadow-md group"
+        className="relative p-2.5 rounded-[10px] border border-neutral-800 hover:bg-neutral-800 bg-neutral-900 transition-all duration-200 shadow-sm hover:shadow-md group"
         aria-label="Delete entries"
       >
         <div className="relative w-5 h-5">
-          <Trash2
-            size={20}
-            className="text-red-500 group-hover:text-red-400 duration-200 transform transition-transform"
-          />
+          <Trash2 size={20} className="text-red-500" />
         </div>
       </button>
     </>

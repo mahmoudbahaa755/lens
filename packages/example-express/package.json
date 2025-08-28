@@ -7,9 +7,9 @@
     "dev": "bun --watch src/index.ts"
   },
   "dependencies": {
-    "@lens/core": "*",
-    "@lens/express-adapter": "^1.0.1",
-    "@lens/watcher-handlers": "^1.0.1",
+    "@lensjs/core": "*",
+    "@lensjs/express": "^1.0.1",
+    "@lensjs/watchers": "^1.0.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "cors": "^2.8.5",

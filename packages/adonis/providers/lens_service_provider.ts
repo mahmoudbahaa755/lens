@@ -2,7 +2,7 @@ import { configProvider } from '@adonisjs/core'
 import { RuntimeException } from '@poppinss/utils'
 import type { ApplicationService } from '@adonisjs/core/types'
 import { LensConfig } from '../src/define_config.js'
-import { QueryEntry, Lens, lensUtils, RequestWatcher, QueryWatcher } from '@lens/core'
+import { QueryEntry, Lens, lensUtils, RequestWatcher, QueryWatcher } from '@lensjs/core'
 import AdonisAdapter from '../src/adapter.js'
 
 declare module '@adonisjs/core/types' {

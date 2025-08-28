@@ -1,4 +1,4 @@
-import { lensUtils } from "@lens/core";
+import { lensUtils } from "@lensjs/core";
 import { watcherEmitter } from "../utils/emitter";
 import { QueryWatcherHandler, SequelizeQueryType } from "../types";
 

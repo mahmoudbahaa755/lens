@@ -7,7 +7,7 @@ The AdonisJS adapter makes it easy to integrate Lens into your AdonisJS app and 
 ## 1. Install the Package
 
 ```bash
-npm install @lens/adonis-adapter
+npm install @lensjs/adonis
 ```
 
 ---
@@ -17,7 +17,7 @@ npm install @lens/adonis-adapter
 Lens provides a setup command that wires everything for you:
 
 ```bash
-node ace configure @lens/adonis-adapter
+node ace configure @lensjs/adonis
 ```
 
 This will automatically:
@@ -34,7 +34,7 @@ This will automatically:
 ```ts
 providers: [
   // ... other providers
-  () => import('@lens/adonis-adapter/lens_provider'),
+  () => import('@lensjs/adonis/lens_provider'),
 ],
 ```
 ### `start/env.ts`
@@ -64,7 +64,7 @@ The `config/lens.ts` file is where you customize Lens behavior:
 
 ```ts
 import env from '#start/env'
-import { defineConfig } from '@lens/adonis-adapter'
+import { defineConfig } from '@lensjs/adonis'
 
 const lensConfig = defineConfig({
   appName: env.get('APP_NAME', 'AdonisJs'),

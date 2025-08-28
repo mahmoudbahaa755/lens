@@ -1,5 +1,5 @@
 {
-  "name": "@lens/watcher-handlers",
+  "name": "@lensjs/watchers",
   "version": "1.0.1",
   "description": "Watcher handlers for Lens",
   "main": "./dist/index.js",
@@ -27,7 +27,8 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "@lens/core": "*",
+    "@lensjs/core": "*",
     "emittery": "latest"
-  }
+  },
+  "gitHead": "1aac4ab5c0490b80fc6ce25309fecf773c860111"
 }

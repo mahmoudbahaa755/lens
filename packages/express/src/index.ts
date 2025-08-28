@@ -4,7 +4,7 @@ import {
   LensWatcher,
   QueryWatcher,
   RequestWatcher,
-} from "@lens/core";
+} from "@lensjs/core";
 import { ExpressAdapterConfig, RequiredExpressAdapterConfig } from "./types";
 import ExpressAdapter from "./adapter";
 

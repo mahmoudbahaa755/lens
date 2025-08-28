@@ -1,5 +1,5 @@
 {
-  "name": "@lens/core",
+  "name": "@lensjs/core",
   "version": "1.0.1",
   "type": "module",
   "private": false,
@@ -32,5 +32,6 @@
     "libsql": "^0.5.17",
     "sql-formatter": "^15.6.6",
     "tailwind-merge": "^3.3.1"
-  }
+  },
+  "gitHead": "1aac4ab5c0490b80fc6ce25309fecf773c860111"
 }

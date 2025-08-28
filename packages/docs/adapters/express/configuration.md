@@ -8,8 +8,8 @@ This guide provides a clear reference and practical examples to help you set it 
 Here’s how to enable query watching with **Prisma**:
 
 ```ts
-import { lens } from "@lens/express-adapter";
-import { createPrismaHandler } from "@lens/watcher-handlers";
+import { lens } from "@lensjs/express";
+import { createPrismaHandler } from "@lensjs/watchers";
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 
@@ -37,8 +37,8 @@ This snippet shows **all available options**, with inline comments:
 
 ```ts
 import express from "express";
-import { lens } from "@lens/express-adapter";
-import { createPrismaHandler } from "@lens/watcher-handlers";
+import { lens } from "@lensjs/express";
+import { createPrismaHandler } from "@lensjs/watchers";
 import { PrismaClient } from "@prisma/client";
 import { DefaultDatabaseStore } from "@lens/store"; // Example store implementation
 

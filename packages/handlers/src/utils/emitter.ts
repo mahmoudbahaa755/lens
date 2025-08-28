@@ -1,5 +1,5 @@
 import { LogEvent } from "kysely";
-import { createEmittery } from "@lens/core";
+import { createEmittery } from "@lensjs/core";
 
 export interface LensWatcherEvents {
   kyselyQuery: LogEvent;

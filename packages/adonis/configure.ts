@@ -38,6 +38,6 @@ export async function configure(command: ConfigureCommand) {
   await registerEnvValidation(codemods)
   await codemods.makeUsingStub(stubsRoot, 'config/lens.stub', {})
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@lens/adonis-adapter/lens_provider')
+    rcFile.addProvider('@lensjs/adonis/lens_provider')
   })
 }

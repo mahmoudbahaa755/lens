@@ -6,7 +6,7 @@ import {
   WatcherTypeEnum,
   RouteHttpMethod,
   QueryWatcher,
-} from "@lens/core";
+} from "@lensjs/core";
 import { RequiredExpressAdapterConfig } from "./types";
 import { Express, Request, Response } from "express";
 import * as path from "path";

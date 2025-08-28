@@ -1,6 +1,6 @@
 import { Express } from "express";
-import { QueryWatcherHandler } from "@lens/watcher-handlers";
-import { UserEntry } from "@lens/core";
+import { QueryWatcherHandler } from "@lensjs/watchers";
+import { UserEntry } from "@lensjs/core";
 import { Request } from "express";
 
 export type ExpressAdapterConfig = {

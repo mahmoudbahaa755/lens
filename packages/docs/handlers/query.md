@@ -1,6 +1,6 @@
 # Query Watcher Handlers
 
-The `@lens/watcher-handlers` package provides **ready-to-use and customizable handlers** for capturing and processing database queries observed by [`@lens/core`](https://www.npmjs.com/package/@lens/core).  
+The `@lensjs/watchers` package provides **ready-to-use and customizable handlers** for capturing and processing database queries observed by [`@lensjs/core`](https://www.npmjs.com/package/@lensjs/core).  
 
 These handlers let you **monitor queries (SQL, MongoDB, etc.)** and visualize them directly in the **Lens UI**.
 
@@ -9,7 +9,7 @@ These handlers let you **monitor queries (SQL, MongoDB, etc.)** and visualize th
 ## Installation
 
 ```bash
-npm install @lens/watcher-handlers
+npm install @lensjs/watchers
 ```
 
 ---
@@ -33,8 +33,8 @@ npm install @prisma/client
 
 ```ts
 import express from "express";
-import { lens } from "@lens/express-adapter";
-import { createPrismaHandler } from "@lens/watcher-handlers";
+import { lens } from "@lensjs/express";
+import { createPrismaHandler } from "@lensjs/watchers";
 import { PrismaClient } from "@prisma/client";
 
 const app = express();
@@ -68,10 +68,10 @@ npm install kysely mysql2
 
 ```ts
 import express from "express";
-import { lens } from "@lens/express-adapter";
+import { lens } from "@lensjs/express";
 import { Kysely, MysqlDialect } from "kysely";
 import mysql from "mysql2";
-import { createKyselyHandler, watcherEmitter } from "@lens/watcher-handlers";
+import { createKyselyHandler, watcherEmitter } from "@lensjs/watchers";
 
 const app = express();
 
@@ -121,9 +121,9 @@ npm install sequelize
 
 ```ts
 import express from "express";
-import { lens } from "@lens/express-adapter";
+import { lens } from "@lensjs/express";
 import { Sequelize } from "sequelize";
-import { createSequelizeHandler, watcherEmitter } from "@lens/watcher-handlers";
+import { createSequelizeHandler, watcherEmitter } from "@lensjs/watchers";
 
 const app = express();
 
@@ -169,9 +169,9 @@ A handler must:
 
 ```ts
 import express from "express";
-import { lens } from "@lens/express-adapter";
-import { type QueryWatcherHandler } from "@lens/watcher-handlers";
-import { lensUtils } from "@lens/core";
+import { lens } from "@lensjs/express";
+import { type QueryWatcherHandler } from "@lensjs/watchers";
+import { lensUtils } from "@lensjs/core";
 import { Kysely, MysqlDialect } from "kysely";
 import mysql from "mysql2";
 import Emittery from "emittery";

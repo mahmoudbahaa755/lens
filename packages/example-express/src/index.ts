@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import path from "path";
-import { createSequelizeHandler, watcherEmitter } from "@lens/watcher-handlers";
-import { lens } from "@lens/express-adapter";
+import { createSequelizeHandler, watcherEmitter } from "@lensjs/watchers";
+import { lens } from "@lensjs/express";
 
 const app = express();
 const port = 3000;

@@ -9,7 +9,7 @@ It helps you **observe your application in real time** by tracking requests, que
 
 - **Lightweight** → minimal overhead, easy to integrate.  
 - **Framework Agnostic** → works with any Node.js framework (currently Express and AdonisJS).
-- **Extensible** → build custom watchers and adapters on top of `@lens/core`.  
+- **Extensible** → build custom watchers and adapters on top of `@lensjs/core`.  
 - **Developer-Friendly Dashboard** → inspect requests, queries, and events in your browser.  
 
 ---
@@ -22,7 +22,7 @@ These adapters collect and forward data (like requests and queries) to the Lens 
 ```mermaid
 flowchart LR
     A[ Node.js App ] --> B[Adapter]
-    B --> C[@lens/core]
+    B --> C[@lensjs/core]
     C --> D[Lens Dashboard]
 ```
 

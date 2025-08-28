@@ -1,5 +1,5 @@
 {
-  "name": "@lens/adonis-adapter",
+  "name": "@lensjs/adonis",
   "description": "AdonisJs adapter for lens package",
   "version": "1.0.1",
   "engines": {
@@ -82,5 +82,6 @@
       "tests/**"
     ]
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config",
+  "gitHead": "1aac4ab5c0490b80fc6ce25309fecf773c860111"
 }

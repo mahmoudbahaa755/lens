@@ -9,13 +9,13 @@ The **Express adapter** integrates LensJS into your Express app.
 Install the Express adapter:
 
 ```bash
-npm install @lens/express-adapter
+npm install @lensjs/express
 ```
 
 👉 If you want to use pre-built watcher handlers (e.g., Prisma), also install:
 
 ```bash
-npm install @lens/watcher-handlers
+npm install @lensjs/watchers
 ```
 
 ---
@@ -25,8 +25,8 @@ npm install @lens/watcher-handlers
 Since the query watcher is required, here’s a minimal setup using Prisma:
 
 ```ts
-import { lens } from "@lens/express-adapter";
-import { createPrismaHandler } from "@lens/watcher-handlers";
+import { lens } from "@lensjs/express";
+import { createPrismaHandler } from "@lensjs/watchers";
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 

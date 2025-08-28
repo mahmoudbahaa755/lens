@@ -1,5 +1,5 @@
 import env from '#start/env'
-import { defineConfig } from '@lens/adonis-adapter'
+import { defineConfig } from '@lensjs/adonis'
 
 const lensConfig = defineConfig({
   appName: env.get('APP_NAME', 'Adonis Adapter'),

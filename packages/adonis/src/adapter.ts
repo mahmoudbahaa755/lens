@@ -8,7 +8,7 @@ import {
   QueryWatcher,
   RouteHttpMethod,
   QueryEntry,
-} from '@lens/core'
+} from '@lensjs/core'
 import * as path from 'path'
 import type { ApplicationService, EmitterService, HttpRouterService } from '@adonisjs/core/types'
 import { shouldIgnoreLogging } from './utils/index.js'

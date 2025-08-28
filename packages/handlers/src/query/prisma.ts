@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { lensUtils, QueryType } from "@lens/core";
+import { lensUtils, QueryType } from "@lensjs/core";
 import { PrismaProvider, QueryWatcherHandler } from "../types";
 
 function shouldIgnorePrismaQuery(query: string, provider: QueryType) {

@@ -1,4 +1,4 @@
-import { QueryEntry, QueryType, SqlQueryType } from "@lens/core";
+import { QueryEntry, QueryType, SqlQueryType } from "@lensjs/core";
 
 export type QueryWatcherHandler = (args: {
   onQuery: (query: QueryEntry["data"]) => Promise<void>;

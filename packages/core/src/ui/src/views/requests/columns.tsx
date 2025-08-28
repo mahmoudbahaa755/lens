@@ -13,7 +13,7 @@ const getColumns = (): TableColumn<RequestTableRow>[] => {
 
   return [
     {
-      name: "Verb",
+      name: "Method",
       render: (row) => <MethodBadge method={row.data.method} />,
     },
     {

@@ -27,7 +27,7 @@ const Layout = () => {
         isMobileSidebarOpen={isMobileSidebarOpen}
         onToggleMobileSidebar={handleToggleMobileSidebar}
       />
-      <hr className="container  my-6 border-gray-300 dark:border-neutral-700" />
+      <hr className="container  my-6 border-gray-300 dark:border-neutral-900" />
       <div className="container flex flex-col h-full lg:flex-row gap-8 relative">
         <Sidebar
           isMobileSidebarOpen={isMobileSidebarOpen}
@@ -39,7 +39,7 @@ const Layout = () => {
           <div className="flex-1">
             <Outlet />
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>{" "}
     </>

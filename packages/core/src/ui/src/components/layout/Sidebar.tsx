@@ -46,7 +46,7 @@ const Sidebar = ({
                 <Link
                   to={route.path}
                   className={[
-                    "flex items-center gap-2 rounded-lg px-3 py-2 font-medium transition-colors",
+                    "flex items-center gap-2 rounded-lg px-4 py-2 font-medium",
                     isActive
                       ? "bg-green-100 dark:bg-neutral-800 text-gray-900 dark:text-white"
                       : "text-gray-600 dark:text-neutral-400 hover:bg-gray-50 dark:hover:bg-neutral-800/50",

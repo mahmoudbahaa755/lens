@@ -1,4 +1,5 @@
 {
+  "version": "independent",
   "scripts": {
     "dev": "vitepress dev",
     "build": "npx vitepress build",

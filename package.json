@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "type": "module",
+  "version": "independent",
   "workspaces": [
     "packages/*"
   ],

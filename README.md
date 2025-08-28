@@ -16,4 +16,4 @@ You can find the official documentation [here](https://lensjs.vercel.app/).
 
 ## Contributing
 
-We welcome contributions from the community! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) to learn how you can get involved.
+We welcome contributions from the community! Please read our [Contributing Guide](packages/docs/contributing/dev-setup.md) to learn how you can get involved.

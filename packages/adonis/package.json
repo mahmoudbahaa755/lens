@@ -1,7 +1,7 @@
 {
   "name": "@lens/adonis-adapter",
   "description": "AdonisJs adapter for lens package",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "node": ">=20.6.0"
   },

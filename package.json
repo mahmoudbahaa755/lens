@@ -4,7 +4,10 @@
   "type": "module",
   "version": "independent",
   "workspaces": [
-    "packages/*"
+    "packages/core",
+    "packages/handlers",
+    "packages/express",
+    "packages/adonis"
   ],
   "repository": {
     "type": "git",

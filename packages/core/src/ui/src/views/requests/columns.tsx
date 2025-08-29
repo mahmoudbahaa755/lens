@@ -4,7 +4,7 @@ import StatusCode from "../../components/StatusCode";
 import { getRoutesPaths } from "../../router/routes";
 import type { RequestTableRow } from "../../types";
 import { useConfig } from "../../utils/context";
-import { humanDifferentDate } from "../../utils/date";
+import { humanDifferentDate } from "@repo/date";
 import type { TableColumn } from "../../components/Table";
 import { Link } from "react-router-dom";
 

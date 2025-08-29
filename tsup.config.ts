@@ -1,11 +1,11 @@
-import { Options } from "tsup";
+import { type Options } from "tsup";
 export type TSUPOptions = Options;
 export const baseConfig: TSUPOptions = {
   entry: ["src/**/*.ts"],
   outDir: "dist",
   format: ["esm", "cjs"],
   dts: true,
-  bundle: true,
+  bundle: false,
   target: "node18",
   splitting: false,
   clean: true,

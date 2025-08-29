@@ -4,9 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --watch src/index.ts"
+    "dev": "nodemon --watch src --ext ts,json --exec tsx src/index.ts"
   },
   "dependencies": {
+    "@lensjs/core": "workspace:*",
+    "@lensjs/express": "workspace:*",
+    "@lensjs/watchers": "workspace:*",
+    "@repo/date": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "cors": "^2.8.5",
@@ -16,7 +20,9 @@
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7"
   },
-  "peerDependencies": {
-    "typescript": "^5"
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "tsx": "^4.20.5",
+    "typescript": "^5.5.0"
   }
 }

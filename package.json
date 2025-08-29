@@ -3,44 +3,31 @@
   "private": true,
   "type": "module",
   "version": "independent",
-  "workspaces": [
-    "packages/core",
-    "packages/handlers",
-    "packages/express",
-    "packages/adonis"
-  ],
+  "packageManager": "pnpm@10.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lensjs/lens.git"
   },
   "dependencies": {
-    "dayjs": "^1.11.13",
-    "vite": "^7.0.6"
+    "turbo": "^2.5.6",
+    "vite": "^7.1.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@types/node": "^20.10.0",
+    "@types/node": "^20.19.11",
     "commitlint": "19.8.1",
     "husky": "^9.1.7",
-    "lerna": "^8.2.3",
+    "prettier": "^3.6.2",
     "tsup": "^8.5.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.9.2"
   },
   "bugs": {
     "url": "https://github.com/lensjs/lens/issues"
   },
   "homepage": "https://github.com/lensjs/lens#readme",
   "scripts": {
-    "build": "lerna run build --stream --since",
-    "dev": "bun --watch packages/example-express/src/index.ts",
-    "dev:front": "cd packages/core/src/ui && bun run dev",
-    "dev:docs": "cd packages/docs && bun run dev",
-    "build:docs": "cd packages/docs && bun run build",
-    "build:front": "cd packages/core/src/ui && bun run build",
-    "build:core": "cd packages/core && bun run build",
-    "build:express": "cd packages/express && bun run build",
-    "build:handlers": "cd packages/handlers && bun run build",
-    "build:adonis": "cd packages/adonis && bun run build"
+    "build": "turbo build",
+    "prepare": "husky"
   }
 }

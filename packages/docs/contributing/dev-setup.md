@@ -8,7 +8,7 @@ First off, thank you for considering contributing to Lens! It's people like you 
 
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - [Git](https://git-scm.com/)
-- [Bun](https://bun.sh)
+- [pnpm](https://pnpm.io)
 
 ### Setup
 
@@ -21,17 +21,17 @@ First off, thank you for considering contributing to Lens! It's people like you 
 
 2.  **Install dependencies:**
 
-    This project uses `bun` as a package manager and `lerna` with workspaces. Running `bun install` at the root will install dependencies for all packages and link them together.
+    This project uses `pnpm` as a package manager and `lerna` with workspaces. Running `pnpm install` at the root will install dependencies for all packages and link them together.
 
     ```bash
-    bun install && bunx install husky
+    pnpm install && pnpmx install husky
     ```
 3.  **Build all packages:**
 
     This command will build all the packages in the correct order.
 
     ```bash
-    bun run build
+    pnpm run build
     ```
 
 4.  **Run the example application:**
@@ -39,7 +39,7 @@ First off, thank you for considering contributing to Lens! It's people like you 
     This will start the Express server with hot-reloading.
 
     ```bash
-    bun run dev
+    pnpm run dev
     ```
 
     The server will be running at `http://localhost:3000`. You can visit `http://localhost:3000/add-user` to trigger a database query that will be captured by Lens.
@@ -49,7 +49,7 @@ First off, thank you for considering contributing to Lens! It's people like you 
 1.  Make your changes in the appropriate package(s).
 2.  If you are working on the UI, you can run the UI dev server:
     ```bash
-    bun run dev:front
+    pnpm run dev:front
     ```
 3.  Ensure all tests pass. (TODO: Add test running instructions).
 4.  Commit your changes following the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.

@@ -1,8 +1,7 @@
 {
   "name": "@lensjs/core",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "type": "module",
-  "private": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -22,22 +21,20 @@
     "build:ui": "npm --prefix src/ui run build",
     "clean": "rm -rf dist",
     "postbuild": "node copy-front-build.cjs",
-    "format": "prettier --write .",
     "test": "vitest"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/vite": "^4.1.11",
-    "@types/luxon": "^3.7.1",
     "cross-env": "^10.0.0",
-    "luxon": "^3.7.1",
-    "prettier": "^3.0.0",
     "vitest": "^3.2.4"
   },
   "dependencies": {
     "emittery": "^1.2.0",
     "libsql": "^0.5.17",
     "sql-formatter": "^15.6.6",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "@repo/date": "workspace:*"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@lensjs/express",
-  "version": "1.0.4",
-  "description": "Express adapter for Lens",
+  "version": "1.0.7",
+  "description": "Express adapter for LensJs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
@@ -22,17 +22,10 @@
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",
-    "express": "^5.1.0",
-    "utf-8-validate": "^6.0.5"
+    "@repo/typescript-config": "workspace:*",
+    "express": "^5.1.0"
   },
-  "peerDependencies": {
-    "@lensjs/core": "^1.0.2"
-  },
-  "trustedDependencies": [
-    "utf-8-validate"
-  ],
   "devDependencies": {
     "@types/express": "^5.0.3"
-  },
-  "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"
+  }
 }

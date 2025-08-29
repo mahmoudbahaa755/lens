@@ -38,7 +38,7 @@ const Sidebar = ({
       >
         <ul className="flex flex-col gap-2 text-gray-700 dark:text-neutral-300">
           {getSidebarRoutes(config).map((route) => {
-            const isActive = location.pathname === route.path;
+            const isActive = location.pathname.startsWith(route.path);
             const Icon = route.icon;
 
             return (

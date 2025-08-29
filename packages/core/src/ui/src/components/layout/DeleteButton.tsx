@@ -1,6 +1,6 @@
 import { Trash2 } from "lucide-react";
 import { useConfig } from "../../utils/context";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "../Modal";
 import { prepareApiUrl } from "../../utils/api";
 
@@ -8,6 +8,7 @@ export default function DeleteButton() {
   const config = useConfig();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const confirmButton = useRef<HTMLButtonElement>(null);
 
   return (
     <>
@@ -24,6 +25,7 @@ export default function DeleteButton() {
             <button
               className="bg-red-500 hover:bg-red-600 text-white font-bold py-1.5 px-4 rounded-2xl"
               disabled={loading}
+              ref={confirmButton}
               onClick={async () => {
                 try {
                   setLoading(true);
@@ -44,7 +46,10 @@ export default function DeleteButton() {
         </div>
       </Modal>
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          setTimeout(() => confirmButton.current?.focus(), 0);
+        }}
         className="relative p-2.5 rounded-[10px] border border-neutral-800 hover:bg-neutral-800 bg-neutral-900 transition-all duration-200 shadow-sm hover:shadow-md group"
         aria-label="Delete entries"
       >

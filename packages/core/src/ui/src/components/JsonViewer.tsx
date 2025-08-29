@@ -222,7 +222,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ data }) => {
       >
         {copied ? <CheckIcon /> : <CopyIcon />}
       </button>
-      <pre className="whitespace-pre-wrap pr-12 text-neutral-800 dark:text-neutral-200">
+      <pre className="whitespace-pre-wrap pr-12 text-neutral-800 dark:text-neutral-200 min-h-10">
         {formatJson(data)}
       </pre>
     </div>

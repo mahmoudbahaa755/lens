@@ -1,0 +1,23 @@
+{
+  "name": "@repo/date",
+  "private": true,
+  "description": "Date Utils package for lensjs",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup --clean"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.15"
+  }
+}

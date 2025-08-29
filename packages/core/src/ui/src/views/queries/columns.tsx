@@ -5,7 +5,7 @@ import type { TableColumn } from "../../components/Table";
 import { getRoutesPaths } from "../../router/routes";
 import type { QueryTableRow } from "../../types";
 import { useConfig } from "../../utils/context";
-import { humanDifferentDate } from "../../utils/date";
+import { humanDifferentDate } from "@repo/date";
 
 function highlightSQL(query: string): JSX.Element {
   return (
@@ -20,7 +20,7 @@ const getColumns = (): TableColumn<QueryTableRow>[] => {
     {
       name: "Query",
       render: (row) => (
-        <div className="col-span-5">
+        <div className="max-w-xl">
           <code
             className="text-sm font-mono text-slate-800 dark:text-slate-300 leading-relaxed line-clamp-1"
             title={row.data.query}

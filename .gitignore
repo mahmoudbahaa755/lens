@@ -1,6 +1,3 @@
-.nx/cache
-
-# dependencies (bun install)
 node_modules
 
 # output
@@ -36,7 +33,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 .vscode/
-.nx
 lens.db
 database.sqlite
 .npmrc
+.turbo

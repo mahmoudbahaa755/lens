@@ -6,7 +6,7 @@ import {
   type LensEntry,
 } from "../types/index";
 import Database from "libsql";
-import { sqlDateTime } from "../utils";
+import { sqlDateTime } from "@repo/date";
 
 const TABLE_NAME = "lens_entries";
 

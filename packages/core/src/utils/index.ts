@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { format, SqlLanguage } from "sql-formatter";
 import { randomUUID } from "crypto";
 import { fileURLToPath } from "url";
-import path from "path/posix";
+import * as path from "node:path";
 
 export const generateRandomUuid = () => {
   return randomUUID();
@@ -53,7 +53,7 @@ export function interpolateQuery(query: string, bindings: Bindings): string {
       const keys = Object.keys(bindings);
       if (index < 0 || index >= keys.length)
         throw new Error(`Missing binding for ${match}`);
-      // @ts-expect-error
+      // @ts-ignore
       value = bindings[keys[index]];
     } else {
       // Named placeholder: $name or :name
@@ -75,26 +75,6 @@ export const formatSqlQuery = (query: string, language: SqlLanguage) => {
   });
 };
 
-export function now() {
-  return DateTime.now().setZone("utc");
-}
-
-export function nowISO() {
-  return now().toISO({ includeOffset: false }) as string;
-}
-
-export function sqlDateTime(dateTime?: DateTime | null) {
-  const time = dateTime ?? now();
-
-  return time.toSQL({ includeOffset: false });
-}
-
-export function convertToUTC(dateTime: string) {
-  return DateTime.fromISO(dateTime)
-    .setZone("utc")
-    .toISO({ includeOffset: false }) as string;
-}
-
 export function getMeta(metaUrl?: string): {
   __filename: string;
   __dirname: string;
@@ -110,7 +90,6 @@ export function getMeta(metaUrl?: string): {
     const __dirname = path.dirname(__filename);
     return { __filename, __dirname };
   } else {
-    // @ts-ignore - available only in CJS
     return { __filename, __dirname };
   }
 }
@@ -135,7 +114,6 @@ export function prepareIgnoredPaths(path: string, ignoredPaths: RegExp[]) {
 
   return { ignoredPaths, normalizedPath };
 }
-
 export function shouldIgnoreCurrentPath(
   path: string,
   ignoredPaths: RegExp[],
@@ -174,3 +152,5 @@ export function prettyHrTime(
 
   return `${(ms / 1000).toFixed(1)} s`;
 }
+
+export * from '@repo/date'

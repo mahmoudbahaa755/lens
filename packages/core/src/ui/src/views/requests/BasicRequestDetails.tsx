@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import DetailPanel, { type DetailItem } from "../../components/DetailPanel";
 import type { OneRequest } from "../../types";
-import { formatDateWithTimeAgo} from "../../utils/date";
+import { formatDateWithTimeAgo} from "@repo/date";
 import MethodBadge from "../../components/MethodBadge";
 import StatusCode from "../../components/StatusCode";
 

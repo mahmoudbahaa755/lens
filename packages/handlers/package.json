@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/watchers",
-  "version": "1.0.1",
+  "version": "1.0.7",
   "description": "Watcher handlers for Lens",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,6 +22,7 @@
     "clean": "rm -rf dist"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@prisma/client": "^6.13.0",
     "@types/node": "^20.10.0",
     "kysely": "^0.28.5",
@@ -32,9 +33,6 @@
   "dependencies": {
     "@lensjs/core": "workspace:*",
     "emittery": "latest"
-  },
-  "peerDependencies": {
-    "@lensjs/core": "^1.0.2"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"
 }

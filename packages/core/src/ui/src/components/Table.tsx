@@ -61,13 +61,13 @@ function Table<T>({ columns: columnsProp, data }: TableProps<T>) {
                 scope="col"
                 className={twMerge(
                   "min-w-32 bg-gray-50  dark:bg-neutral-900 p-5 text-sm font-semibold text-gray-900 dark:text-neutral-200 first:rounded-s-lg last:rounded-e-lg",
-                  column.position === "end" ? "text-end" : ""
+                  column.position === "end" ? "text-end" : "",
                 )}
               >
                 <div
                   className={twMerge(
                     "flex items-center gap-2",
-                    column.position === "end" ? "justify-end" : "justify-start"
+                    column.position === "end" ? "justify-end" : "justify-start",
                   )}
                 >
                   {column.headPrefix && column.headPrefix()}
@@ -78,6 +78,13 @@ function Table<T>({ columns: columnsProp, data }: TableProps<T>) {
           </tr>
         </thead>
         <tbody>
+          {!data.length && (
+            <tr>
+              <td colSpan={columns.length} className="p-5 text-center text-neutral-400">
+                    No Entries Recorded Yet!
+              </td>
+            </tr>
+          )}
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
@@ -88,7 +95,7 @@ function Table<T>({ columns: columnsProp, data }: TableProps<T>) {
                   key={colIndex}
                   className={twMerge(
                     "p-5 first:rounded-s-lg last:rounded-e-lg bg-white dark:bg-transparent",
-                    column.position === "end" ? "text-end" : "text-start"
+                    column.position === "end" ? "text-end" : "text-start",
                   )}
                 >
                   <div
@@ -100,7 +107,7 @@ function Table<T>({ columns: columnsProp, data }: TableProps<T>) {
                       column.class,
                       column.position === "end"
                         ? "justify-end"
-                        : "justify-start"
+                        : "justify-start",
                     )}
                   >
                     {column.icon && column.icon(row)}

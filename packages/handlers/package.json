@@ -18,20 +18,16 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --clean",
-    "clean": "rm -rf dist"
+    "build": "tsup --clean"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@prisma/client": "^6.13.0",
-    "@types/node": "^20.10.0",
     "kysely": "^0.28.5",
-    "prisma": "^6.14.0",
-    "tsup": "^8.5.0",
-    "typescript": "^5.4.0"
+    "prisma": "^6.15.0"
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",
+    "@repo/date": "workspace:*",
     "emittery": "latest"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"

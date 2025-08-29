@@ -15,6 +15,7 @@ import { shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
 import { HttpContext } from '@adonisjs/core/http'
 import { LensConfig } from './define_config.js'
+import { nowISO, sqlDateTime } from '@repo/date'
 
 export default class AdonisAdapter extends LensAdapter {
   protected app: ApplicationService
@@ -84,7 +85,7 @@ export default class AdonisAdapter extends LensAdapter {
           body: request.hasBody() ? request.body() : {},
           status: event.ctx.response.response.statusCode,
           ip: request.ip(),
-          createdAt: lensUtils.nowISO(),
+          createdAt: nowISO(),
         },
         response: {
           json: event.ctx.response.getBody(),
@@ -113,7 +114,7 @@ export default class AdonisAdapter extends LensAdapter {
             self.config.watchers.queries.provider
           ),
           duration,
-          createdAt: lensUtils.sqlDateTime() as string,
+          createdAt: sqlDateTime() as string,
           type: self.config.watchers.queries.provider,
         }
 

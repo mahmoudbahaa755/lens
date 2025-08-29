@@ -1,51 +1,46 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import relativeTime from "dayjs/plugin/relativeTime";
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
+import { DateTime } from "luxon";
 
 export function now() {
-  return dayjs().utc();
+  return DateTime.utc();
 }
 
 export function nowISO() {
-  return now().toISOString();
+  return now().toISO({ suppressMilliseconds: true }) as string;
 }
 
-export function sqlDateTime(dateTime?: dayjs.Dayjs | null) {
+export function sqlDateTime(dateTime?: DateTime | null) {
   const time = dateTime ?? now();
-
-  return time.utc().format("YYYY-MM-DD HH:mm:ss");
+  return time.toFormat("yyyy-LL-dd HH:mm:ss");
 }
 
-export function convertToUTC(dateTime: string) {
-  return dayjs(dateTime).utc().toISOString();
+export function convertToUTC(dateTime: string | Date | number) {
+  return DateTime.fromJSDate(new Date(dateTime))
+    .toUTC()
+    .toISO({ suppressMilliseconds: true }) as string;
 }
 
 export function getCurrentTimezone(): string {
-  return dayjs.tz.guess();
+  return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
 function parseBackendUTC(date: string | Date | number) {
-  return dayjs.utc(date).tz(getCurrentTimezone());
+  return DateTime.fromJSDate(new Date(date), { zone: "utc" }).setZone(
+    getCurrentTimezone()
+  );
 }
 
 export const humanDifferentDate = (date: string | Date) => {
   const d = parseBackendUTC(date);
 
   return {
-    label: d.fromNow(),
-    exact: d.format("YYYY-MM-DD HH:mm:ss"),
+    label: d.toRelative() ?? "Unknown",
+    exact: d.toFormat("yyyy-LL-dd HH:mm:ss"),
   };
 };
 
 export function formatTimeAgo(dateInput: string | number | Date): string {
   const d = parseBackendUTC(dateInput);
-
-  return d.isValid() ? d.fromNow() : "Unknown";
+  return d.isValid ? d.toRelative() ?? "Unknown" : "Unknown";
 }
 
 export function formatDateWithTimeAgo(
@@ -54,11 +49,10 @@ export function formatDateWithTimeAgo(
 ): string {
   if (!dateInput) return "N/A";
 
-  const d = parseBackendUTC(dateInput);
+  const d = parseBackendUTC(dateInput).setLocale(locale);
 
-  if (!d.isValid()) return "N/A";
+  if (!d.isValid) return "N/A";
 
-  const formatted = d.locale(locale).format("MMMM D, YYYY h:mm A");
-  return `${formatted} (${d.fromNow()})`;
+  const formatted = d.toFormat("MMMM d, yyyy h:mm a");
+  return `${formatted} (${d.toRelative() ?? "Unknown"})`;
 }
-

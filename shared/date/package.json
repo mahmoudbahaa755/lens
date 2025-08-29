@@ -15,9 +15,10 @@
     "build": "tsup --clean"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/luxon": "^3.7.1"
   },
   "dependencies": {
-    "dayjs": "^1.11.15"
+    "luxon": "^3.7.1"
   }
 }

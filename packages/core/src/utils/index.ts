@@ -153,4 +153,3 @@ export function prettyHrTime(
   return `${(ms / 1000).toFixed(1)} s`;
 }
 
-export * from '@repo/date'

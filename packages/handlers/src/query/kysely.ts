@@ -2,6 +2,7 @@ import { lensUtils } from "@lensjs/core";
 import { watcherEmitter } from "../utils/emitter";
 import { KyselyQueryType, QueryWatcherHandler } from "../types";
 import { LogEvent } from "kysely";
+import { nowISO } from "@repo/date";
 
 function getQueryObject({
   provider,
@@ -19,7 +20,7 @@ function getQueryObject({
     query: lensUtils.formatSqlQuery(sql, provider),
     duration: `${payload.queryDurationMillis.toFixed(1)} ms`,
     type: provider,
-    createdAt: lensUtils.nowISO(),
+    createdAt: nowISO(),
   };
 }
 

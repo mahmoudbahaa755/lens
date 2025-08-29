@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import { lensUtils, QueryType } from "@lensjs/core";
 import { PrismaProvider, QueryWatcherHandler } from "../types";
 
@@ -29,7 +28,7 @@ export function createPrismaHandler({
   prisma,
   provider,
 }: {
-  prisma: PrismaClient;
+  prisma: any ;
   provider: PrismaProvider;
 }): QueryWatcherHandler {
   return async ({ onQuery }) => {

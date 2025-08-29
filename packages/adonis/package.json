@@ -61,7 +61,10 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@lensjs/core": "workspace:*"
+    "@lensjs/core": "workspace:*",
+    "@poppinss/utils": "^6.10.1",
+    "@repo/date": "workspace:*",
+    "chalk": "^5.6.0"
   },
   "publishConfig": {
     "access": "public",

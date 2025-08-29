@@ -21,7 +21,9 @@
     "build": "tsup --clean"
   },
   "dependencies": {
+    "@repo/date": "workspace:*",
     "@lensjs/core": "workspace:*",
+    "@lensjs/watchers": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "express": "^5.1.0"
   },

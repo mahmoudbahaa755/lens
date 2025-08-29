@@ -11,6 +11,7 @@ import { RequiredExpressAdapterConfig } from "./types";
 import { Express, Request, Response } from "express";
 import * as path from "path";
 import express from "express";
+import { nowISO, sqlDateTime } from "@repo/date";
 
 export default class ExpressAdapter extends LensAdapter {
   protected app!: Express;
@@ -87,7 +88,7 @@ export default class ExpressAdapter extends LensAdapter {
         const queryPayload = {
           query: query.query,
           duration: query.duration || "0 ms",
-          createdAt: query.createdAt || (lensUtils.sqlDateTime() as string),
+          createdAt: query.createdAt || (sqlDateTime() as string),
           type: query.type,
         };
 
@@ -150,7 +151,7 @@ export default class ExpressAdapter extends LensAdapter {
           body: req.body ?? {},
           status: res.statusCode,
           ip: req.socket?.remoteAddress ?? "",
-          createdAt: lensUtils.nowISO(),
+          createdAt: nowISO(),
         },
         response: {
           json: (res as any)._body ?? null,

@@ -56,11 +56,16 @@
     "@adonisjs/core": "^6.19.0",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.8.0",
-    "@lensjs/adonis": "^1.0.6",
+    "@lensjs/adonis": "workspace:*",
+    "@libsql/sqlite3": "^0.3.1",
     "@vinejs/vine": "^3.0.1",
     "better-sqlite3": "^12.2.0",
+    "bindings": "^1.5.0",
+    "dayjs": "^1.11.15",
+    "libsql": "^0.5.20",
     "luxon": "^3.7.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7"
   },
   "hotHook": {
     "boundaries": [

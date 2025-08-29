@@ -1,6 +1,7 @@
 import { lensUtils } from "@lensjs/core";
 import { watcherEmitter } from "../utils/emitter";
 import { QueryWatcherHandler, SequelizeQueryType } from "../types";
+import { now } from "@repo/date";
 
 function normalizeSql(sql: string) {
   return sql.replace(/^Executed \(default\):\s*/, "");
@@ -57,7 +58,7 @@ function sequelizeEventHandler({
     ),
     duration: `${payload.timing.toFixed(1)} ms`,
     type: provider,
-    createdAt: `${lensUtils.now()}`,
+    createdAt: `${now()}`,
   };
 }
 

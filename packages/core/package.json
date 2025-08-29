@@ -18,23 +18,26 @@
   },
   "scripts": {
     "build": "tsup --clean && npm run build:ui",
-    "build:ui": "npm --prefix src/ui run build",
-    "clean": "rm -rf dist",
+    "build:ui": "npm --prefix src/ui run prod",
+    "clean": "rimraf dist",
     "postbuild": "node copy-front-build.cjs",
     "test": "vitest"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/vite": "^4.1.11",
+    "@types/luxon": "^3.7.1",
     "cross-env": "^10.0.0",
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@repo/date": "workspace:*",
     "emittery": "^1.2.0",
     "libsql": "^0.5.17",
+    "luxon": "^3.7.1",
+    "rimraf": "^6.0.1",
     "sql-formatter": "^15.6.6",
-    "tailwind-merge": "^3.3.1",
-    "@repo/date": "workspace:*"
+    "tailwind-merge": "^3.3.1"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"
 }

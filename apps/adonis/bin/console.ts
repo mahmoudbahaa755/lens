@@ -31,7 +31,7 @@ const IMPORTER = (filePath: string) => {
   return import(filePath)
 }
 
-// process.env.ACE_CLI_COMMAND = process.argv[2] ?? ''
+process.env.ACE_CLI_COMMAND = process.argv[2] ?? ''
 
 new Ignitor(APP_ROOT, { importer: IMPORTER })
   .tap((app) => {

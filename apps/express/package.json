@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch src --ext ts,json --exec tsx src/index.ts"
+    "dev": "nodemon --watch src --ext ts,tsx --exec 'tsx src/index.ts'"
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",
@@ -18,11 +18,17 @@
     "emittery": "^1.2.0",
     "express": "^5.1.0",
     "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "utf-8-validate": "^6.0.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
     "tsx": "^4.20.5",
-    "typescript": "^5.5.0"
-  }
+    "typescript": "^5.5.0",
+    "@types/bun": "latest"
+  },
+  "trustedDependencies": [
+    "utf-8-validate"
+  ],
+  "module": "src/index.ts"
 }

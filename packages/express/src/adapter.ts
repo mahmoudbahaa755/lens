@@ -64,9 +64,9 @@ export default class ExpressAdapter extends LensAdapter {
     this.app.use(this.normalizePath(spaRoute), express.static(uiPath));
 
     this.app.get(
-      this.normalizePath(`${spaRoute}/favicon.svg`),
+      this.normalizePath(`${spaRoute}/favicon.ico`),
       (_: Request, res: Response) =>
-        res.sendFile(path.join(uiPath, "favicon.svg")),
+        res.sendFile(path.join(uiPath, "favicon.ico")),
     );
 
     this.app.get(new RegExp(`^/${spaRoute}(?!/api)(/.*)?$`), (req, res) => {
@@ -184,7 +184,7 @@ export default class ExpressAdapter extends LensAdapter {
           createdAt: nowISO(),
         },
         response: {
-          json: (res as any)._body ?? null,
+          json: this.parseBody((res as any)._body),
           headers: res.getHeaders?.() as Record<string, string>,
         },
         user: (await this.config.isAuthenticated?.(req))
@@ -201,4 +201,12 @@ export default class ExpressAdapter extends LensAdapter {
   private normalizePath(pathStr: string) {
     return pathStr.startsWith("/") ? pathStr : `/${pathStr}`;
   }
+
+    private parseBody(body: any) {
+        if(! body) {
+            return null;
+        }
+
+        return JSON.parse(body);
+    }
 }

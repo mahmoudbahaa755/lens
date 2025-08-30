@@ -69,7 +69,12 @@ await sequelize.sync();
 
 app.get("/add-user", async (_req, res) => {
   await User.create({ name: "John Doe" });
-  res.send("good");
+  res.json({ message: "User added successfully" });
+});
+
+app.get("/get-users", async (_req, res) => {
+  const users = await User.findAll();
+  res.json(users);
 });
 
 app.listen(port, () => {

@@ -127,8 +127,8 @@ export default class AdonisAdapter extends LensAdapter {
 
   serveUI(uiPath: string, spaRoute: string, _dataToInject: Record<string, any>): void {
     this.app.booted(async () => {
-      this.router.get(`/${spaRoute}/favicon.svg`, (ctx: HttpContext) => {
-        return ctx.response.download(path.join(uiPath, 'favicon.svg'))
+      this.router.get(`/${spaRoute}/favicon.ico`, (ctx: HttpContext) => {
+        return ctx.response.download(path.join(uiPath, 'favicon.ico'))
       })
 
       this.router.get(`/${spaRoute}`, (ctx: HttpContext) => {

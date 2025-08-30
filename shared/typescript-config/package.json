@@ -1,7 +1,7 @@
 {
   "name": "@lensjs/typescript-config",
   "private": false,
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

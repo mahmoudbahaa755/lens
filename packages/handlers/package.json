@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/watchers",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Watcher handlers for Lens",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,13 +21,13 @@
     "build": "tsup --clean"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@lensjs/typescript-config": "workspace:*",
     "kysely": "^0.28.5",
     "prisma": "^6.15.0"
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",
-    "@repo/date": "workspace:*",
+    "@lensjs/date": "workspace:*",
     "emittery": "latest"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"

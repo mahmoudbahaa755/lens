@@ -1,3 +1,3 @@
 {
-  "extends": "@repo/typescript-config/handlers.json"
+  "extends": "@lensjs/typescript-config/handlers.json"
 }

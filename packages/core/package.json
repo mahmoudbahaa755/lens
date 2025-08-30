@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/core",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,14 +24,14 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@lensjs/typescript-config": "workspace:*",
     "@tailwindcss/vite": "^4.1.12",
     "@types/luxon": "^3.7.1",
     "cross-env": "^10.0.0",
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@repo/date": "workspace:*",
+    "@lensjs/date": "workspace:*",
     "emittery": "^1.2.0",
     "libsql": "^0.5.20",
     "luxon": "^3.7.1",

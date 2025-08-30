@@ -1,7 +1,7 @@
 {
   "name": "ui",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "cross-env VITE_API_URL=http://localhost:3000 vite",
@@ -19,7 +19,7 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.2",
     "tailwindcss": "^4.1.12",
-    "@repo/date": "workspace:*"
+    "@lensjs/date": "workspace:*"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",

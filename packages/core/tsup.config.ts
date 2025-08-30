@@ -7,7 +7,7 @@ export default defineConfig({
   dts: true,
   bundle: true,
   target: "node18",
-  splitting: true,
+  splitting: false,
   clean: true,
   shims: false,
   // shims: true,

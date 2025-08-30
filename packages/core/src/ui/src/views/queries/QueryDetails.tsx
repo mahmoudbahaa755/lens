@@ -4,7 +4,7 @@ import TabbedDataViewer from "../../components/tabs/TabbedDataViewer";
 import type { QueryEntry } from "../../types";
 import { getRoutesPaths } from "../../router/routes";
 import { useConfig } from "../../utils/context";
-import { formatDateWithTimeAgo } from "@repo/date";
+import { formatDateWithTimeAgo } from "@lensjs/date";
 import QueryViewer from "../../components/queryFormatters/QueryViewer";
 
 export default function QueryDetails({ query }: { query: QueryEntry }) {

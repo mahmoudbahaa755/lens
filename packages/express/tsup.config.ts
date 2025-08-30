@@ -5,7 +5,7 @@ export default defineConfig({
   outDir: "dist",
   format: ["esm", "cjs"],
   dts: true,
-  bundle: false,
+  bundle: true,
   target: "node18",
   splitting: false,
   clean: true,

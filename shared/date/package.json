@@ -1,6 +1,6 @@
 {
-  "name": "@repo/date",
-  "private": true,
+  "name": "@lensjs/date",
+  "version": "1.0.10",
   "description": "Date Utils package for lensjs",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -11,15 +11,20 @@
       "import": "./dist/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup --clean"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@lensjs/typescript-config": "workspace:*",
     "@types/luxon": "^3.7.1"
   },
   "dependencies": {
     "luxon": "^3.7.1"
   },
-  "version": "0.0.1"
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -5,7 +5,7 @@ import type { TableColumn } from "../../components/Table";
 import { getRoutesPaths } from "../../router/routes";
 import type { QueryTableRow } from "../../types";
 import { useConfig } from "../../utils/context";
-import { humanDifferentDate } from "@repo/date";
+import { humanDifferentDate } from "@lensjs/date";
 
 function highlightSQL(query: string): JSX.Element {
   return (

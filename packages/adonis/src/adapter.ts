@@ -15,7 +15,7 @@ import { shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
 import { HttpContext } from '@adonisjs/core/http'
 import { LensConfig } from './define_config.js'
-import { nowISO, sqlDateTime } from '@repo/date'
+import { nowISO, sqlDateTime } from '@lensjs/date'
 
 export default class AdonisAdapter extends LensAdapter {
   protected app: ApplicationService

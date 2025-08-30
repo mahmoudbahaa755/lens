@@ -3,8 +3,6 @@ import cors from "cors";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { createSequelizeHandler, watcherEmitter } from "@lensjs/watchers";
 import { lens } from "@lensjs/express";
-import { BetterSqliteStore } from "@lensjs/core";
-import path from "node:path";
 
 const app = express();
 const port = 3000;

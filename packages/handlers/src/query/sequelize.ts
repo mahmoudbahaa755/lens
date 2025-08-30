@@ -1,7 +1,7 @@
 import { lensUtils } from "@lensjs/core";
 import { watcherEmitter } from "../utils/emitter";
 import { QueryWatcherHandler, SequelizeQueryType } from "../types";
-import { now } from "@repo/date";
+import { now } from "@lensjs/date";
 
 function normalizeSql(sql: string) {
   return sql.replace(/^Executed \(default\):\s*/, "");

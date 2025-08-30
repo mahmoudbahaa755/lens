@@ -1,7 +1,7 @@
 {
   "name": "@lensjs/adonis",
   "description": "AdonisJs adapter for lens package",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "engines": {
     "node": ">=20.6.0"
   },
@@ -63,7 +63,7 @@
   "dependencies": {
     "@lensjs/core": "workspace:*",
     "@poppinss/utils": "^6.10.1",
-    "@repo/date": "workspace:*",
+    "@lensjs/date": "workspace:*",
     "chalk": "^5.6.0"
   },
   "publishConfig": {

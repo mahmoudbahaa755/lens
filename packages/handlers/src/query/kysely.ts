@@ -2,7 +2,7 @@ import { lensUtils } from "@lensjs/core";
 import { watcherEmitter } from "../utils/emitter";
 import { KyselyQueryType, QueryWatcherHandler } from "../types";
 import { LogEvent } from "kysely";
-import { nowISO } from "@repo/date";
+import { nowISO } from "@lensjs/date";
 
 function getQueryObject({
   provider,

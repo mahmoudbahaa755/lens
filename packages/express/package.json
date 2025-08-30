@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/express",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "Express adapter for LensJs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,10 +21,10 @@
     "build": "tsup --clean"
   },
   "dependencies": {
-    "@repo/date": "workspace:*",
+    "@lensjs/date": "workspace:*",
     "@lensjs/core": "workspace:*",
     "@lensjs/watchers": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@lensjs/typescript-config": "workspace:*",
     "express": "^5.1.0"
   },
   "devDependencies": {

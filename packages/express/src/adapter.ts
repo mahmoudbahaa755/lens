@@ -12,7 +12,7 @@ import { Express, Request, Response } from "express";
 import * as path from "node:path";
 import fs from "node:fs";
 import express from "express";
-import { nowISO, sqlDateTime } from "@repo/date";
+import { nowISO, sqlDateTime } from "@lensjs/date";
 
 export default class ExpressAdapter extends LensAdapter {
   protected app!: Express;

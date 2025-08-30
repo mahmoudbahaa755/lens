@@ -1,0 +1,691 @@
+{
+  "nodes": {
+    "example-express": {
+      "name": "example-express",
+      "type": "lib",
+      "data": {
+        "root": "packages/example-express",
+        "name": "example-express",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "dev"
+            ]
+          },
+          "js": {
+            "packageName": "example-express",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "bun --watch src/index.ts",
+              "runCommand": "bun run dev -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "example-adonis": {
+      "name": "example-adonis",
+      "type": "lib",
+      "data": {
+        "root": "packages/example-adonis",
+        "name": "example-adonis",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "start",
+              "build",
+              "dev",
+              "test",
+              "lint",
+              "format",
+              "typecheck"
+            ]
+          },
+          "js": {
+            "packageName": "example-adonis",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            },
+            "metadata": {
+              "scriptContent": "node bin/server.js",
+              "runCommand": "bun run start -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "node ace build",
+              "runCommand": "bun run build -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "node ace serve --hmr",
+              "runCommand": "bun run dev -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            },
+            "metadata": {
+              "scriptContent": "node ace test",
+              "runCommand": "bun run test -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint .",
+              "runCommand": "bun run lint -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "format": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "format"
+            },
+            "metadata": {
+              "scriptContent": "prettier --write .",
+              "runCommand": "bun run format -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "typecheck": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typecheck"
+            },
+            "metadata": {
+              "scriptContent": "tsc --noEmit",
+              "runCommand": "bun run typecheck -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@lens/watcher-handlers": {
+      "name": "@lens/watcher-handlers",
+      "type": "lib",
+      "data": {
+        "root": "packages/handlers",
+        "name": "@lens/watcher-handlers",
+        "tags": [
+          "npm:public"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "build",
+              "clean"
+            ]
+          },
+          "description": "Watcher handlers for Lens",
+          "js": {
+            "packageName": "@lens/watcher-handlers",
+            "packageExports": {
+              ".": {
+                "require": "./dist/index.cjs",
+                "import": "./dist/index.js"
+              }
+            },
+            "packageMain": "./dist/index.js",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "tsup --clean",
+              "runCommand": "bun run build -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            },
+            "metadata": {
+              "scriptContent": "rm -rf dist",
+              "runCommand": "bun run clean -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "nx-release-publish": {
+            "executor": "@nx/js:release-publish",
+            "dependsOn": [
+              "^nx-release-publish"
+            ],
+            "options": {},
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@lens/express-adapter": {
+      "name": "@lens/express-adapter",
+      "type": "lib",
+      "data": {
+        "root": "packages/express",
+        "name": "@lens/express-adapter",
+        "tags": [
+          "npm:public"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "build"
+            ]
+          },
+          "description": "Express adapter for Lens",
+          "js": {
+            "packageName": "@lens/express-adapter",
+            "packageExports": {
+              ".": {
+                "require": "./dist/index.cjs",
+                "import": "./dist/index.js"
+              }
+            },
+            "packageMain": "./dist/index.js",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "tsup --clean",
+              "runCommand": "bun run build -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "nx-release-publish": {
+            "executor": "@nx/js:release-publish",
+            "dependsOn": [
+              "^nx-release-publish"
+            ],
+            "options": {},
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@lens/adonis-adapter": {
+      "name": "@lens/adonis-adapter",
+      "type": "lib",
+      "data": {
+        "root": "packages/adonis",
+        "name": "@lens/adonis-adapter",
+        "tags": [
+          "npm:public"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "clean",
+              "copy:templates",
+              "typecheck",
+              "lint",
+              "format",
+              "quick:test",
+              "pretest",
+              "test",
+              "prebuild",
+              "build",
+              "postbuild",
+              "release",
+              "version",
+              "prepublishOnly"
+            ]
+          },
+          "description": "AdonisJs adapter for lens package",
+          "js": {
+            "packageName": "@lens/adonis-adapter",
+            "packageExports": {
+              ".": "./build/index.js",
+              "./types": "./build/src/types.js",
+              "./lens_provider": "./build/providers/lens_service_provider.js",
+              "./lens_middleware": "./build/src/middlewares/lens_middleware.js"
+            },
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            },
+            "metadata": {
+              "scriptContent": "del-cli build",
+              "runCommand": "bun run clean -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "copy:templates": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "copy:templates"
+            },
+            "metadata": {
+              "scriptContent": "copyfiles \"stubs/**/*.stub\" build",
+              "runCommand": "bun run copy:templates -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "typecheck": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typecheck"
+            },
+            "metadata": {
+              "scriptContent": "tsc --noEmit",
+              "runCommand": "bun run typecheck -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint .",
+              "runCommand": "bun run lint -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "format": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "format"
+            },
+            "metadata": {
+              "scriptContent": "prettier --write .",
+              "runCommand": "bun run format -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "quick:test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "quick:test"
+            },
+            "metadata": {
+              "scriptContent": "node --import=./tsnode.esm.js --enable-source-maps bin/test.ts",
+              "runCommand": "bun run quick:test -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "pretest": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "pretest"
+            },
+            "metadata": {
+              "scriptContent": "npm run lint",
+              "runCommand": "bun run pretest -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            },
+            "metadata": {
+              "scriptContent": "c8 npm run quick:test",
+              "runCommand": "bun run test -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "prebuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prebuild"
+            },
+            "metadata": {
+              "scriptContent": "npm run clean",
+              "runCommand": "bun run prebuild -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "tsc",
+              "runCommand": "bun run build -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "postbuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "postbuild"
+            },
+            "metadata": {
+              "scriptContent": "npm run copy:templates",
+              "runCommand": "bun run postbuild -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "release": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "release"
+            },
+            "metadata": {
+              "scriptContent": "np",
+              "runCommand": "bun run release -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "version": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "version"
+            },
+            "metadata": {
+              "scriptContent": "npm run build",
+              "runCommand": "bun run version -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "prepublishOnly": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prepublishOnly"
+            },
+            "metadata": {
+              "scriptContent": "npm run build",
+              "runCommand": "bun run prepublishOnly -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "nx-release-publish": {
+            "executor": "@nx/js:release-publish",
+            "dependsOn": [
+              "^nx-release-publish"
+            ],
+            "options": {},
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@lens/core": {
+      "name": "@lens/core",
+      "type": "lib",
+      "data": {
+        "root": "packages/core",
+        "name": "@lens/core",
+        "tags": [
+          "npm:public"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "build",
+              "build:ui",
+              "clean",
+              "postbuild",
+              "format",
+              "test"
+            ]
+          },
+          "js": {
+            "packageName": "@lens/core",
+            "packageExports": {
+              ".": {
+                "require": "./dist/index.cjs",
+                "import": "./dist/index.js"
+              }
+            },
+            "packageMain": "./dist/index.js",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "tsup --clean && npm run build:ui",
+              "runCommand": "bun run build -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "build:ui": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build:ui"
+            },
+            "metadata": {
+              "scriptContent": "npm --prefix src/ui run build",
+              "runCommand": "bun run build:ui -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "clean": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "clean"
+            },
+            "metadata": {
+              "scriptContent": "rm -rf dist",
+              "runCommand": "bun run clean -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "postbuild": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "postbuild"
+            },
+            "metadata": {
+              "scriptContent": "node copy-front-build.cjs",
+              "runCommand": "bun run postbuild -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "cache": true,
+            "dependsOn": []
+          },
+          "format": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "format"
+            },
+            "metadata": {
+              "scriptContent": "prettier --write .",
+              "runCommand": "bun run format -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            },
+            "metadata": {
+              "scriptContent": "vitest",
+              "runCommand": "bun run test -- undefined"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": []
+          },
+          "nx-release-publish": {
+            "executor": "@nx/js:release-publish",
+            "dependsOn": [
+              "^nx-release-publish"
+            ],
+            "options": {},
+            "configurations": {},
+            "parallelism": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    }
+  },
+  "externalNodes": {},
+  "dependencies": {
+    "example-express": [
+      {
+        "source": "example-express",
+        "target": "@lens/express-adapter",
+        "type": "static"
+      },
+      {
+        "source": "example-express",
+        "target": "@lens/watcher-handlers",
+        "type": "static"
+      }
+    ],
+    "example-adonis": [
+      {
+        "source": "example-adonis",
+        "target": "@lens/adonis-adapter",
+        "type": "static"
+      }
+    ],
+    "@lens/watcher-handlers": [],
+    "@lens/express-adapter": [],
+    "@lens/adonis-adapter": [],
+    "@lens/core": []
+  },
+  "version": "6.0",
+  "errors": [],
+  "computedAt": 1756071402080
+}

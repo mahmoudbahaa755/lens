@@ -1,0 +1,759 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.8.2",
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".husky/pre-push",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "tsup.config.ts",
+        "hash": "9069177824408135707"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "12551501761131050253"
+      },
+      {
+        "file": "bun.lock",
+        "hash": "1128504585698440264"
+      },
+      {
+        "file": "changes.txt",
+        "hash": "11272324616631691281"
+      },
+      {
+        "file": "lerna.json",
+        "hash": "2565237123621199458"
+      },
+      {
+        "file": "CONTRIBUTING.md",
+        "hash": "1838246737902465926"
+      },
+      {
+        "file": "package.json",
+        "hash": "2358572840205076624"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "201805580220806209"
+      },
+      {
+        "file": ".husky/commit-msg",
+        "hash": "12146485457218258659"
+      },
+      {
+        "file": "commitlint.config.js",
+        "hash": "10278295895719801822"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "13800021260491770634"
+      },
+      {
+        "file": "nx.json",
+        "hash": "174088267432913223"
+      }
+    ],
+    "projectFileMap": {
+      "@lens/watcher-handlers": [
+        {
+          "file": "packages/handlers/README.md",
+          "hash": "10328677353380173312"
+        },
+        {
+          "file": "packages/handlers/package.json",
+          "hash": "18187207559426903989"
+        },
+        {
+          "file": "packages/handlers/src/index.ts",
+          "hash": "4077505039766163980"
+        },
+        {
+          "file": "packages/handlers/src/query/index.ts",
+          "hash": "16307713984484691206"
+        },
+        {
+          "file": "packages/handlers/src/query/kysely.ts",
+          "hash": "3641299051240301802"
+        },
+        {
+          "file": "packages/handlers/src/query/prisma.ts",
+          "hash": "5354649551617949119"
+        },
+        {
+          "file": "packages/handlers/src/query/sequelize.ts",
+          "hash": "7093683197339069630"
+        },
+        {
+          "file": "packages/handlers/src/types/index.ts",
+          "hash": "5934596415265770784"
+        },
+        {
+          "file": "packages/handlers/src/types/query.ts",
+          "hash": "8567816427891704337"
+        },
+        {
+          "file": "packages/handlers/src/utils/emitter.ts",
+          "hash": "9328596787014987241"
+        },
+        {
+          "file": "packages/handlers/tsconfig.json",
+          "hash": "12312747755742834469"
+        },
+        {
+          "file": "packages/handlers/tsup.config.ts",
+          "hash": "7229048181208234312"
+        }
+      ],
+      "@lens/adonis-adapter": [
+        {
+          "file": "packages/adonis/.editorconfig",
+          "hash": "15733568014472350070"
+        },
+        {
+          "file": "packages/adonis/.gitignore",
+          "hash": "18077402424837707033"
+        },
+        {
+          "file": "packages/adonis/.npmrc",
+          "hash": "16247214316636327594"
+        },
+        {
+          "file": "packages/adonis/.prettierignore",
+          "hash": "17824774533898048321"
+        },
+        {
+          "file": "packages/adonis/LICENSE.md",
+          "hash": "286798476445360678"
+        },
+        {
+          "file": "packages/adonis/README.md",
+          "hash": "2122179450427688172"
+        },
+        {
+          "file": "packages/adonis/bin/test.ts",
+          "hash": "1333225894475121638"
+        },
+        {
+          "file": "packages/adonis/configure.ts",
+          "hash": "16715533440948954173"
+        },
+        {
+          "file": "packages/adonis/eslint.config.js",
+          "hash": "6701426467158297268"
+        },
+        {
+          "file": "packages/adonis/index.ts",
+          "hash": "8543771871634971422"
+        },
+        {
+          "file": "packages/adonis/package.json",
+          "hash": "6333176731426582381"
+        },
+        {
+          "file": "packages/adonis/providers/README.md",
+          "hash": "8884373439964115112"
+        },
+        {
+          "file": "packages/adonis/providers/lens_service_provider.ts",
+          "hash": "8181904754897255357"
+        },
+        {
+          "file": "packages/adonis/src/README.md",
+          "hash": "18398778084786171909"
+        },
+        {
+          "file": "packages/adonis/src/adapter.ts",
+          "hash": "11110443632243889313"
+        },
+        {
+          "file": "packages/adonis/src/define_config.ts",
+          "hash": "2228583058884660385"
+        },
+        {
+          "file": "packages/adonis/src/middlewares/lens_middleware.ts",
+          "hash": "7784063041344918192"
+        },
+        {
+          "file": "packages/adonis/src/utils/index.ts",
+          "hash": "11964773378700220044"
+        },
+        {
+          "file": "packages/adonis/stubs/README.md",
+          "hash": "7222408608918547514"
+        },
+        {
+          "file": "packages/adonis/stubs/config/lens.stub",
+          "hash": "17814117506426289985"
+        },
+        {
+          "file": "packages/adonis/stubs/main.ts",
+          "hash": "4738712010484616845"
+        },
+        {
+          "file": "packages/adonis/tests/example.spec.ts",
+          "hash": "11571912088665769114"
+        },
+        {
+          "file": "packages/adonis/tsconfig.json",
+          "hash": "2079729644151116762"
+        },
+        {
+          "file": "packages/adonis/tsnode.esm.js",
+          "hash": "12417794545606589121"
+        }
+      ],
+      "@lens/core": [
+        {
+          "file": "packages/core/README.md",
+          "hash": "17638169816305366002"
+        },
+        {
+          "file": "packages/core/copy-front-build.cjs",
+          "hash": "13340066395891240659"
+        },
+        {
+          "file": "packages/core/package.json",
+          "hash": "14690092445693905063"
+        },
+        {
+          "file": "packages/core/src/abstracts/adapter.ts",
+          "hash": "14900037379957678133"
+        },
+        {
+          "file": "packages/core/src/abstracts/store.ts",
+          "hash": "6667500542427391775"
+        },
+        {
+          "file": "packages/core/src/context/container.ts",
+          "hash": "11908773353293437312"
+        },
+        {
+          "file": "packages/core/src/context/context.ts",
+          "hash": "14337279878259302284"
+        },
+        {
+          "file": "packages/core/src/core/api_controller.ts",
+          "hash": "13567842524174216126"
+        },
+        {
+          "file": "packages/core/src/core/lens.ts",
+          "hash": "154550357105392463"
+        },
+        {
+          "file": "packages/core/src/core/watcher.ts",
+          "hash": "14788628395183797377"
+        },
+        {
+          "file": "packages/core/src/index.ts",
+          "hash": "7590328380106693067"
+        },
+        {
+          "file": "packages/core/src/stores/better_sqlite.ts",
+          "hash": "12547853000930029930"
+        },
+        {
+          "file": "packages/core/src/stores/index.ts",
+          "hash": "8898221364721311850"
+        },
+        {
+          "file": "packages/core/src/types/index.ts",
+          "hash": "5711052606102674263"
+        },
+        {
+          "file": "packages/core/src/ui/.gitignore",
+          "hash": "987422939859577920"
+        },
+        {
+          "file": "packages/core/src/ui/README.md",
+          "hash": "11415558854060082855"
+        },
+        {
+          "file": "packages/core/src/ui/bun.lock",
+          "hash": "10744218531884083289"
+        },
+        {
+          "file": "packages/core/src/ui/eslint.config.js",
+          "hash": "12780242011398973838"
+        },
+        {
+          "file": "packages/core/src/ui/index.html",
+          "hash": "5399161226597723913"
+        },
+        {
+          "file": "packages/core/src/ui/package-lock.json",
+          "hash": "16198006652814246448"
+        },
+        {
+          "file": "packages/core/src/ui/package.json",
+          "hash": "15107840005480674606"
+        },
+        {
+          "file": "packages/core/src/ui/public/favicon.ico",
+          "hash": "148015533818270452"
+        },
+        {
+          "file": "packages/core/src/ui/src/App.tsx",
+          "hash": "3893663161844419668"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/DetailPanel.tsx",
+          "hash": "15666917422214666339"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/JsonViewer.tsx",
+          "hash": "14875946867091662802"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/LoadMore.tsx",
+          "hash": "702427712239060671"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/MethodBadge.tsx",
+          "hash": "14782558759835535186"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/Modal.tsx",
+          "hash": "4210660853268005810"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/StatusCode.tsx",
+          "hash": "3816720208546692945"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/Table.tsx",
+          "hash": "5101201765899673606"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/layout/DeleteButton.tsx",
+          "hash": "435856863309547206"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/layout/Footer.tsx",
+          "hash": "11994408226627100794"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/layout/Header.tsx",
+          "hash": "7770035572643252972"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/layout/Layout.tsx",
+          "hash": "1836014398570845516"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/layout/LoadingScreen.tsx",
+          "hash": "14976951109982440635"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/layout/Sidebar.tsx",
+          "hash": "18085563489955380865"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/queryFormatters/MongoViewer.tsx",
+          "hash": "13010059282346898086"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/queryFormatters/QueryViewer.tsx",
+          "hash": "4043844995869815730"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/queryFormatters/SqlViewer.tsx",
+          "hash": "17351328606179127675"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/table/NoData.tsx",
+          "hash": "11818097609761433776"
+        },
+        {
+          "file": "packages/core/src/ui/src/components/tabs/TabbedDataViewer.tsx",
+          "hash": "16801770446460282431"
+        },
+        {
+          "file": "packages/core/src/ui/src/containers/queries/QueriesContainer.tsx",
+          "hash": "2160379980228451247"
+        },
+        {
+          "file": "packages/core/src/ui/src/containers/queries/QueryDetailsContainer.tsx",
+          "hash": "5845234393862462687"
+        },
+        {
+          "file": "packages/core/src/ui/src/containers/requests/RequestDetailsContainer.tsx",
+          "hash": "10834586934488159327"
+        },
+        {
+          "file": "packages/core/src/ui/src/containers/requests/RequestsContainer.tsx",
+          "hash": "9908716820827286718"
+        },
+        {
+          "file": "packages/core/src/ui/src/hooks/useLensApi.ts",
+          "hash": "773096247164644018"
+        },
+        {
+          "file": "packages/core/src/ui/src/hooks/useLoadMore.ts",
+          "hash": "4795682002719757256"
+        },
+        {
+          "file": "packages/core/src/ui/src/hooks/useQueries.ts",
+          "hash": "6415538279995207837"
+        },
+        {
+          "file": "packages/core/src/ui/src/hooks/useRequests.ts",
+          "hash": "11564654458345082236"
+        },
+        {
+          "file": "packages/core/src/ui/src/hooks/useTanstackApi.ts",
+          "hash": "3069900374262567628"
+        },
+        {
+          "file": "packages/core/src/ui/src/index.css",
+          "hash": "1628883824488565407"
+        },
+        {
+          "file": "packages/core/src/ui/src/interfaces/index.ts",
+          "hash": "9230137885261738697"
+        },
+        {
+          "file": "packages/core/src/ui/src/main.tsx",
+          "hash": "18014184530501283481"
+        },
+        {
+          "file": "packages/core/src/ui/src/router/Router.ts",
+          "hash": "2760709152720711586"
+        },
+        {
+          "file": "packages/core/src/ui/src/router/routes/Loading.tsx",
+          "hash": "8979277139221721147"
+        },
+        {
+          "file": "packages/core/src/ui/src/router/routes/index.tsx",
+          "hash": "5786974308663494460"
+        },
+        {
+          "file": "packages/core/src/ui/src/types/index.ts",
+          "hash": "5566613500214115936"
+        },
+        {
+          "file": "packages/core/src/ui/src/utils/api.ts",
+          "hash": "18329629352175655691"
+        },
+        {
+          "file": "packages/core/src/ui/src/utils/context.ts",
+          "hash": "12588427091727307583"
+        },
+        {
+          "file": "packages/core/src/ui/src/utils/date.ts",
+          "hash": "16773475880313869372"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/queries/QueryDetails.tsx",
+          "hash": "5205605725931095396"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/queries/QueryTable.tsx",
+          "hash": "10445022559101153403"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/queries/columns.tsx",
+          "hash": "16754627965544220528"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/requests/BasicRequestDetails.tsx",
+          "hash": "13682503553689384444"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/requests/RequestDetails.tsx",
+          "hash": "16787447502513512858"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/requests/RequetsTable.tsx",
+          "hash": "15106313174376685837"
+        },
+        {
+          "file": "packages/core/src/ui/src/views/requests/columns.tsx",
+          "hash": "1943316624781492461"
+        },
+        {
+          "file": "packages/core/src/ui/src/vite-env.d.ts",
+          "hash": "7856441258253745083"
+        },
+        {
+          "file": "packages/core/src/ui/tsconfig.app.json",
+          "hash": "14617223996533971413"
+        },
+        {
+          "file": "packages/core/src/ui/tsconfig.json",
+          "hash": "11226547063925144724"
+        },
+        {
+          "file": "packages/core/src/ui/tsconfig.node.json",
+          "hash": "133773142228338237"
+        },
+        {
+          "file": "packages/core/src/ui/vite.config.ts",
+          "hash": "13483763849128231541"
+        },
+        {
+          "file": "packages/core/src/utils/async_context.ts",
+          "hash": "10135745579683341161"
+        },
+        {
+          "file": "packages/core/src/utils/event_emitter.ts",
+          "hash": "754765073405420578"
+        },
+        {
+          "file": "packages/core/src/utils/index.ts",
+          "hash": "10644217924703401345"
+        },
+        {
+          "file": "packages/core/src/watchers/index.ts",
+          "hash": "5556861178990009251"
+        },
+        {
+          "file": "packages/core/src/watchers/query_watcher.ts",
+          "hash": "16056850089752982721"
+        },
+        {
+          "file": "packages/core/src/watchers/request_watcher.ts",
+          "hash": "1145908785589650021"
+        },
+        {
+          "file": "packages/core/tests/core/lens.test.ts",
+          "hash": "14781857204011387290"
+        },
+        {
+          "file": "packages/core/tests/stores/better_sqlite.test.ts",
+          "hash": "4987549038759389512"
+        },
+        {
+          "file": "packages/core/tests/utils/async_context.test.ts",
+          "hash": "7916490827094781961"
+        },
+        {
+          "file": "packages/core/tests/utils/index.test.ts",
+          "hash": "6705265436526114519"
+        },
+        {
+          "file": "packages/core/tests/watchers/query_watcher.test.ts",
+          "hash": "17283989395524390383"
+        },
+        {
+          "file": "packages/core/tests/watchers/request_watcher.test.ts",
+          "hash": "16605269534167596814"
+        },
+        {
+          "file": "packages/core/tsconfig.json",
+          "hash": "12312747755742834469"
+        },
+        {
+          "file": "packages/core/tsup.config.ts",
+          "hash": "13746849401425560871"
+        },
+        {
+          "file": "packages/core/vitest.config.ts",
+          "hash": "1489010312909514131"
+        }
+      ],
+      "example-express": [
+        {
+          "file": "packages/example-express/package.json",
+          "hash": "6528349937056577924",
+          "deps": [
+            "@lens/express-adapter",
+            "@lens/watcher-handlers"
+          ]
+        },
+        {
+          "file": "packages/example-express/src/database.sqlite",
+          "hash": "3771787256265615577"
+        },
+        {
+          "file": "packages/example-express/src/index.ts",
+          "hash": "2547289606810715072"
+        },
+        {
+          "file": "packages/example-express/src/local_storage.ts",
+          "hash": "8307157963918735848"
+        },
+        {
+          "file": "packages/example-express/src/workflow.txt",
+          "hash": "9121363529556999653"
+        },
+        {
+          "file": "packages/example-express/tsconfig.json",
+          "hash": "14156312998145935364"
+        }
+      ],
+      "example-adonis": [
+        {
+          "file": "packages/example-adonis/.editorconfig",
+          "hash": "11865610914450534854"
+        },
+        {
+          "file": "packages/example-adonis/.env.example",
+          "hash": "2419973558109902156"
+        },
+        {
+          "file": "packages/example-adonis/.gitignore",
+          "hash": "10069503811151977709"
+        },
+        {
+          "file": "packages/example-adonis/ace.js",
+          "hash": "4590980195275254353"
+        },
+        {
+          "file": "packages/example-adonis/adonisrc.ts",
+          "hash": "8493541886983221441"
+        },
+        {
+          "file": "packages/example-adonis/app/exceptions/handler.ts",
+          "hash": "10444818367959113180"
+        },
+        {
+          "file": "packages/example-adonis/app/middleware/auth_middleware.ts",
+          "hash": "17900834102475297819"
+        },
+        {
+          "file": "packages/example-adonis/app/middleware/container_bindings_middleware.ts",
+          "hash": "10055248796015446444"
+        },
+        {
+          "file": "packages/example-adonis/app/middleware/force_json_response_middleware.ts",
+          "hash": "3538776398823137627"
+        },
+        {
+          "file": "packages/example-adonis/app/models/user.ts",
+          "hash": "10031317523343768081"
+        },
+        {
+          "file": "packages/example-adonis/bin/console.ts",
+          "hash": "17722885562178496007"
+        },
+        {
+          "file": "packages/example-adonis/bin/server.ts",
+          "hash": "16854761863232167649"
+        },
+        {
+          "file": "packages/example-adonis/bin/test.ts",
+          "hash": "15135125683723346191"
+        },
+        {
+          "file": "packages/example-adonis/config/app.ts",
+          "hash": "14945924279840782084"
+        },
+        {
+          "file": "packages/example-adonis/config/auth.ts",
+          "hash": "11616560280255055445"
+        },
+        {
+          "file": "packages/example-adonis/config/bodyparser.ts",
+          "hash": "9513708604821087740"
+        },
+        {
+          "file": "packages/example-adonis/config/cors.ts",
+          "hash": "3187887661816166498"
+        },
+        {
+          "file": "packages/example-adonis/config/database.ts",
+          "hash": "17520064480174910911"
+        },
+        {
+          "file": "packages/example-adonis/config/hash.ts",
+          "hash": "17044074848892609872"
+        },
+        {
+          "file": "packages/example-adonis/config/lens.ts",
+          "hash": "12301120130389821783"
+        },
+        {
+          "file": "packages/example-adonis/config/logger.ts",
+          "hash": "14069446652379595996"
+        },
+        {
+          "file": "packages/example-adonis/database/migrations/1755581653520_create_users_table.ts",
+          "hash": "7272296792064268534"
+        },
+        {
+          "file": "packages/example-adonis/database/migrations/1755581653523_create_access_tokens_table.ts",
+          "hash": "2963293551921462398"
+        },
+        {
+          "file": "packages/example-adonis/eslint.config.js",
+          "hash": "14446175997154528922"
+        },
+        {
+          "file": "packages/example-adonis/package.json",
+          "hash": "3176789745855849689",
+          "deps": [
+            "@lens/adonis-adapter"
+          ]
+        },
+        {
+          "file": "packages/example-adonis/start/env.ts",
+          "hash": "2897806681684458401"
+        },
+        {
+          "file": "packages/example-adonis/start/kernel.ts",
+          "hash": "2872066969764680728"
+        },
+        {
+          "file": "packages/example-adonis/start/routes.ts",
+          "hash": "10546175992784971996"
+        },
+        {
+          "file": "packages/example-adonis/tests/bootstrap.ts",
+          "hash": "16365752930280902988"
+        },
+        {
+          "file": "packages/example-adonis/tsconfig.json",
+          "hash": "13287420169072459771"
+        }
+      ],
+      "@lens/express-adapter": [
+        {
+          "file": "packages/express/bun.lock",
+          "hash": "6410076495162541063"
+        },
+        {
+          "file": "packages/express/index.ts",
+          "hash": "16487662540903650922"
+        },
+        {
+          "file": "packages/express/package.json",
+          "hash": "18239275536977283643"
+        },
+        {
+          "file": "packages/express/src.ts",
+          "hash": "11011550552949353513"
+        },
+        {
+          "file": "packages/express/src/adapter.ts",
+          "hash": "14116163360621489362"
+        },
+        {
+          "file": "packages/express/src/index.ts",
+          "hash": "17126940133841885547"
+        },
+        {
+          "file": "packages/express/src/types/index.ts",
+          "hash": "1574770693705835530"
+        },
+        {
+          "file": "packages/express/tsconfig.json",
+          "hash": "12312747755742834469"
+        },
+        {
+          "file": "packages/express/tsup.config.ts",
+          "hash": "2691150150009848501"
+        },
+        {
+          "file": "packages/express/work.txt",
+          "hash": "13605340028365674711"
+        }
+      ]
+    }
+  }
+}

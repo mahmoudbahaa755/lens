@@ -1,0 +1,65 @@
+{
+  "run": {
+    "command": "cli run build --stream --since",
+    "startTime": "2025-08-24T21:30:08.088Z",
+    "endTime": "2025-08-24T21:30:32.455Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "@lens/watcher-handlers:build",
+      "target": "build",
+      "projectName": "@lens/watcher-handlers",
+      "hash": "415591762366809266",
+      "startTime": "2025-08-24T21:30:08.120Z",
+      "endTime": "2025-08-24T21:30:08.162Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "@lens/express-adapter:build",
+      "target": "build",
+      "projectName": "@lens/express-adapter",
+      "hash": "18290518790688268004",
+      "startTime": "2025-08-24T21:30:08.120Z",
+      "endTime": "2025-08-24T21:30:08.171Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "@lens/adonis-adapter:build",
+      "target": "build",
+      "projectName": "@lens/adonis-adapter",
+      "hash": "7235781990396482150",
+      "startTime": "2025-08-24T21:30:08.120Z",
+      "endTime": "2025-08-24T21:30:08.183Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "example-adonis:build",
+      "target": "build",
+      "projectName": "example-adonis",
+      "hash": "5670567640877068028",
+      "startTime": "2025-08-24T21:30:08.120Z",
+      "endTime": "2025-08-24T21:30:08.196Z",
+      "params": "",
+      "cacheStatus": "local-cache-hit",
+      "status": 0
+    },
+    {
+      "taskId": "@lens/core:build",
+      "target": "build",
+      "projectName": "@lens/core",
+      "hash": "17024509229108723144",
+      "startTime": "2025-08-24T21:30:08.120Z",
+      "endTime": "2025-08-24T21:30:32.260Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
+}

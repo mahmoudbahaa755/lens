@@ -1,0 +1,45 @@
+[0m[2m[35m$[0m [2m[1mtsup --clean[0m
+[34mCLI[39m Building entry: src/index.ts, src/query/index.ts, src/query/kysely.ts, src/query/prisma.ts, src/query/sequelize.ts, src/types/index.ts, src/types/query.ts, src/utils/emitter.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.0
+[34mCLI[39m Using tsup config: C:\work\packages\lensjs\lens\packages\handlers\tsup.config.ts
+[34mCLI[39m Target: node18
+[34mCLI[39m Cleaning output folder
+[34mESM[39m Build start
+[34mCJS[39m Build start
+[32mCJS[39m [1mdist\index.cjs           [22m[32m5.73 KB[39m
+[32mCJS[39m [1mdist\query\index.cjs     [22m[32m5.68 KB[39m
+[32mCJS[39m [1mdist\query\kysely.cjs    [22m[32m2.38 KB[39m
+[32mCJS[39m [1mdist\query\sequelize.cjs [22m[32m3.40 KB[39m
+[32mCJS[39m [1mdist\types\index.cjs     [22m[32m764.00 B[39m
+[32mCJS[39m [1mdist\types\query.cjs     [22m[32m764.00 B[39m
+[32mCJS[39m [1mdist\query\prisma.cjs    [22m[32m2.12 KB[39m
+[32mCJS[39m [1mdist\utils\emitter.cjs   [22m[32m1.50 KB[39m
+[32mCJS[39m ⚡️ Build success in 56ms
+[32mESM[39m [1mdist\types\index.js     [22m[32m0 B[39m
+[32mESM[39m [1mdist\types\query.js     [22m[32m0 B[39m
+[32mESM[39m [1mdist\index.js           [22m[32m4.49 KB[39m
+[32mESM[39m [1mdist\query\index.js     [22m[32m4.48 KB[39m
+[32mESM[39m [1mdist\query\kysely.js    [22m[32m1.33 KB[39m
+[32mESM[39m [1mdist\query\prisma.js    [22m[32m1.09 KB[39m
+[32mESM[39m [1mdist\utils\emitter.js   [22m[32m517.00 B[39m
+[32mESM[39m [1mdist\query\sequelize.js [22m[32m2.35 KB[39m
+[32mESM[39m ⚡️ Build success in 59ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 10885ms
+[32mDTS[39m [1mdist\index.d.ts            [22m[32m468.00 B[39m
+[32mDTS[39m [1mdist\query\index.d.ts      [22m[32m514.00 B[39m
+[32mDTS[39m [1mdist\query\kysely.d.ts     [22m[32m239.00 B[39m
+[32mDTS[39m [1mdist\query\prisma.d.ts     [22m[32m318.00 B[39m
+[32mDTS[39m [1mdist\query\sequelize.d.ts  [22m[32m251.00 B[39m
+[32mDTS[39m [1mdist\utils\emitter.d.ts    [22m[32m632.00 B[39m
+[32mDTS[39m [1mdist\types\query.d.ts      [22m[32m571.00 B[39m
+[32mDTS[39m [1mdist\types\index.d.ts      [22m[32m140.00 B[39m
+[32mDTS[39m [1mdist\index.d.cts           [22m[32m474.00 B[39m
+[32mDTS[39m [1mdist\query\index.d.cts     [22m[32m518.00 B[39m
+[32mDTS[39m [1mdist\query\kysely.d.cts    [22m[32m240.00 B[39m
+[32mDTS[39m [1mdist\query\prisma.d.cts    [22m[32m319.00 B[39m
+[32mDTS[39m [1mdist\query\sequelize.d.cts [22m[32m252.00 B[39m
+[32mDTS[39m [1mdist\utils\emitter.d.cts   [22m[32m632.00 B[39m
+[32mDTS[39m [1mdist\types\query.d.cts     [22m[32m571.00 B[39m
+[32mDTS[39m [1mdist\types\index.d.cts     [22m[32m141.00 B[39m

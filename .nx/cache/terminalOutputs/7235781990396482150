@@ -1,0 +1,5 @@
+[0m[2m[35m$[0m [2m[1mbun run clean[0m
+[0m[2m[35m$[0m [2m[1mdel-cli build[0m
+[0m[2m[35m$[0m [2m[1mtsc[0m
+[0m[2m[35m$[0m [2m[1mbun run copy:templates[0m
+[0m[2m[35m$[0m [2m[1mcopyfiles "stubs/**/*.stub" build[0m

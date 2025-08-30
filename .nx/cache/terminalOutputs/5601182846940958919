@@ -1,0 +1,150 @@
+[0m[2m[35m$[0m [2m[1mtsup --clean && bun run build:ui[0m
+[34mCLI[39m Building entry: src/index.ts, src/abstracts/adapter.ts, src/abstracts/store.ts, src/context/container.ts, src/context/context.ts, src/core/api_controller.ts, src/core/lens.ts, src/core/watcher.ts, src/stores/better_sqlite.ts, src/stores/index.ts, src/types/index.ts, src/utils/async_context.ts, src/utils/event_emitter.ts, src/utils/index.ts, src/watchers/index.ts, src/watchers/query_watcher.ts, src/watchers/request_watcher.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.0
+[34mCLI[39m Using tsup config: C:\work\packages\lensjs\lens\packages\core\tsup.config.ts
+[34mCLI[39m Target: node18
+[34mCLI[39m Cleaning output folder
+[34mESM[39m Build start
+[34mCJS[39m Build start
+[32mESM[39m [1mdist\chunk-XXYRWHSQ.js           [22m[32m0 B[39m
+[32mESM[39m [1mdist\chunk-VD5IMUWL.js           [22m[32m0 B[39m
+[32mESM[39m [1mdist\watchers\request_watcher.js [22m[32m252.00 B[39m
+[32mESM[39m [1mdist\types\index.js              [22m[32m119.00 B[39m
+[32mESM[39m [1mdist\utils\async_context.js      [22m[32m153.00 B[39m
+[32mESM[39m [1mdist\utils\event_emitter.js      [22m[32m143.00 B[39m
+[32mESM[39m [1mdist\chunk-WPJFZU37.js           [22m[32m285.00 B[39m
+[32mESM[39m [1mdist\utils\index.js              [22m[32m533.00 B[39m
+[32mESM[39m [1mdist\stores\index.js             [22m[32m247.00 B[39m
+[32mESM[39m [1mdist\stores\better_sqlite.js     [22m[32m227.00 B[39m
+[32mESM[39m [1mdist\index.js                    [22m[32m1.08 KB[39m
+[32mESM[39m [1mdist\watchers\query_watcher.js   [22m[32m248.00 B[39m
+[32mESM[39m [1mdist\watchers\index.js           [22m[32m343.00 B[39m
+[32mESM[39m [1mdist\chunk-N4CSVBYC.js           [22m[32m943.00 B[39m
+[32mESM[39m [1mdist\context\container.js        [22m[32m118.00 B[39m
+[32mESM[39m [1mdist\context\context.js          [22m[32m166.00 B[39m
+[32mESM[39m [1mdist\chunk-KXFPWUB6.js           [22m[32m768.00 B[39m
+[32mESM[39m [1mdist\chunk-UF5HFNMI.js           [22m[32m384.00 B[39m
+[32mESM[39m [1mdist\chunk-TPUVRGYT.js           [22m[32m583.00 B[39m
+[32mESM[39m [1mdist\abstracts\store.js          [22m[32m110.00 B[39m
+[32mESM[39m [1mdist\chunk-NDSI6KJB.js           [22m[32m3.26 KB[39m
+[32mESM[39m [1mdist\core\api_controller.js      [22m[32m208.00 B[39m
+[32mESM[39m [1mdist\core\lens.js                [22m[32m356.00 B[39m
+[32mESM[39m [1mdist\chunk-5KCLROBG.js           [22m[32m3.77 KB[39m
+[32mESM[39m [1mdist\chunk-EJ5BW35V.js           [22m[32m4.64 KB[39m
+[32mESM[39m [1mdist\chunk-3YDSHMNY.js           [22m[32m2.26 KB[39m
+[32mESM[39m [1mdist\chunk-FKMBNWX4.js           [22m[32m70.00 B[39m
+[32mESM[39m [1mdist\abstracts\adapter.js        [22m[32m145.00 B[39m
+[32mESM[39m [1mdist\core\watcher.js             [22m[32m114.00 B[39m
+[32mESM[39m [1mdist\chunk-XYXPHWEI.js           [22m[32m243.00 B[39m
+[32mESM[39m [1mdist\chunk-FLOVBBFU.js           [22m[32m252.00 B[39m
+[32mESM[39m [1mdist\chunk-MLKGABMK.js           [22m[32m191.00 B[39m
+[32mESM[39m [1mdist\chunk-YC6T4XWI.js           [22m[32m1005.00 B[39m
+[32mESM[39m [1mdist\chunk-CQ2Z4TCR.js           [22m[32m71.00 B[39m
+[32mESM[39m ⚡️ Build success in 327ms
+[32mCJS[39m [1mdist\watchers\request_watcher.cjs [22m[32m357.00 B[39m
+[32mCJS[39m [1mdist\types\index.cjs              [22m[32m230.00 B[39m
+[32mCJS[39m [1mdist\stores\index.cjs             [22m[32m370.00 B[39m
+[32mCJS[39m [1mdist\stores\better_sqlite.cjs     [22m[32m326.00 B[39m
+[32mCJS[39m [1mdist\watchers\index.cjs           [22m[32m514.00 B[39m
+[32mCJS[39m [1mdist\utils\index.cjs              [22m[32m944.00 B[39m
+[32mCJS[39m [1mdist\utils\async_context.cjs      [22m[32m289.00 B[39m
+[32mCJS[39m [1mdist\utils\event_emitter.cjs      [22m[32m279.00 B[39m
+[32mCJS[39m [1mdist\watchers\query_watcher.cjs   [22m[32m355.00 B[39m
+[32mCJS[39m [1mdist\chunk-7EKM5HB5.cjs           [22m[32m13.00 B[39m
+[32mCJS[39m [1mdist\chunk-6ED6KAS4.cjs           [22m[32m1.71 KB[39m
+[32mCJS[39m [1mdist\chunk-MUH66FA2.cjs           [22m[32m994.00 B[39m
+[32mCJS[39m [1mdist\index.cjs                    [22m[32m1.67 KB[39m
+[32mCJS[39m [1mdist\abstracts\store.cjs          [22m[32m212.00 B[39m
+[32mCJS[39m [1mdist\abstracts\adapter.cjs        [22m[32m248.00 B[39m
+[32mCJS[39m [1mdist\context\container.cjs        [22m[32m216.00 B[39m
+[32mCJS[39m [1mdist\context\context.cjs          [22m[32m305.00 B[39m
+[32mCJS[39m [1mdist\chunk-SJXZARBJ.cjs           [22m[32m784.00 B[39m
+[32mCJS[39m [1mdist\core\api_controller.cjs      [22m[32m328.00 B[39m
+[32mCJS[39m [1mdist\chunk-Q24ISXGC.cjs           [22m[32m1.02 KB[39m
+[32mCJS[39m [1mdist\chunk-BFFOUTTE.cjs           [22m[32m891.00 B[39m
+[32mCJS[39m [1mdist\core\lens.cjs                [22m[32m483.00 B[39m
+[32mCJS[39m [1mdist\chunk-XZFXXD3A.cjs           [22m[32m13.00 B[39m
+[32mCJS[39m [1mdist\chunk-AUNZMB6W.cjs           [22m[32m4.10 KB[39m
+[32mCJS[39m [1mdist\core\watcher.cjs             [22m[32m214.00 B[39m
+[32mCJS[39m [1mdist\chunk-J6YRMERL.cjs           [22m[32m4.26 KB[39m
+[32mCJS[39m [1mdist\chunk-WU6IZUEV.cjs           [22m[32m5.41 KB[39m
+[32mCJS[39m [1mdist\chunk-QRZUNYF6.cjs           [22m[32m389.00 B[39m
+[32mCJS[39m [1mdist\chunk-EHOWCXZV.cjs           [22m[32m148.00 B[39m
+[32mCJS[39m [1mdist\chunk-A3SYFYF2.cjs           [22m[32m2.55 KB[39m
+[32mCJS[39m [1mdist\chunk-2HRVJRKV.cjs           [22m[32m340.00 B[39m
+[32mCJS[39m [1mdist\chunk-GI7SJDNQ.cjs           [22m[32m1.22 KB[39m
+[32mCJS[39m [1mdist\chunk-75ZPJI57.cjs           [22m[32m272.00 B[39m
+[32mCJS[39m [1mdist\chunk-EKG3FVLV.cjs           [22m[32m151.00 B[39m
+[32mCJS[39m ⚡️ Build success in 332ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 9641ms
+[32mDTS[39m [1mdist\index.d.ts                     [22m[32m1.04 KB[39m
+[32mDTS[39m [1mdist\watchers\index.d.ts            [22m[32m209.00 B[39m
+[32mDTS[39m [1mdist\context\container.d.ts         [22m[32m824.00 B[39m
+[32mDTS[39m [1mdist\context\context.d.ts           [22m[32m314.00 B[39m
+[32mDTS[39m [1mdist\core\api_controller.d.ts       [22m[32m955.00 B[39m
+[32mDTS[39m [1mdist\core\lens.d.ts                 [22m[32m811.00 B[39m
+[32mDTS[39m [1mdist\abstracts\adapter.d.ts         [22m[32m673.00 B[39m
+[32mDTS[39m [1mdist\abstracts\store.d.ts           [22m[32m1.02 KB[39m
+[32mDTS[39m [1mdist\utils\event_emitter.d.ts       [22m[32m838.00 B[39m
+[32mDTS[39m [1mdist\utils\async_context.d.ts       [22m[32m504.00 B[39m
+[32mDTS[39m [1mdist\watchers\query_watcher.d.ts    [22m[32m286.00 B[39m
+[32mDTS[39m [1mdist\watchers\request_watcher.d.ts  [22m[32m293.00 B[39m
+[32mDTS[39m [1mdist\core\watcher.d.ts              [22m[32m225.00 B[39m
+[32mDTS[39m [1mdist\types\index.d.ts               [22m[32m2.28 KB[39m
+[32mDTS[39m [1mdist\stores\better_sqlite.d.ts      [22m[32m1.73 KB[39m
+[32mDTS[39m [1mdist\utils\index.d.ts               [22m[32m344.00 B[39m
+[32mDTS[39m [1mdist\stores\index.d.ts              [22m[32m168.00 B[39m
+[32mDTS[39m [1mdist\index-D0Vszdac.d.ts            [22m[32m2.82 KB[39m
+[32mDTS[39m [1mdist\index.d.cts                    [22m[32m1.06 KB[39m
+[32mDTS[39m [1mdist\watchers\index.d.cts           [22m[32m213.00 B[39m
+[32mDTS[39m [1mdist\context\container.d.cts        [22m[32m826.00 B[39m
+[32mDTS[39m [1mdist\context\context.d.cts          [22m[32m316.00 B[39m
+[32mDTS[39m [1mdist\core\api_controller.d.cts      [22m[32m956.00 B[39m
+[32mDTS[39m [1mdist\core\lens.d.cts                [22m[32m815.00 B[39m
+[32mDTS[39m [1mdist\abstracts\adapter.d.cts        [22m[32m675.00 B[39m
+[32mDTS[39m [1mdist\abstracts\store.d.cts          [22m[32m1.02 KB[39m
+[32mDTS[39m [1mdist\utils\event_emitter.d.cts      [22m[32m840.00 B[39m
+[32mDTS[39m [1mdist\utils\async_context.d.cts      [22m[32m505.00 B[39m
+[32mDTS[39m [1mdist\watchers\query_watcher.d.cts   [22m[32m288.00 B[39m
+[32mDTS[39m [1mdist\watchers\request_watcher.d.cts [22m[32m295.00 B[39m
+[32mDTS[39m [1mdist\core\watcher.d.cts             [22m[32m226.00 B[39m
+[32mDTS[39m [1mdist\types\index.d.cts              [22m[32m2.28 KB[39m
+[32mDTS[39m [1mdist\stores\better_sqlite.d.cts     [22m[32m1.74 KB[39m
+[32mDTS[39m [1mdist\utils\index.d.cts              [22m[32m345.00 B[39m
+[32mDTS[39m [1mdist\stores\index.d.cts             [22m[32m171.00 B[39m
+[32mDTS[39m [1mdist\index-D0Vszdac.d.cts           [22m[32m2.82 KB[39m
+[0m[2m[35m$[0m [2m[1mnpm --prefix src/ui run build[0m
+
+> ui@0.0.0 build
+> cross-env VITE_API_URL='' tsc -b && vite build
+
+[36mvite v7.1.1 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 1824 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                                  [39m[1m[2m  0.49 kB[22m[1m[22m[2m │ gzip:  0.31 kB[22m
+[2mdist/[22m[32massets/favicon-D0UnoCWN.ico                 [39m[1m[2m  4.29 kB[22m[1m[22m
+[2mdist/[22m[35massets/index-btH-SnfL.css                   [39m[1m[2m 26.48 kB[22m[1m[22m[2m │ gzip:  6.02 kB[22m
+[2mdist/[22m[36massets/date-BfrO8K8S.js                     [39m[1m[2m  0.37 kB[22m[1m[22m[2m │ gzip:  0.26 kB[22m
+[2mdist/[22m[36massets/QueryTable-B6xvhLlC.js               [39m[1m[2m  0.40 kB[22m[1m[22m[2m │ gzip:  0.28 kB[22m
+[2mdist/[22m[36massets/LoadMore-BvGku3xK.js                 [39m[1m[2m  0.51 kB[22m[1m[22m[2m │ gzip:  0.35 kB[22m
+[2mdist/[22m[36massets/useLoadMore-DNFjpDq_.js              [39m[1m[2m  0.54 kB[22m[1m[22m[2m │ gzip:  0.33 kB[22m
+[2mdist/[22m[36massets/useQueries-C92s4Ywp.js               [39m[1m[2m  0.60 kB[22m[1m[22m[2m │ gzip:  0.37 kB[22m
+[2mdist/[22m[36massets/useLensApi-Ktc-YMeG.js               [39m[1m[2m  0.68 kB[22m[1m[22m[2m │ gzip:  0.43 kB[22m
+[2mdist/[22m[36massets/QueriesContainer-NZWXAgny.js         [39m[1m[2m  0.71 kB[22m[1m[22m[2m │ gzip:  0.45 kB[22m
+[2mdist/[22m[36massets/StatusCode-BBaYxyj0.js               [39m[1m[2m  1.03 kB[22m[1m[22m[2m │ gzip:  0.41 kB[22m
+[2mdist/[22m[36massets/columns-Dqw34dxr.js                  [39m[1m[2m  1.05 kB[22m[1m[22m[2m │ gzip:  0.52 kB[22m
+[2mdist/[22m[36massets/RequetsTable-ByI6d6sg.js             [39m[1m[2m  1.07 kB[22m[1m[22m[2m │ gzip:  0.59 kB[22m
+[2mdist/[22m[36massets/RequestsContainer-CFhQpXeE.js        [39m[1m[2m  1.36 kB[22m[1m[22m[2m │ gzip:  0.75 kB[22m
+[2mdist/[22m[36massets/RequestDetails-BVKiWy1F.js           [39m[1m[2m  2.93 kB[22m[1m[22m[2m │ gzip:  1.05 kB[22m
+[2mdist/[22m[36massets/TabbedDataViewer-fj4aSUwq.js         [39m[1m[2m  6.07 kB[22m[1m[22m[2m │ gzip:  1.83 kB[22m
+[2mdist/[22m[36massets/RequestDetailsContainer-n8_xcgUp.js  [39m[1m[2m  9.50 kB[22m[1m[22m[2m │ gzip:  3.57 kB[22m
+[2mdist/[22m[36massets/Table-17pvZaRi.js                    [39m[1m[2m 26.32 kB[22m[1m[22m[2m │ gzip:  8.59 kB[22m
+[2mdist/[22m[36massets/QueryDetailsContainer-DDM8sTyS.js    [39m[1m[2m109.01 kB[22m[1m[22m[2m │ gzip: 28.53 kB[22m
+[2mdist/[22m[36massets/index-DseDFInr.js                    [39m[1m[2m267.13 kB[22m[1m[22m[2m │ gzip: 86.46 kB[22m
+[32m✓ built in 6.35s[39m
+[0m[2m[35m$[0m [2m[1mif exist "%SystemRoot%\System32\xcopy.exe" (xcopy /E /I /Y "src/ui/dist" "dist/ui\") else (cp -r src/ui/dist/ dist/ui --force)[0m
+[0m[31merror[0m: Failed to run script [1mpostbuild[0m due to error [1mUnclosed subshell[0m

@@ -72,6 +72,10 @@ app.get("/add-user", async (_req, res) => {
   res.json({ message: "User added successfully" });
 });
 
+app.get('/normal-send', async (_req, res) => {
+    res.send('Hello World!')
+})
+
 app.get("/get-users", async (_req, res) => {
   const users = await User.findAll();
   res.json(users);

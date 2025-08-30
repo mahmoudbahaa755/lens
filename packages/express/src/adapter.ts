@@ -134,7 +134,7 @@ export default class ExpressAdapter extends LensAdapter {
       let safeBody: any;
 
       try {
-        if (! body) {
+        if (!body) {
           safeBody = "Purged By Lens";
         } else if (typeof body === "object" && !Buffer.isBuffer(body)) {
           // JSON object
@@ -202,11 +202,15 @@ export default class ExpressAdapter extends LensAdapter {
     return pathStr.startsWith("/") ? pathStr : `/${pathStr}`;
   }
 
-    private parseBody(body: any) {
-        if(! body) {
-            return null;
-        }
-
-        return JSON.parse(body);
+  private parseBody(body: any) {
+    if (!body) {
+      return null;
     }
+
+    try {
+      return JSON.parse(body);
+    } catch (_e) {
+      return body;
+    }
+  }
 }

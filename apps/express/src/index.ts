@@ -3,12 +3,14 @@ import cors from "cors";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { createSequelizeHandler, watcherEmitter } from "@lensjs/watchers";
 import { lens } from "@lensjs/express";
+import { BetterSqliteStore } from "@lensjs/core";
+import path from "node:path";
 
 const app = express();
 const port = 3000;
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: './lens.db',
+  storage: "./lens.db",
   benchmark: true,
   logQueryParameters: true,
   logging: (sql, timing) => {
@@ -69,7 +71,7 @@ await sequelize.sync();
 
 app.get("/add-user", async (_req, res) => {
   await User.create({ name: "John Doe" });
-  res.send("User added");
+  res.send("good");
 });
 
 app.listen(port, () => {

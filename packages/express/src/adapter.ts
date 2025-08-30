@@ -9,7 +9,8 @@ import {
 } from "@lensjs/core";
 import { RequiredExpressAdapterConfig } from "./types";
 import { Express, Request, Response } from "express";
-import * as path from "path";
+import * as path from "node:path";
+import fs from "node:fs";
 import express from "express";
 import { nowISO, sqlDateTime } from "@repo/date";
 
@@ -120,16 +121,45 @@ export default class ExpressAdapter extends LensAdapter {
   private patchResponseMethods(res: Response) {
     const originalJson = res.json.bind(res);
     const originalSend = res.send.bind(res);
+
     (res as any)._body = undefined;
 
     res.json = function (body?: any) {
       (res as any)._body = body;
+      // JSON is always allowed
       return originalJson(body);
     } as typeof res.json;
 
     res.send = function (body?: any) {
-      (res as any)._body = body;
-      return originalSend(body);
+      let safeBody: any;
+
+      try {
+        if (! body) {
+          safeBody = "Purged By Lens";
+        } else if (typeof body === "object" && !Buffer.isBuffer(body)) {
+          // JSON object
+          safeBody = body;
+        } else if (typeof body === "string") {
+          const filePath = path.resolve(body);
+          // If it's a real file → Purge instead of leaking
+          if (fs.existsSync(filePath)) {
+            safeBody = "Purged By Lens";
+          } else {
+            safeBody = body; // normal string
+          }
+        } else if (Buffer.isBuffer(body)) {
+          // binary → purge
+          safeBody = "Purged By Lens";
+        } else {
+          // anything else not safe
+          safeBody = "Purged By Lens";
+        }
+      } catch {
+        safeBody = "Purged By Lens";
+      }
+
+      (res as any)._body = safeBody;
+      return originalSend(safeBody);
     } as typeof res.send;
   }
 

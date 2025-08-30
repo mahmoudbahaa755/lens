@@ -40,7 +40,7 @@ import express from "express";
 import { lens } from "@lensjs/express";
 import { createPrismaHandler } from "@lensjs/watchers";
 import { PrismaClient } from "@prisma/client";
-import { DefaultDatabaseStore } from "@lens/store"; // Example store implementation
+import { BetterSqliteStore } from "@lensjs/core"; // Example store implementation
 
 const app = express();
 const prisma = new PrismaClient({ log: ["query"] });
@@ -49,7 +49,7 @@ await lens({
   // (Required) Your Express app instance
   app,
 
-  // (Required) Query watcher configuration
+  // (Optional) Query watcher configuration
   queryWatcher: {
     enabled: true, // Enable query watching
     handler: createPrismaHandler({
@@ -57,6 +57,7 @@ await lens({
       provider: "mysql",
     }),
   },
+
   // (Optional) Enable request watcher (default: true)
   requestWatcherEnabled: true,
 
@@ -67,7 +68,7 @@ await lens({
   appName: "My Express App", // Default: "Lens"
 
   // (Optional) Store implementation (default: BetterSqliteStore)
-  store: new DefaultDatabaseStore(),
+  store: new BetterSqliteStore(),
 
   // (Optional) Paths to ignore
   ignoredPaths: [/^\/health/, /^\/metrics/],

@@ -20,5 +20,6 @@
   },
   "dependencies": {
     "luxon": "^3.7.1"
-  }
+  },
+  "version": "0.0.1"
 }

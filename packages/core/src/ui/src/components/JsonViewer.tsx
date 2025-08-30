@@ -209,6 +209,14 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ data }) => {
     return elements;
   };
 
+  function formatData(data: any) {
+    if (typeof data === "string") {
+      return <span className="text-green-600 dark:text-green-400">{data}</span>;
+    }
+
+    return formatJson(data);
+  }
+
   return (
     <div className="bg-neutral-50 dark:bg-slate-900 rounded-lg p-4 font-mono text-sm overflow-x-auto relative">
       <button
@@ -223,7 +231,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ data }) => {
         {copied ? <CheckIcon /> : <CopyIcon />}
       </button>
       <pre className="whitespace-pre-wrap pr-12 text-neutral-800 dark:text-neutral-200 min-h-10">
-        {formatJson(data)}
+        {formatData(data)}
       </pre>
     </div>
   );

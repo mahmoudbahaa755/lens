@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/core",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,7 +17,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup --clean && npm run build:ui",
+    "build": "npm run clean && tsup --clean && npm run build:ui",
     "build:ui": "npm --prefix src/ui run prod",
     "clean": "rimraf dist",
     "postbuild": "node copy-front-build.cjs",
@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/vite": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.12",
     "@types/luxon": "^3.7.1",
     "cross-env": "^10.0.0",
     "vitest": "^3.2.4"
@@ -33,7 +33,7 @@
   "dependencies": {
     "@repo/date": "workspace:*",
     "emittery": "^1.2.0",
-    "libsql": "^0.5.17",
+    "libsql": "^0.5.20",
     "luxon": "^3.7.1",
     "rimraf": "^6.0.1",
     "sql-formatter": "^15.6.6",

@@ -26,27 +26,14 @@ Since the query watcher is required, here’s a minimal setup using Prisma:
 
 ```ts
 import { lens } from "@lensjs/express";
-import { createPrismaHandler } from "@lensjs/watchers";
-import { PrismaClient } from "@prisma/client";
 import express from "express";
 
 const app = express();
 const port = 3000;
-const prisma = new PrismaClient({ log: ["query"] });
 
-await lens({
-  app,
-  queryWatcher: {
-    enabled: true,
-    handler: createPrismaHandler({
-      prisma,
-      provider: "mysql",
-    }),
-  },
-});
+await lens({ app });
 
 app.get("/hello-world", async (_req, res) => {
-  await prisma.user.create({ data: { name: "Alice" } });
   res.send("Hello world!");
 });
 

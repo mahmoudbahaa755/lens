@@ -1,13 +1,13 @@
 {
   "name": "docs",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "dev": "vitepress dev",
     "build": "npx vitepress build",
     "preview": "vitepress preview"
   },
   "devDependencies": {
-    "vitepress": "^2.0.0-alpha.11"
+    "vitepress": "^2.0.0-alpha.12"
   }
 }

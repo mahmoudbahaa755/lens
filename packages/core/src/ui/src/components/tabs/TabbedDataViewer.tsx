@@ -15,6 +15,7 @@ export interface TabItem {
   label: string;
   data?: Record<string, any>;
   content?: React.ReactNode;
+  shouldShow?: boolean;
 }
 
 const TabbedDataViewer: React.FC<TabbedDataProps> = ({
@@ -22,9 +23,15 @@ const TabbedDataViewer: React.FC<TabbedDataProps> = ({
   title,
   defaultActiveTab,
 }) => {
+  tabs = tabs.filter((tab) => tab.shouldShow === undefined || tab.shouldShow);
+
   const [activeTab, setActiveTab] = useState<string>(
-    defaultActiveTab || tabs[0]?.id || ""
+    defaultActiveTab || tabs[0]?.id || "",
   );
+
+  if (!tabs.length) {
+    return null;
+  }
 
   return (
     <div className="border  border-neutral-200 dark:border-neutral-700 rounded-[15px] shadow-sm">

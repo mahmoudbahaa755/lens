@@ -25,7 +25,10 @@ export default abstract class Store {
     requestId: string,
     type: WatcherTypeEnum,
   ): Promise<LensEntry[]>;
-  abstract find(type: WatcherTypeEnum, id: string): Promise<LensEntry|null>;
+  abstract getAllCacheEntries(
+    paginationParams: PaginationParams,
+  ): Promise<Paginator<Omit<LensEntry, "data">[]>>;
+  abstract find(type: WatcherTypeEnum, id: string): Promise<LensEntry | null>;
   abstract truncate(): Promise<void>;
   abstract paginate<T>(
     type: WatcherTypeEnum,
@@ -33,4 +36,16 @@ export default abstract class Store {
   ): Promise<Paginator<T>>;
 
   abstract count(type: WatcherTypeEnum): Promise<number>;
+
+  protected stringifyData(data: Record<string, any> | string) {
+    if (typeof data === "string") {
+      return data;
+    }
+
+    try {
+      return JSON.stringify(data);
+    } catch (e) {
+      console.error(`Failed to stringify lens data: ${e}`);
+    }
+  }
 }

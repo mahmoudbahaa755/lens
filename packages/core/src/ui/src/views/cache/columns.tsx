@@ -1,39 +1,23 @@
 import { CircleArrowRightIcon } from "lucide-react";
-import RequestMethodBadge from "../../components/MethodBadge";
-import StatusCode from "../../components/StatusCode";
 import { getRoutesPaths } from "../../router/routes";
-import type { RequestTableRow } from "../../types";
+import type { CacheTableRow } from "../../types";
 import { useConfig } from "../../utils/context";
 import { humanDifferentDate } from "@lensjs/date";
 import type { TableColumn } from "../../components/Table";
 import { Link } from "react-router-dom";
+import CacheActionBadge from "../../components/CacheActionBadge";
 
-const getColumns = (): TableColumn<RequestTableRow>[] => {
+const getColumns = (): TableColumn<CacheTableRow>[] => {
   const paths = getRoutesPaths(useConfig());
 
   return [
     {
-      name: "Method",
-      render: (row) => <RequestMethodBadge method={row.data.method} />,
+      name: "Key",
+      value: (row) => row.data.data.key || "__",
     },
     {
-      name: "Path",
-      render: (row) => (
-        <Link
-          to={`${paths.REQUESTS}/${row.id}`}
-          className="line-clamp-2 max-w-80 min-w-40 text-base text-blue-600 dark:text-neutral-200 hover:underline"
-        >
-          {row.data.path}
-        </Link>
-      ),
-    },
-    {
-      name: "Status",
-      render: (row) => <StatusCode status={row.data.status} />,
-    },
-    {
-      name: "Duration",
-      value: (row) => row.data.duration,
+      name: "Operation",
+      render: (row) => <CacheActionBadge action={row.data.action} />,
     },
     {
       name: "Happened",
@@ -48,7 +32,7 @@ const getColumns = (): TableColumn<RequestTableRow>[] => {
       name: "Actions",
       render: (row) => (
         <Link
-          to={`${paths.REQUESTS}/${row.id}`}
+          to={`${paths.CACHE_ENTRIES}/${row.id}`}
           className="transition-colors duration-100 hover:text-white"
         >
           <CircleArrowRightIcon size={20} />

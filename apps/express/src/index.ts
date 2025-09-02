@@ -3,9 +3,11 @@ import cors from "cors";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { createSequelizeHandler, watcherEmitter } from "@lensjs/watchers";
 import { lens } from "@lensjs/express";
+import MemoryCache from "./concrete/cache/memory_cache";
 
 const app = express();
 const port = 3000;
+const cache = new MemoryCache();
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: "./lens.db",
@@ -24,6 +26,7 @@ app.use(
 
 await lens({
   app,
+  cacheWatcherEnabled: true,
   queryWatcher: {
     enabled: true,
     handler: createSequelizeHandler({ provider: "sqlite" }),
@@ -66,19 +69,53 @@ User.init(
 );
 
 await sequelize.sync();
+cache.setup();
 
 app.get("/add-user", async (_req, res) => {
   await User.create({ name: "John Doe" });
   res.json({ message: "User added successfully" });
 });
 
-app.get('/normal-send', async (_req, res) => {
-    res.send('Hello World!')
-})
+app.get("/normal-send", async (_req, res) => {
+  res.send("Hello World!");
+});
 
 app.get("/get-users", async (_req, res) => {
   const users = await User.findAll();
   res.json(users);
+});
+
+// Cache Routes
+app.get("/set-cache", async (_, res) => {
+  res.json({
+    result: await cache.set("randomKey", {
+      hello: "world",
+    }),
+  });
+});
+
+app.get("/has-cache", async (_, res) => {
+  res.json({
+    result: await cache.has("randomKey"),
+  });
+});
+
+app.get("/get-cache", async (_, res) => {
+  res.json({
+    result: await cache.get("randomKey"),
+  });
+});
+
+app.get("/delete-cache", async (_, res) => {
+  res.json({
+    result: await cache.delete("randomKey"),
+  });
+});
+
+app.get("/clear-cache", async (_, res) => {
+  res.json({
+    result: await cache.clear(),
+  });
 });
 
 app.listen(port, () => {

@@ -1,16 +1,16 @@
 import { useMemo } from "react";
 import DetailPanel, { type DetailItem } from "../../components/DetailPanel";
 import type { OneRequest } from "../../types";
-import { formatDateWithTimeAgo} from "@lensjs/date";
-import MethodBadge from "../../components/MethodBadge";
+import { formatDateWithTimeAgo } from "@lensjs/date";
+import RequestMethodBadge from "../../components/MethodBadge";
 import StatusCode from "../../components/StatusCode";
 
 const BasicRequestDetails = ({ request }: { request: OneRequest }) => {
   const formattedTime = useMemo(() => {
-    return formatDateWithTimeAgo(request?.data?.createdAt);
-  }, [request?.data?.createdAt]);
+    return formatDateWithTimeAgo(request?.request.data?.createdAt);
+  }, [request?.request.data.createdAt]);
 
-  if (!request || !request.data) {
+  if (!request || !request.request) {
     return (
       <DetailPanel
         title="Request Details"
@@ -21,7 +21,7 @@ const BasicRequestDetails = ({ request }: { request: OneRequest }) => {
   }
 
   const getHostname = () => {
-    return request?.data?.headers?.host || "Unknown";
+    return request?.request.data?.headers?.host || "Unknown";
   };
 
   const detailItems = useMemo(
@@ -38,42 +38,42 @@ const BasicRequestDetails = ({ request }: { request: OneRequest }) => {
       },
       {
         label: "Method",
-        value: request.data.method ? (
-          <MethodBadge method={request.data.method} />
+        value: request.request.data.method ? (
+          <RequestMethodBadge method={request.request.data.method} />
         ) : (
           "Unknown"
         ),
       },
       {
         label: "Request ID",
-        value: request.data.id || "N/A",
+        value: request.request.data.id || "N/A",
         className: "text-gray-700 dark:text-gray-300 font-mono text-sm",
       },
       {
         label: "Path",
-        value: request.data.path || "N/A",
+        value: request.request.data.path || "N/A",
         className: "text-gray-900 dark:text-gray-100 font-mono",
       },
       {
         label: "Status",
-        value: request.data.status ? (
-          <StatusCode status={request.data.status} />
+        value: request.request.data.status ? (
+          <StatusCode status={request.request.data.status} />
         ) : (
           "N/A"
         ),
       },
       {
         label: "Duration",
-        value: request.data.duration || "N/A",
+        value: request.request.data.duration || "N/A",
         className: "text-gray-900 dark:text-gray-100 font-medium",
       },
       {
         label: "IP Address",
-        value: request.data.ip || "N/A",
+        value: request.request.data.ip || "N/A",
         className: "text-gray-900 dark:text-gray-100 font-mono",
       },
     ],
-    [request.data, formattedTime],
+    [request.request.data, formattedTime],
   );
 
   return <DetailPanel title="Request Details" items={detailItems} />;

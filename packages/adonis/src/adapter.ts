@@ -8,6 +8,7 @@ import {
   QueryWatcher,
   RouteHttpMethod,
   QueryEntry,
+  CacheWatcher,
 } from '@lensjs/core'
 import * as path from 'path'
 import type { ApplicationService, EmitterService, HttpRouterService } from '@adonisjs/core/types'
@@ -15,7 +16,8 @@ import { shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
 import { HttpContext } from '@adonisjs/core/http'
 import { LensConfig } from './define_config.js'
-import { nowISO, sqlDateTime } from '@lensjs/date'
+import { nowISO } from '@lensjs/date'
+import emitter from '@adonisjs/core/services/emitter'
 
 export default class AdonisAdapter extends LensAdapter {
   protected app: ApplicationService
@@ -74,7 +76,7 @@ export default class AdonisAdapter extends LensAdapter {
       if (self.shouldIgnorePath(event.ctx.request.url(false))) return
 
       const request = event.ctx.request
-      const requestId = lensUtils.generateRandomUuid()
+      const requestId = event.ctx.request.lensEntry?.requestId ?? lensUtils.generateRandomUuid()
       const logPayload: RequestEntry = {
         request: {
           id: requestId,
@@ -105,7 +107,8 @@ export default class AdonisAdapter extends LensAdapter {
       if (shouldIgnoreLogging(self.app)) return
 
       // @ts-ignore
-      this.emitter.on('db:query', async function (query: any) {
+      emitter.on('db:query', async function (query: any) {
+        const requestId = HttpContext.get()?.request.lensEntry?.requestId
         const duration: string = query.duration ? string.prettyHrTime(query.duration) : '0 ms'
 
         const payload: QueryEntry['data'] = {
@@ -114,15 +117,19 @@ export default class AdonisAdapter extends LensAdapter {
             self.config.watchers.queries.provider
           ),
           duration,
-          createdAt: sqlDateTime() as string,
+          createdAt: nowISO(),
           type: self.config.watchers.queries.provider,
         }
 
         await queryWatcher.log({
           data: payload,
+          requestId,
         })
       })
     })
+  }
+
+  protected async watchCache(watcher: CacheWatcher) {
   }
 
   serveUI(uiPath: string, spaRoute: string, _dataToInject: Record<string, any>): void {

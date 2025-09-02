@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import DetailPanel from "../../components/DetailPanel";
 import TabbedDataViewer from "../../components/tabs/TabbedDataViewer";
-import type { QueryEntry } from "../../types";
+import type { OneQuery } from "../../types";
 import { getRoutesPaths } from "../../router/routes";
 import { useConfig } from "../../utils/context";
 import { formatDateWithTimeAgo } from "@lensjs/date";
 import QueryViewer from "../../components/queryFormatters/QueryViewer";
 
-export default function QueryDetails({ query }: { query: QueryEntry }) {
+export default function QueryDetails({ query }: { query: OneQuery }) {
   const detailItems = [
     query.lens_entry_id && {
       label: "Request",
@@ -23,7 +23,7 @@ export default function QueryDetails({ query }: { query: QueryEntry }) {
     },
     {
       label: "Time",
-      value: <span>{formatDateWithTimeAgo(query.created_at)}</span>,
+      value: <span>{formatDateWithTimeAgo(query.data.createdAt)}</span>,
       className: "text-gray-900 dark:text-gray-100",
     },
     {
@@ -41,7 +41,7 @@ export default function QueryDetails({ query }: { query: QueryEntry }) {
   return (
     <div className="flex flex-col gap-4">
       {" "}
-      <DetailPanel title="Request Details" items={detailItems} />
+      <DetailPanel title="Query Details" items={detailItems} />
       <TabbedDataViewer
         tabs={[
           {

@@ -4,11 +4,12 @@ export type LensConfig = {
   api: {
     requests: string;
     queries: string;
-    truncate: string
+    cache: string;
+    truncate: string;
   };
 };
 
-export type LensEntryType = "request" | "query";
+export type LensEntryType = "request" | "query" | "cache";
 
 export type PaginationParams = {
   page: number;
@@ -36,15 +37,19 @@ export type ApiResponse<T> = {
 };
 
 export type QueryEntry = {
-  id: string;
-  type: LensEntryType;
-  created_at: string;
-  lens_entry_id: string | null;
+  query: string;
+  duration: string;
+  createdAt: string;
+  type: QueryType;
+};
+
+export type CacheAction = "hit" | "miss" | "delete" | "clear" | "write";
+export type CacheEntry = {
+  action: CacheAction;
+  createdAt: string;
   data: {
-    query: string;
-    duration: string;
-    createdAt: string;
-    type: QueryType;
+    key: string;
+    value: any;
   };
 };
 
@@ -71,7 +76,10 @@ export type RequestEntry = {
   user?: UserEntry | null;
 };
 
-export type RequestTableEntry = Omit<RequestEntry, "ip" | "headers" | "body">;
+export type RequestTableEntry = Omit<
+  RequestEntry,
+  "ip" | "headers" | "body" | "user"
+>;
 export type Queries = QueryEntry;
 export type GenericLensEntry<T> = {
   id: string;
@@ -89,7 +97,13 @@ export type HasMoreType<T> = {
 };
 
 export type RequestTableRow = GenericLensEntry<RequestTableEntry>;
-export type OneRequest = GenericLensEntry<RequestEntry>;
-export type QueryTableRow = QueryEntry;
+export type OneRequest = {
+  request: GenericLensEntry<RequestEntry>;
+  queries: GenericLensEntry<QueryEntry>[];
+  cacheEntries: GenericLensEntry<CacheEntry>[];
+};
+export type QueryTableRow = GenericLensEntry<QueryEntry>;
 export type OneQuery = GenericLensEntry<QueryEntry>;
+export type CacheTableRow = GenericLensEntry<CacheEntry>;
+export type OneCache = GenericLensEntry<CacheEntry>;
 export type QueryType = "sql" | "mongodb";

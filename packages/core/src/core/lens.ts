@@ -87,6 +87,7 @@ export default class Lens {
         api: {
           requests: `/${config.basePath}/api/requests`,
           queries: `/${config.basePath}/api/queries`,
+          cache: `/${config.basePath}/api/cache`,
           truncate: `/${config.basePath}/api/truncate`,
         },
       };
@@ -123,6 +124,18 @@ export default class Lens {
         path: `${basePath}/api/queries/:id`,
         handler: async (data: RouteDefinitionHandler) =>
           await ApiController.getQuery(data),
+      },
+      {
+        method: "GET" as const,
+        path: `${basePath}/api/cache`,
+        handler: async (data: RouteDefinitionHandler) =>
+          await ApiController.getCacheEntries(data),
+      },
+      {
+        method: "GET" as const,
+        path: `${basePath}/api/cache/:id`,
+        handler: async (data: RouteDefinitionHandler) =>
+          await ApiController.getCacheEntry(data),
       },
       {
         method: "DELETE" as const,

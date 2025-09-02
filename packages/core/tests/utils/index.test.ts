@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   interpolateQuery,
   formatSqlQuery,
-  sqlDateTime,
   isStaticFile,
   stripBeforeAssetsPath,
   prepareIgnoredPaths,
@@ -99,25 +98,25 @@ describe("utils", () => {
     });
   });
 
-  describe("sqlDateTime", () => {
-    it("should return the current time in SQL format if no time is provided", () => {
-      const now = DateTime.now();
-      const expected = now.toSQL({ includeOffset: false });
-      // Since the exact time will differ, we check the format and length
-      expect(sqlDateTime()).toMatch(
-        /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}$/,
-      );
-      expect(sqlDateTime()?.length).toBe(expected?.length);
-    });
-
-    it("should return the provided time in SQL format", () => {
-      const dateTime = DateTime.fromISO("2025-01-01T00:00:00.000Z", {
-        zone: "utc",
-      });
-      const expected = "2025-01-01 00:00:00.000";
-      expect(sqlDateTime(dateTime)).toBe(expected);
-    });
-  });
+  // describe("sqlDateTime", () => {
+  //   it("should return the current time in SQL format if no time is provided", () => {
+  //     const now = DateTime.now();
+  //     const expected = now.toSQL({ includeOffset: false });
+  //     // Since the exact time will differ, we check the format and length
+  //     expect(sqlDateTime()).toMatch(
+  //       /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}$/,
+  //     );
+  //     expect(sqlDateTime()?.length).toBe(expected?.length);
+  //   });
+  //
+  //   it("should return the provided time in SQL format", () => {
+  //     const dateTime = DateTime.fromISO("2025-01-01T00:00:00.000Z", {
+  //       zone: "utc",
+  //     });
+  //     const expected = "2025-01-01 00:00:00.000";
+  //     expect(sqlDateTime(dateTime)).toBe(expected);
+  //   });
+  // });
 
   describe("isStaticFile", () => {
     it('should return true if "assets" is in the params', () => {

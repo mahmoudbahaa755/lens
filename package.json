@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "version": "independent",
-  "packageManager": "pnpm@10.15.0",
+  "packageManager": "pnpm@10.15.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lensjs/lens.git"

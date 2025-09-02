@@ -3,26 +3,30 @@ import type { OneRequest, PaginatorMeta, RequestTableRow } from "../types";
 import useLensApi, { DEFAULT_META } from "./useLensApi";
 
 const defaultRequest: OneRequest = {
-  created_at: "",
-  data: {
-    body: {},
-    createdAt: "",
-    duration: "",
-    headers: {},
-    id: "",
-    ip: "",
-    method: "GET",
-    path: "",
-    response: {
+  queries: [],
+  cacheEntries: [],
+  request: {
+    created_at: "",
+    data: {
+      body: {},
+      createdAt: "",
+      duration: "",
       headers: {},
-      json: {},
+      id: "",
+      ip: "",
+      method: "GET",
+      path: "",
+      response: {
+        headers: {},
+        json: {},
+      },
+      status: 0,
+      user: null,
     },
-    status: 0,
-    user: null,
+    id: "",
+    lens_entry_id: null,
+    type: "request",
   },
-  id: "",
-  lens_entry_id: null,
-  type: "request",
 };
 
 export default function useRequests() {
@@ -37,7 +41,11 @@ export default function useRequests() {
       setLoading(true);
       getRequestById(id)
         .then((res) => {
-          setRequest(res.data!);
+          setRequest({
+            request: res.data!,
+            queries: [],
+            cacheEntries: [],
+          });
         })
         .finally(() => {
           setLoading(false);

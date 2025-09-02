@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
-import type { PaginatorMeta, QueryEntry, QueryTableRow } from "../types";
+import type { OneQuery, PaginatorMeta, QueryTableRow } from "../types";
 import useLensApi, { DEFAULT_META } from "./useLensApi";
 
 export default function useQueries() {
   const [queries, setQueries] = useState<QueryTableRow[]>([]);
-  const [query, setQuery] = useState<QueryEntry>();
+  const [query, setQuery] = useState<OneQuery>();
   const [loading, setLoading] = useState(false);
   const [meta, setMeta] = useState<PaginatorMeta>(DEFAULT_META);
 
@@ -14,7 +14,6 @@ export default function useQueries() {
       setLoading(true);
       getQueryById(id)
         .then((res) => {
-          console.log(res, "das2s");
           setQuery(res.data!);
         })
         .finally(() => {

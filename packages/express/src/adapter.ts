@@ -6,6 +6,9 @@ import {
   WatcherTypeEnum,
   RouteHttpMethod,
   QueryWatcher,
+  lensContext,
+  CacheWatcher,
+  lensEmitter,
 } from "@lensjs/core";
 import { RequiredExpressAdapterConfig } from "./types";
 import { Express, Request, Response } from "express";
@@ -36,6 +39,9 @@ export default class ExpressAdapter extends LensAdapter {
           break;
         case WatcherTypeEnum.QUERY:
           void this.watchQueries(watcher as QueryWatcher);
+          break;
+        case WatcherTypeEnum.CACHE:
+          void this.watchCache(watcher as CacheWatcher);
           break;
       }
     }
@@ -79,6 +85,15 @@ export default class ExpressAdapter extends LensAdapter {
     });
   }
 
+  private async watchCache(watcher: CacheWatcher) {
+    if (!this.config.cacheWatcherEnabled) return;
+
+    lensEmitter.on("cache", async (data) => {
+      console.log("Event Object", data);
+      await watcher?.log(data);
+    });
+  }
+
   private async watchQueries(watcher: QueryWatcher) {
     if (!this.config.queryWatcher.enabled) return;
 
@@ -89,7 +104,7 @@ export default class ExpressAdapter extends LensAdapter {
         const queryPayload = {
           query: query.query,
           duration: query.duration || "0 ms",
-          createdAt: query.createdAt || (sqlDateTime() as string),
+          createdAt: query.createdAt || nowISO(),
           type: query.type,
         };
 
@@ -104,17 +119,23 @@ export default class ExpressAdapter extends LensAdapter {
     if (!this.config.requestWatcherEnabled) return;
 
     this.app.use((req, res, next) => {
-      if (this.shouldIgnorePath(req.path)) return next();
+      const context = {
+        requestId: lensUtils.generateRandomUuid(),
+      };
 
-      const start = process.hrtime();
+      lensContext.run(context, () => {
+        if (this.shouldIgnorePath(req.path)) return next();
 
-      this.patchResponseMethods(res);
+        const start = process.hrtime();
 
-      res.on("finish", async () => {
-        await this.finalizeRequestLog(req, res, requestWatcher, start);
+        this.patchResponseMethods(res);
+
+        res.on("finish", async () => {
+          await this.finalizeRequestLog(req, res, requestWatcher, start);
+        });
+
+        next();
       });
-
-      next();
     });
   }
 
@@ -173,7 +194,8 @@ export default class ExpressAdapter extends LensAdapter {
       const duration = lensUtils.prettyHrTime(process.hrtime(start));
       const logPayload = {
         request: {
-          id: lensUtils.generateRandomUuid(),
+          id:
+            lensContext.getStore()?.requestId || lensUtils.generateRandomUuid(),
           method: req.method as any,
           duration,
           path: req.originalUrl,

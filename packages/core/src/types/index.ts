@@ -12,6 +12,32 @@ export type QueryEntry = {
   requestId?: string;
 };
 
+export type CacheAction = "miss" | "hit" | "delete" | "clear" | "write";
+export type CacheEntry =
+  | {
+      action: "hit" | "write";
+      requestId?: string;
+      createdAt: string;
+      data: {
+        key: string;
+        value: any;
+      };
+    }
+  | {
+      action: "clear";
+      requestId?: string;
+      createdAt: string;
+      data?: undefined | {};
+    }
+  | {
+      action: "delete" | "miss";
+      requestId?: string;
+      createdAt: string;
+      data: {
+        key: string;
+      };
+    };
+
 export type UserEntry = {
   id: number | string;
   name: string;
@@ -44,6 +70,7 @@ export type Entry =
 export enum WatcherTypeEnum {
   REQUEST = "request",
   QUERY = "query",
+  CACHE = "cache",
 }
 
 export type LensConfig = {

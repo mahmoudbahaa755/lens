@@ -1,5 +1,5 @@
-import { ArrowRightLeft, Database } from "lucide-react";
-import { lazy} from "react";
+import { ArrowRightLeft, Database, Layers } from "lucide-react";
+import { lazy } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import type { LensConfig } from "../../types";
@@ -16,6 +16,12 @@ const RequestDetailsContainer = lazy(
 const QueryDetailsContainer = lazy(
   () => import("../../containers/queries/QueryDetailsContainer"),
 );
+const CacheEntryContainer = lazy(
+  () => import("../../containers/cacheEntries/CacheEntryContainer"),
+);
+const CacheEntryDetailsContainer = lazy(
+  () => import("../../containers/cacheEntries/CacheEntryDetailsContainer"),
+);
 
 export function getRoutesPaths(config: LensConfig) {
   return {
@@ -23,6 +29,8 @@ export function getRoutesPaths(config: LensConfig) {
     QUERIES: `${config.path}/queries`,
     REQUEST_DETAILS: `${config.path}/requests/:requestId`,
     QUERY_DETAILS: `${config.path}/queries/:queryId`,
+    CACHE_ENTRIES: `${config.path}/cache`,
+    CACHE_ENTRY_DETAILS: `${config.path}/cache/:cacheId`,
   };
 }
 
@@ -39,6 +47,11 @@ export function getSidebarRoutes(config: LensConfig) {
       path: paths.QUERIES,
       label: "Queries",
       icon: Database,
+    },
+    {
+      path: paths.CACHE_ENTRIES,
+      label: "Cache",
+      icon: Layers,
     },
   ];
 }
@@ -74,6 +87,14 @@ export function getRoutes(config: LensConfig): RouteObject[] {
         {
           path: "queries/:id",
           element: <QueryDetailsContainer />,
+        },
+        {
+          path: "cache",
+          element: <CacheEntryContainer />,
+        },
+        {
+          path: "cache/:id",
+          element: <CacheEntryDetailsContainer />,
         },
         {
           path: "*",

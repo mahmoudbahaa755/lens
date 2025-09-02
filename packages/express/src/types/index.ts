@@ -11,6 +11,7 @@ export type ExpressAdapterConfig = {
   ignoredPaths?: RegExp[];
   onlyPaths?: RegExp[];
   requestWatcherEnabled?: boolean;
+  cacheWatcherEnabled?: boolean;
   queryWatcher?: {
     enabled: boolean;
     handler: QueryWatcherHandler;

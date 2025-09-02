@@ -1,11 +1,10 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import type {
   ApiResponse,
-  GenericLensEntry,
+  OneRequest,
   PaginatorMeta,
   QueryEntry,
   QueryTableRow,
-  RequestEntry,
   RequestTableRow,
 } from "../types";
 import { prepareApiUrl } from "../utils/api";
@@ -19,7 +18,7 @@ export const DEFAULT_META: PaginatorMeta = {
 
 async function fetchJson<TData>(
   url: string,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<ApiResponse<TData>> {
   const res = await fetch(url, {
     headers: { "Content-Type": "application/json" },
@@ -35,7 +34,7 @@ async function fetchJson<TData>(
 
 const withQueryParams = (
   endpoint: string,
-  params?: Record<string, unknown>
+  params?: Record<string, unknown>,
 ) => {
   const searchParams = new URLSearchParams(
     Object.entries(params || {}).reduce(
@@ -45,8 +44,8 @@ const withQueryParams = (
         }
         return acc;
       },
-      {} as Record<string, string>
-    )
+      {} as Record<string, string>,
+    ),
   );
 
   return `${endpoint}${searchParams.toString() ? `?${searchParams}` : ""}`;
@@ -54,7 +53,7 @@ const withQueryParams = (
 
 export function useAllRequests(
   page?: number,
-  options?: UseQueryOptions<ApiResponse<RequestTableRow[]>>
+  options?: UseQueryOptions<ApiResponse<RequestTableRow[]>>,
 ) {
   const config = useConfig();
   return useQuery<ApiResponse<RequestTableRow[]>>({
@@ -64,8 +63,8 @@ export function useAllRequests(
         prepareApiUrl(
           withQueryParams(config.api.requests, {
             page,
-          })
-        )
+          }),
+        ),
       ),
     ...options,
   });
@@ -73,14 +72,14 @@ export function useAllRequests(
 
 export function useRequestById(
   id: string,
-  options?: UseQueryOptions<ApiResponse<GenericLensEntry<RequestEntry>>>
+  options?: UseQueryOptions<ApiResponse<OneRequest>>,
 ) {
   const config = useConfig();
-  return useQuery<ApiResponse<GenericLensEntry<RequestEntry>>>({
+  return useQuery<ApiResponse<OneRequest>>({
     queryKey: ["request", id],
     queryFn: async () =>
-      await fetchJson<GenericLensEntry<RequestEntry>>(
-        prepareApiUrl(`${config.api.requests}/${id}`)
+      await fetchJson<OneRequest>(
+        prepareApiUrl(`${config.api.requests}/${id}`),
       ),
     ...{
       enabled: !!id,
@@ -91,7 +90,7 @@ export function useRequestById(
 
 export function useQueries(
   page: number,
-  options?: UseQueryOptions<ApiResponse<QueryTableRow[]>>
+  options?: UseQueryOptions<ApiResponse<QueryTableRow[]>>,
 ) {
   const config = useConfig();
   return useQuery<ApiResponse<QueryTableRow[]>>({
@@ -101,8 +100,8 @@ export function useQueries(
         prepareApiUrl(
           withQueryParams(config.api.queries, {
             page,
-          })
-        )
+          }),
+        ),
       ),
     ...options,
   });
@@ -110,7 +109,7 @@ export function useQueries(
 
 export function useQueryById(
   id: string,
-  options?: UseQueryOptions<ApiResponse<QueryEntry>>
+  options?: UseQueryOptions<ApiResponse<QueryEntry>>,
 ) {
   const config = useConfig();
   return useQuery<ApiResponse<QueryEntry>>({

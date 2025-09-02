@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",
+    "@lensjs/date": "workspace:*",
     "@lensjs/express": "workspace:*",
     "@lensjs/watchers": "workspace:*",
-    "@lensjs/date": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "cors": "^2.8.5",
@@ -22,10 +22,10 @@
     "utf-8-validate": "^6.0.5"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "nodemon": "^3.1.10",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "@types/bun": "latest"
+    "typescript": "^5.9.2"
   },
   "trustedDependencies": [
     "utf-8-validate"

@@ -1,4 +1,5 @@
 import {
+  CacheWatcher,
   Lens,
   lensUtils,
   LensWatcher,
@@ -15,23 +16,39 @@ const defaultConfig = {
   ignoredPaths: [],
   onlyPaths: [],
   requestWatcherEnabled: true,
+  cacheWatcherEnabled: false,
 };
 
 export const lens = async (config: ExpressAdapterConfig) => {
   const adapter = new ExpressAdapter({ app: config.app });
   const watchers: LensWatcher[] = [];
   const mergedConfig = {
-    ...config,
     ...defaultConfig,
+    ...config,
   } as RequiredExpressAdapterConfig;
 
-  if (mergedConfig.requestWatcherEnabled) {
-    watchers.push(new RequestWatcher());
-  }
+  const defaultWatchers = [
+    {
+      enabled: mergedConfig.requestWatcherEnabled,
+      watcher: new RequestWatcher(),
+    },
+    {
+      enabled: mergedConfig.cacheWatcherEnabled,
+      watcher: new CacheWatcher(),
+    },
+    {
+      enabled: mergedConfig.queryWatcher?.enabled,
+      watcher: new QueryWatcher(),
+    },
+  ];
 
-  if (mergedConfig.queryWatcher?.enabled) {
-    watchers.push(new QueryWatcher());
-  }
+  defaultWatchers.forEach((watcher) => {
+    if (watcher.enabled) {
+      watchers.push(watcher.watcher);
+    }
+  });
+
+    console.log('currentWatchers', watchers)
 
   const { ignoredPaths, normalizedPath } = lensUtils.prepareIgnoredPaths(
     mergedConfig.path,

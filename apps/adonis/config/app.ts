@@ -18,17 +18,7 @@ export const appKey = new Secret(env.get('APP_KEY'))
 export const http = defineConfig({
   generateRequestId: true,
   allowMethodSpoofing: false,
-
-  /**
-   * Enabling async local storage will let you access HTTP context
-   * from anywhere inside your application.
-   */
-  useAsyncLocalStorage: false,
-
-  /**
-   * Manage cookies configuration. The settings for the session id cookie are
-   * defined inside the "config/session.ts" file.
-   */
+  useAsyncLocalStorage: true,
   cookie: {
     domain: '',
     path: '/',

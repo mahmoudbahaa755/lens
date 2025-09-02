@@ -7,9 +7,8 @@
 |
 */
 
-import User from '#models/user'
+import UsersController from '#controllers/users_controller'
 import router from '@adonisjs/core/services/router'
-import { faker } from '@faker-js/faker';
 
 router.get('/', async () => {
   return {
@@ -17,10 +16,4 @@ router.get('/', async () => {
   }
 })
 
-router.get('create-user', async () => {
-  await User.create({
-    name: faker.person.fullName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
-  })
-})
+router.get('/create-user', [UsersController, 'create'])

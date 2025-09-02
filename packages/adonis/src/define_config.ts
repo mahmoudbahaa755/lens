@@ -18,6 +18,7 @@ export type LensConfig = {
       enabled: boolean
       provider: AdonisQueryType
     }
+    cache: boolean
     requests: boolean
   },
   isAuthenticated?: (ctx: HttpContext) => Promise<boolean>,

@@ -1,6 +1,11 @@
 import DetailPanel from "../../components/DetailPanel";
-import TabbedDataViewer from "../../components/tabs/TabbedDataViewer";
+import Table from "../../components/Table";
+import TabbedDataViewer, {
+  type TabItem,
+} from "../../components/tabs/TabbedDataViewer";
 import type { OneRequest } from "../../types";
+import getColumns from "../queries/columns";
+import getCacheColumns from "../cache/columns";
 import BasicRequestDetails from "./BasicRequestDetails";
 
 const RequestDetails = ({ request }: { request: OneRequest }) => {
@@ -8,12 +13,12 @@ const RequestDetails = ({ request }: { request: OneRequest }) => {
     {
       id: "payload",
       label: "Payload",
-      data: request.data.body,
+      data: request.request.data.body,
     },
     {
       id: "headers",
       label: "Headers",
-      data: request.data.headers,
+      data: request.request.data.headers,
     },
   ];
 
@@ -21,33 +26,50 @@ const RequestDetails = ({ request }: { request: OneRequest }) => {
     {
       id: "response-body",
       label: "Body",
-      data: request.data.response.json,
+      data: request.request.data.response.json,
     },
     {
       id: "response-headers",
       label: "Headers",
-      data: request.data.response.headers,
+      data: request.request.data.response.headers,
+    },
+  ];
+
+  const requestRelatedTabls: TabItem[] = [
+    {
+      id: "request-queries",
+      label: `Queries (${request.queries.length})`,
+      shouldShow: request.queries.length > 0,
+      content: <Table columns={getColumns()} data={request?.queries} />,
+    },
+    {
+      id: "request-cache",
+      label: `Cache (${request.cacheEntries.length})`,
+      shouldShow: request.cacheEntries.length > 0,
+      content: (
+        <Table columns={getCacheColumns()} data={request.cacheEntries} />
+      ),
     },
   ];
 
   return (
     <div className="flex flex-col gap-3">
       <BasicRequestDetails request={request} />
-      {request.data.user && (
+      {request.request.data.user && (
         <DetailPanel
           title="User"
           items={[
             {
               label: "ID",
-              value: request?.data?.user?.id,
+              value: request.request.data.user?.id,
             },
             {
               label: "Email",
-              value: request?.data?.user?.email,
+              value: request.request.data.user?.email,
             },
             {
               label: "Name",
-              value: request?.data?.user?.name,
+              value: request.request.data.user?.name,
             },
           ]}
         />
@@ -63,6 +85,7 @@ const RequestDetails = ({ request }: { request: OneRequest }) => {
         title="Response Data"
         defaultActiveTab="response-body"
       />
+      <TabbedDataViewer tabs={requestRelatedTabls} />
     </div>
   );
 };

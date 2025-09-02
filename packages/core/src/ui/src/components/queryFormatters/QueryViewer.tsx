@@ -3,7 +3,7 @@ import SqlViewer from "./SqlViewer";
 import MongbDbViewer from "./MongoViewer";
 
 interface QueryFormatterProps {
-  queryPayload: QueryEntry["data"];
+  queryPayload: QueryEntry;
 }
 
 const QueryViewer = ({ queryPayload }: QueryFormatterProps) => {

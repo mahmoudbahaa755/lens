@@ -1,8 +1,10 @@
 import type {
   ApiResponse,
+  CacheTableRow,
   GenericLensEntry,
+  OneCache,
+  OneQuery,
   PaginatorMeta,
-  QueryEntry,
   QueryTableRow,
   RequestEntry,
   RequestTableRow,
@@ -21,7 +23,7 @@ const useLensApi = () => {
 
   async function fetchJson<TData>(
     url: string,
-    options?: RequestInit
+    options?: RequestInit,
   ): Promise<ApiResponse<TData>> {
     const res = await fetch(url, {
       headers: { "Content-Type": "application/json" },
@@ -37,7 +39,7 @@ const useLensApi = () => {
 
   const withQueryParams = (
     endpoint: string,
-    params?: Record<string, unknown>
+    params?: Record<string, unknown>,
   ) => {
     const searchParams = new URLSearchParams(
       Object.entries(params || {}).reduce(
@@ -47,8 +49,8 @@ const useLensApi = () => {
           }
           return acc;
         },
-        {} as Record<string, string>
-      )
+        {} as Record<string, string>,
+      ),
     );
 
     return `${endpoint}${searchParams.toString() ? `?${searchParams}` : ""}`;
@@ -59,14 +61,14 @@ const useLensApi = () => {
       prepareApiUrl(
         withQueryParams(config.api.requests, {
           page,
-        })
-      )
+        }),
+      ),
     );
   };
 
   const getRequestById = async (id: string) => {
     return fetchJson<GenericLensEntry<RequestEntry>>(
-      prepareApiUrl(`${config.api.requests}/${id}`)
+      prepareApiUrl(`${config.api.requests}/${id}`),
     );
   };
   const getQueries = async (page: number) => {
@@ -74,18 +76,36 @@ const useLensApi = () => {
       prepareApiUrl(
         withQueryParams(config.api.queries, {
           page,
-        })
-      )
+        }),
+      ),
     );
   };
+
   const getQueryById = async (id: string) => {
-    return fetchJson<QueryEntry>(prepareApiUrl(`${config.api.queries}/${id}`));
+    return fetchJson<OneQuery>(prepareApiUrl(`${config.api.queries}/${id}`));
   };
+
+  const getCacheEntries = async (page?: number) => {
+    return fetchJson<CacheTableRow[]>(
+      prepareApiUrl(
+        withQueryParams(config.api.cache, {
+          page,
+        }),
+      ),
+    );
+  };
+
+  const getCacheEntryById = async (id: string) => {
+    return fetchJson<OneCache>(prepareApiUrl(`${config.api.cache}/${id}`));
+  };
+
   return {
     getAllRequests,
     getRequestById,
     getQueries,
     getQueryById,
+    getCacheEntries,
+    getCacheEntryById,
   };
 };
 

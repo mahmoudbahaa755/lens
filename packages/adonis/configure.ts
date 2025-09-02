@@ -19,14 +19,27 @@ import { stubsRoot } from './stubs/main.js'
 const registerEnvValidation = async (codemods: Codemods) => {
   try {
     await codemods.defineEnvValidations({
-      leadingComment: 'Node lens variables',
+      leadingComment: 'LensJs variables',
       variables: {
         LENS_BASE_PATH: 'Env.schema.string.optional()',
         LENS_ENABLED: 'Env.schema.boolean.optional()',
         LENS_ENABLE_QUERY_WATCHER: 'Env.schema.boolean.optional()',
         LENS_ENABLE_REQUEST_WATCHER: 'Env.schema.boolean.optional()',
+        LENS_ENABLE_CACHE_WATCHER: 'Env.schema.boolean.optional()',
       },
     })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const registerMiddleware = async (codemods: Codemods) => {
+  try {
+    codemods.registerMiddleware('router', [
+      {
+        path: '@lens/adonis/lens_middleware',
+      },
+    ])
   } catch (error) {
     console.error(error)
   }
@@ -36,8 +49,9 @@ export async function configure(command: ConfigureCommand) {
   const codemods = await command.createCodemods()
 
   await registerEnvValidation(codemods)
+  await registerMiddleware(codemods)
   await codemods.makeUsingStub(stubsRoot, 'config/lens.stub', {})
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@lensjs/adonis/lens_provider')
+    rcFile.addProvider('@lens/adonis/lens_provider')
   })
 }

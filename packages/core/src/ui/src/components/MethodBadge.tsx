@@ -1,4 +1,4 @@
-export default function MethodBadge({ method }: { method: string }) {
+export default function RequestMethodBadge({ method }: { method: string }) {
   const colors: Record<string, string> = {
     GET: "bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-white",
     POST: "bg-blue-100 text-blue-800 dark:bg-blue-600 dark:text-white",

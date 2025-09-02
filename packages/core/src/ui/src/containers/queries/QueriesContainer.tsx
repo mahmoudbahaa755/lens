@@ -14,7 +14,6 @@ const QueriesContainer = () => {
     fetchQueries();
   }, []);
 
-    console.log('data', hasMoreObject.data)
   return <QueriesTable hasMoreObject={hasMoreObject}/>;
 };
 

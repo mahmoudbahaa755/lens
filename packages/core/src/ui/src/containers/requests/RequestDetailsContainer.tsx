@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useRequestById } from "../../hooks/useTanstackApi";
 
 const RequestDetailsTable = lazy(
-  () => import("../../views/requests/RequestDetails")
+  () => import("../../views/requests/RequestDetails"),
 );
 
 const RequestDetailsContainer = () => {

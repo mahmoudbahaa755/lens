@@ -6,7 +6,7 @@ import {
   type LensEntry,
 } from "../types/index";
 import Database from "libsql";
-import { sqlDateTime } from "@lensjs/date";
+import { nowISO, sqlDateTime } from "@lensjs/date";
 
 const TABLE_NAME = "lens_entries";
 
@@ -34,34 +34,40 @@ export default class BetterSqliteStore extends Store {
   }) {
     this.connection
       .prepare(
-        `INSERT INTO ${TABLE_NAME} (id, data, type, created_at, lens_entry_id, minimal_data) values($id, $data, $type, $created_at, $lens_entry_id, $minimalData)`
+        `INSERT INTO ${TABLE_NAME} (id, data, type, created_at, lens_entry_id, minimal_data) values($id, $data, $type, $created_at, $lens_entry_id, $minimalData)`,
       )
       .run({
         id: entry.id ?? randomUUID(),
-        data: JSON.stringify(entry.data),
+        data: this.stringifyData(entry.data),
         type: entry.type,
-        created_at: entry.timestamp ?? sqlDateTime(),
+        created_at: entry.timestamp ?? nowISO(),
         lens_entry_id: entry.requestId || null,
-        minimalData: JSON.stringify(entry.minimal_data ?? {}),
+        minimalData: this.stringifyData(entry.minimal_data ?? {}),
       });
   }
 
   override async getAllQueries<T extends LensEntry[]>(
-    pagination: PaginationParams
+    pagination: PaginationParams,
   ) {
     return await this.paginate<T>(WatcherTypeEnum.QUERY, pagination);
   }
 
   override async getAllRequests<T extends Omit<LensEntry, "data">[]>(
-    pagination: PaginationParams
+    pagination: PaginationParams,
   ) {
     return await this.paginate<T>(WatcherTypeEnum.REQUEST, pagination, false);
+  }
+
+  override async getAllCacheEntries<T extends Omit<LensEntry, "data">[]>(
+    pagination: PaginationParams,
+  ) {
+    return await this.paginate<T>(WatcherTypeEnum.CACHE, pagination);
   }
 
   public async allByRequestId(requestId: string, type: WatcherTypeEnum) {
     const rows = this.connection
       .prepare(
-        `${this.getSelectedColumns()} FROM ${TABLE_NAME} WHERE type = $type AND lens_entry_id = $requestId ORDER BY created_at DESC`
+        `${this.getSelectedColumns()} FROM ${TABLE_NAME} WHERE type = $type AND lens_entry_id = $requestId ORDER BY created_at DESC`,
       )
       .all({ type, requestId });
 
@@ -71,7 +77,7 @@ export default class BetterSqliteStore extends Store {
   public async paginate<T>(
     type: WatcherTypeEnum,
     { page, perPage }: PaginationParams,
-    includeFullData: boolean = true
+    includeFullData: boolean = true,
   ): Promise<{
     meta: {
       total: number;
@@ -82,7 +88,7 @@ export default class BetterSqliteStore extends Store {
   }> {
     const offset = (page - 1) * perPage;
     const query = `${this.getSelectedColumns(
-      includeFullData
+      includeFullData,
     )} FROM ${TABLE_NAME} WHERE type = ? ORDER BY created_at DESC LIMIT ? OFFSET ?`;
     const count = await this.count(type);
     const rows = this.connection.prepare(query).all(type, perPage, offset);
@@ -109,7 +115,7 @@ export default class BetterSqliteStore extends Store {
   public async find(type: WatcherTypeEnum, id: string) {
     const row = this.connection
       .prepare(
-        `${this.getSelectedColumns()} FROM ${TABLE_NAME} WHERE id = ? AND type = ? LIMIT 1`
+        `${this.getSelectedColumns()} FROM ${TABLE_NAME} WHERE id = ? AND type = ? LIMIT 1`,
       )
       .get(id, type);
 
@@ -137,9 +143,14 @@ export default class BetterSqliteStore extends Store {
       CREATE INDEX IF NOT EXISTS lens_entries_id_type_index
       ON ${TABLE_NAME} (id, type);
     `;
+    const lensEntryIdIndex = `
+      CREATE INDEX IF NOT EXISTS lens_entry_id_index
+      ON ${TABLE_NAME} (lens_entry_id);
+    `;
 
     this.connection.exec(createTable);
     this.connection.exec(createIndex);
+    this.connection.exec(lensEntryIdIndex);
   }
 
   protected mapRow(row: any, includeFullData = true): LensEntry {

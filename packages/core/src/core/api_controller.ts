@@ -14,16 +14,27 @@ export class ApiController {
     );
   }
 
-  static async getRequest({
-    params,
-  }: RouteDefinitionHandler): Promise<ApiResponse<LensEntry>> {
+  static async getRequest({ params }: RouteDefinitionHandler) {
     const request = await getStore().find(WatcherTypeEnum.REQUEST, params.id);
 
     if (!request) {
       return this.notFoundResponse();
     }
 
-    return this.resourceResponse(request);
+    const queries = await getStore().allByRequestId(
+      request.id,
+      WatcherTypeEnum.QUERY,
+    );
+    const cacheEntries = await getStore().allByRequestId(
+      request.id,
+      WatcherTypeEnum.CACHE,
+    );
+
+    return this.resourceResponse({
+      request,
+      queries,
+      cacheEntries,
+    });
   }
 
   static async getQueries({
@@ -46,6 +57,22 @@ export class ApiController {
     }
 
     return this.resourceResponse(query);
+  }
+
+  static async getCacheEntries({ qs }: RouteDefinitionHandler) {
+    return this.paginatedResponse(
+      await getStore().getAllCacheEntries(this.extractPaginationParams(qs)),
+    );
+  }
+
+  static async getCacheEntry({ params }: RouteDefinitionHandler) {
+    const cacheEntry = await getStore().find(WatcherTypeEnum.CACHE, params.id);
+
+    if (!cacheEntry) {
+      return this.notFoundResponse();
+    }
+
+    return this.resourceResponse(cacheEntry);
   }
 
   static async truncate() {

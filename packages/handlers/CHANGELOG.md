@@ -1,0 +1,8 @@
+# @lensjs/watchers
+
+## 1.0.13
+
+### Patch Changes
+
+- Updated dependencies [64887b2]
+  - @lensjs/core@2.0.0

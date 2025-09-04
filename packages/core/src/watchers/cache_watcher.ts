@@ -26,34 +26,20 @@ export default class CacheWatcher extends Watcher {
   }
 
   private normalizePayload(data: CacheEntry): { key: string; value: any } {
-    let normalizedData: any =
-      "data" in data
-        ? data.data
-        : {
-            key: "",
-            value: "",
-          };
+    let key = "";
+    let value: any = "";
 
-    if (
-      !normalizedData ||
-      (typeof normalizedData === "object" &&
-        Object.keys(normalizedData).length === 0)
-    ) {
-      normalizedData = {
-        key: "",
-        value: "",
-      };
+    if ("data" in data && typeof data.data === "object" && data.data !== null) {
+      if ("key" in data.data) {
+        key = String(data.data.key);
+      }
+      if ("value" in data.data) {
+        value = data.data.value;
+      }
+    } else if (typeof data.data === "string") {
+      value = data.data;
     }
 
-
-    if (! normalizedData["key"]) {
-      normalizedData.key = "";
-    }
-
-    if (!normalizedData["value"]) {
-      normalizedData["value"] = "";
-    }
-
-    return normalizedData;
+    return { key, value };
   }
 }

@@ -35,13 +35,19 @@ export default class ExpressAdapter extends LensAdapter {
     for (const watcher of this.getWatchers()) {
       switch ((watcher as any).name) {
         case WatcherTypeEnum.REQUEST:
-          this.watchRequests(watcher as RequestWatcher);
+          if (this.config.requestWatcherEnabled) {
+            this.watchRequests(watcher as RequestWatcher);
+          }
           break;
         case WatcherTypeEnum.QUERY:
-          void this.watchQueries(watcher as QueryWatcher);
+          if (this.config.queryWatcher.enabled) {
+            void this.watchQueries(watcher as QueryWatcher);
+          }
           break;
         case WatcherTypeEnum.CACHE:
-          void this.watchCache(watcher as CacheWatcher);
+          if (this.config.cacheWatcherEnabled) {
+            void this.watchCache(watcher as CacheWatcher);
+          }
           break;
       }
     }
@@ -118,13 +124,13 @@ export default class ExpressAdapter extends LensAdapter {
     if (!this.config.requestWatcherEnabled) return;
 
     this.app.use((req, res, next) => {
+      if (this.shouldIgnorePath(req.path)) return next();
+
       const context = {
         requestId: lensUtils.generateRandomUuid(),
       };
 
       lensContext.run(context, () => {
-        if (this.shouldIgnorePath(req.path)) return next();
-
         const start = process.hrtime();
 
         this.patchResponseMethods(res);

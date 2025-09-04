@@ -11,6 +11,7 @@ class MockStore extends Store {
   save = vi.fn();
   getAllRequests = vi.fn();
   getAllQueries = vi.fn();
+  getAllCacheEntries = vi.fn();
   allByRequestId = vi.fn();
   find = vi.fn();
   truncate = vi.fn();

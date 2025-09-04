@@ -33,6 +33,7 @@
     "dev": "turbo dev",
     "patch": "pnpm -r exec npm version patch",
     "publish": "pnpm publish -r --no-git-checks",
-    "prepare": "husky"
+    "prepare": "husky",
+     "test": "turbo test"
   }
 }

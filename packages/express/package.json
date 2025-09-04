@@ -18,16 +18,19 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --clean"
+    "build": "tsup --clean",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@lensjs/date": "workspace:*",
     "@lensjs/core": "workspace:*",
-    "@lensjs/watchers": "workspace:*",
+    "@lensjs/date": "workspace:*",
     "@lensjs/typescript-config": "workspace:*",
+    "@lensjs/watchers": "workspace:*",
     "express": "^5.1.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3"
+    "@types/express": "^5.0.3",
+    "supertest": "^7.1.4",
+    "vitest": "^3.2.4"
   }
 }

@@ -28,7 +28,6 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "quick:test": "node --import=./tsnode.esm.js --enable-source-maps bin/test.ts",
-    "pretest": "npm run lint",
     "test": "c8 npm run quick:test",
     "prebuild": "npm run clean",
     "build": "tsc",

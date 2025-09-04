@@ -21,7 +21,7 @@
     "build:ui": "npm --prefix src/ui run prod",
     "clean": "rimraf dist",
     "postbuild": "node copy-front-build.cjs",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@lensjs/typescript-config": "workspace:*",

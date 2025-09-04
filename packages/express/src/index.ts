@@ -48,8 +48,6 @@ export const lens = async (config: ExpressAdapterConfig) => {
     }
   });
 
-    console.log('currentWatchers', watchers)
-
   const { ignoredPaths, normalizedPath } = lensUtils.prepareIgnoredPaths(
     mergedConfig.path,
     mergedConfig.ignoredPaths,

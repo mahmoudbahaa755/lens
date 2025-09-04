@@ -12,7 +12,7 @@ import {
 } from '@lensjs/core'
 import * as path from 'path'
 import type { ApplicationService, EmitterService, HttpRouterService } from '@adonisjs/core/types'
-import { shouldIgnoreLogging } from './utils/index.js'
+import { assertCacheBindingRegistered, shouldIgnoreLogging } from './utils/index.js'
 import string from '@adonisjs/core/helpers/string'
 import { HttpContext } from '@adonisjs/core/http'
 import { LensConfig } from './define_config.js'
@@ -47,6 +47,9 @@ export default class AdonisAdapter extends LensAdapter {
             this.queryWatcher = watcher as unknown as QueryWatcher
             await this.watchQueries(watcher)
             break
+          case WatcherTypeEnum.CACHE:
+            this.watchCache(watcher as unknown as CacheWatcher)
+            break
         }
       }
     })
@@ -60,10 +63,13 @@ export default class AdonisAdapter extends LensAdapter {
   registerRoutes(routes: RouteDefinition[]): void {
     this.app.booted(async () => {
       routes.forEach((route) => {
-        this.router[route.method.toLowerCase() as RouteHttpMethod](route.path, async (ctx: any) => {
-          const data = await route.handler({ params: ctx.params, qs: ctx.request.qs() })
-          return ctx.response.json(data)
-        })
+        this.router[route.method.toLowerCase() as RouteHttpMethod](
+          route.path,
+          async (ctx: HttpContext) => {
+            const data = await route.handler({ params: ctx.params, qs: ctx.request.qs() })
+            return ctx.response.json(data)
+          }
+        )
       })
     })
   }
@@ -130,6 +136,76 @@ export default class AdonisAdapter extends LensAdapter {
   }
 
   protected async watchCache(watcher: CacheWatcher) {
+    if (!this.config.watchers.cache) return
+
+    assertCacheBindingRegistered(this.app)
+
+    // Clear
+    // @ts-expect-error
+    this.emitter.on('cache:cleared', async (event: any) => {
+      await watcher.log({
+        action: 'clear',
+        data: {
+          key: event.key,
+        },
+        createdAt: nowISO(),
+        requestId: HttpContext.get()?.request.lensEntry?.requestId,
+      })
+    })
+
+    // Write
+    // @ts-expect-error
+    this.emitter.on('cache:written', async (event: any) => {
+      await watcher.log({
+        action: 'write',
+        data: {
+          key: event.key,
+          value: event.value,
+        },
+        createdAt: nowISO(),
+        requestId: HttpContext.get()?.request.lensEntry?.requestId,
+      })
+    })
+
+    // Hit
+    // @ts-expect-error
+    this.emitter.on('cache:hit', async (event: any) => {
+      await watcher.log({
+        action: 'hit',
+        data: {
+          key: event.key,
+          value: event.value,
+        },
+        createdAt: nowISO(),
+        requestId: HttpContext.get()?.request.lensEntry?.requestId,
+      })
+    })
+
+    // Miss
+    // @ts-expect-error
+    this.emitter.on('cache:miss', async (event: any) => {
+      await watcher.log({
+        action: 'miss',
+        data: {
+          key: event.key,
+        },
+        createdAt: nowISO(),
+        requestId: HttpContext.get()?.request.lensEntry?.requestId,
+      })
+    })
+
+    // Delete
+    // @ts-expect-error
+    this.emitter.on('cache:deleted', async (event: any) => {
+      await watcher.log({
+        action: 'delete',
+        data: {
+          key: event.key,
+        },
+        createdAt: nowISO(),
+        requestId: HttpContext.get()?.request.lensEntry?.requestId,
+      })
+    })
   }
 
   serveUI(uiPath: string, spaRoute: string, _dataToInject: Record<string, any>): void {

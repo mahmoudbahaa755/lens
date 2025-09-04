@@ -6,9 +6,7 @@ export default defineConfig({
   description:
     "A Nodejs Framework Agonstic Package To Monitor Your Application",
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
     nav: [{ text: "Home", link: "/" }],
-
     sidebar: [
       {
         text: "Getting Started",
@@ -43,12 +41,51 @@ export default defineConfig({
       {
         text: "Watchers",
         collapsed: true,
-        items: [{ text: "Query Watcher", link: "/handlers/query" }],
+        items: [
+          {
+            text: "Installation",
+            link: "/handlers/installation",
+          },
+          {
+            text: "Query",
+            collapsed: true,
+            items: [
+              {
+                text: "Express",
+                link: "/handlers/query/express",
+              },
+              {
+                text: "AdonisJS",
+                link: "/handlers/query/adonis",
+              },
+            ],
+          },
+          {
+            text: "Cache",
+            collapsed: true,
+            items: [
+              {
+                text: "Express",
+                link: "/handlers/cache/express",
+              },
+              {
+                text: "AdonisJS",
+                link: "/handlers/cache/adonis",
+              },
+            ],
+          },
+        ],
       },
     ],
 
-    socialLinks: [
-      { icon: "github", link: "https://github.com/lensjs/lens" },
-    ],
+    socialLinks: [{ icon: "github", link: "https://github.com/lensjs/lens" }],
+
+    docFooter: {
+      prev: "Previous",
+      next: "Next",
+    },
+  },
+  sitemap: {
+    hostname: "https://lensjs.vercel.app",
   },
 });

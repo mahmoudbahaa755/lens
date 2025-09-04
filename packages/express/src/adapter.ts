@@ -89,7 +89,6 @@ export default class ExpressAdapter extends LensAdapter {
     if (!this.config.cacheWatcherEnabled) return;
 
     lensEmitter.on("cache", async (data) => {
-      console.log("Event Object", data);
       await watcher?.log(data);
     });
   }

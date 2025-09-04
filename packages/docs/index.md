@@ -13,9 +13,11 @@ hero:
 
 features:
   - title: Requests
-    details: Log and inspect incoming request information.
+    details: Easily log and inspect all incoming request information, including headers, body, and response.
   - title: Database Queries
-    details: Monitor database query performance and view query details.
+    details: Gain insights into your database interactions by monitoring query performance and viewing detailed query information.
+  - title: Cache
+    details: Keep track of your caching layer with detailed monitoring of cache operations and their performance.
   - title: Extensible
-    details: Create custom adapters, stores, and watchers to suit your needs.
+    details: Tailor Lens to your specific needs by creating custom adapters for new frameworks, data stores, and watchers for unique events.
 ---

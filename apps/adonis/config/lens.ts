@@ -9,11 +9,11 @@ const lensConfig = defineConfig({
   onlyPaths: [],
   watchers: {
     requests: env.get('LENS_ENABLE_REQUEST_WATCHER', true),
-    cache: env.get('LENS_ENABLE_CACHE_WATCHER', false),
+    cache: env.get('LENS_ENABLE_CACHE_WATCHER', true),
     queries: {
       enabled: env.get('LENS_ENABLE_QUERY_WATCHER', true),
       provider: 'sqlite',
-    }
+    },
   },
   // Optional
   isAuthenticated: async (ctx) => {

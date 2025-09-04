@@ -13,17 +13,6 @@ export default class CacheWatcher extends Watcher {
       createdAt: data.createdAt,
     };
 
-    console.log("stored cache entry", {
-      requestId: data.requestId ?? "",
-      type: this.name,
-      data: payload,
-      minimal_data: {
-        action: data.action,
-        key: payload.data.key,
-        createdAt: payload.createdAt,
-      },
-    });
-
     await getStore().save({
       requestId: data.requestId ?? "",
       type: this.name,

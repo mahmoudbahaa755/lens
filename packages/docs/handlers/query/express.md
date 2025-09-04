@@ -1,33 +1,25 @@
-# Query Watcher Handlers
+# Express Query Watcher Handlers
 
-The `@lensjs/watchers` package provides **ready-to-use and customizable handlers** for capturing and processing database queries observed by [`@lensjs/core`](https://www.npmjs.com/package/@lensjs/core).  
+Lens provides built-in handlers to monitor database queries from popular ORMs within your Express application. This guide covers how to integrate these handlers and also how to create custom ones.
 
-These handlers let you **monitor queries (SQL, MongoDB, etc.)** and visualize them directly in the **Lens UI**.
+## Prerequisites
 
----
-
-## Installation
+Before using the built-in query watcher handlers, ensure you have installed the `@lensjs/watchers` package:
 
 ```bash
 npm install @lensjs/watchers
 ```
 
----
+This package supports popular ORMs out of the box, allowing you to easily plug them into the Lens ecosystem.
 
 ## Built-in Handlers
 
-This package supports popular ORMs out of the box.  
-Pick your integration and plug it into the Lens ecosystem.
-
 ### 1. Prisma
 
-Capture queries from **Prisma** with `createPrismaHandler`.
+Capture queries from **Prisma** by using `createPrismaHandler`.
 
-**Dependencies:**
-
-```bash
-npm install @prisma/client
-```
+**Prerequisites:**
+Follow the official Prisma documentation to install Prisma in your project and then [Install Prisma Client](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/install-prisma-client-typescript-planetscale).
 
 **Usage Example (Express + Prisma):**
 
@@ -38,25 +30,23 @@ import { createPrismaHandler } from "@lensjs/watchers";
 import { PrismaClient } from "@prisma/client";
 
 const app = express();
-const prisma = new PrismaClient({ log: ["query"] });
+const prisma = new PrismaClient({ log: ["query"] }); // Enable query logging for Prisma
 
 await lens({
   app,
   queryWatcher: {
-    enabled: true,
+    enabled: true, // Enable the query watcher
     handler: createPrismaHandler({
       prisma,
-      provider: "mysql",
+      provider: "mysql", // Specify your database provider
     }),
   },
 });
 ```
 
----
-
 ### 2. Kysely
 
-Capture queries from **Kysely** with `createKyselyHandler`.
+Capture queries from **Kysely** by using `createKyselyHandler`.
 
 **Dependencies:**
 
@@ -79,9 +69,9 @@ await lens({
   app,
   queryWatcher: {
     enabled: true,
-    handler: createKyselyHandler({ 
+    handler: createKyselyHandler({
        provider: "mysql" ,
-       logQueryErrorsToConsole: true, // Log query errors to the console, default is true
+       logQueryErrorsToConsole: true, // Optional: Log query errors to the console (default is true)
     }),
   },
 });
@@ -100,16 +90,14 @@ const db = new Kysely<Database>({
     }),
   }),
   log(event) {
-    watcherEmitter.emit("kyselyQuery", event);
+    watcherEmitter.emit("kyselyQuery", event); // Emit Kysely query events to Lens
   },
 });
 ```
 
----
-
 ### 3. Sequelize
 
-Capture queries from **Sequelize** with `createSequelizeHandler`.
+Capture queries from **Sequelize** by using `createSequelizeHandler`.
 
 **Dependencies:**
 
@@ -141,37 +129,36 @@ const sequelize = new Sequelize("DB_NAME", "DB_USER", "DB_PASSWORD", {
   benchmark: true,
   logQueryParameters: true,
   logging: (sql: string, timing?: number) => {
-    watcherEmitter.emit("sequelizeQuery", { sql, timing });
+    watcherEmitter.emit("sequelizeQuery", { sql, timing }); // Emit Sequelize query events to Lens
   },
 });
 ```
 
----
-
 ## Custom Handlers
 
-You can create your own handler for unsupported ORMs or raw query clients.
+If your ORM or query client is not supported by the built-in handlers, you can create your own custom handler to integrate with Lens.
 
 ### Handler Essentials
 
-A handler must:
+A custom handler must adhere to the `QueryWatcherHandler` interface and perform the following:
 
-- Return a `QueryWatcherHandler`
-- Call `onQuery` whenever a query is captured
-- Optionally use `lensUtils`:
-  - `interpolateQuery(sql, params)` → inject parameters  
-  - `formatSqlQuery(query)` → pretty-print SQL  
-  - `now()` → timestamp  
-
----
+*   Return a `QueryWatcherHandler` function.
+*   Call the `onQuery` callback function whenever a query is captured, providing the necessary query details.
+*   Optionally utilize `lensUtils` for common tasks:
+    *   `interpolateQuery(sql, params)`: Injects parameters into a SQL query string.
+    *   `formatSqlQuery(query)`: Formats a SQL query for better readability.
+    *   `now()`: Generates a timestamp.
 
 ### Example: Custom Kysely Handler
+
+This example demonstrates how to create a custom handler for Kysely, manually emitting query events:
 
 ```ts
 import express from "express";
 import { lens } from "@lensjs/express";
 import { type QueryWatcherHandler } from "@lensjs/watchers";
 import { lensUtils } from "@lensjs/core";
+import { nowISO } from "@lensjs/date";
 import { Kysely, MysqlDialect } from "kysely";
 import mysql from "mysql2";
 import Emittery from "emittery";
@@ -193,7 +180,7 @@ const db = new Kysely<Database>({
     }),
   }),
   log: (event) => {
-    eventEmitter.emit("customQuery", event);
+    eventEmitter.emit("customQuery", event); // Emit custom query events
   },
 });
 
@@ -212,7 +199,7 @@ function customQueryHandler(): QueryWatcherHandler {
         ),
         duration: `${payload.queryDurationMillis ?? 0} ms`,
         type: databaseType,
-        createdAt: lensUtils.nowISO(),
+        createdAt: nowISO(),
       });
     });
   };
@@ -226,8 +213,6 @@ await lens({
   },
 });
 ```
-
----
 
 ## Summary
 

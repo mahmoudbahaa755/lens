@@ -1,11 +1,10 @@
 # Express Adapter Configuration
 
-The `lens` function accepts a single configuration object that controls how Lens integrates with your Express app.  
-This guide provides a clear reference and practical examples to help you set it up quickly.
+The `lens` function accepts a single configuration object that controls how Lens integrates with your Express application. This guide provides a clear reference and practical examples to help you set it up quickly.
 
 ## Example: Prisma Query Watcher
 
-Here’s how to enable query watching with **Prisma**:
+Here’s how to enable query watching specifically for **Prisma** in your Express application:
 
 ```ts
 import { lens } from "@lensjs/express";
@@ -18,22 +17,20 @@ const prisma = new PrismaClient({ log: ["query"] });
 
 await lens({
   app,
-  path: "/lens", // Dashboard available at http://localhost:3000/lens
+  path: "/lens", // The Lens dashboard will be available at http://localhost:3000/lens
   appName: "My Express App",
   queryWatcher: {
     enabled: true, // Enable query watching
     handler: createPrismaHandler({
       prisma,
       provider: "mysql"
-  },
+  }),
 });
 ```
 
----
+## Complete Example: Full Configuration Options
 
-## Complete Example: Full Configuration
-
-This snippet shows **all available options**, with inline comments:
+This snippet illustrates all available configuration options for the Express adapter, along with inline comments for clarity:
 
 ```ts
 import express from "express";
@@ -46,44 +43,49 @@ const app = express();
 const prisma = new PrismaClient({ log: ["query"] });
 
 await lens({
-  // (Required) Your Express app instance
+  // Required: Your Express application instance.
   app,
 
-  // (Optional) Query watcher configuration
+  // Optional: Configuration for the query watcher.
   queryWatcher: {
-    enabled: true, // Enable query watching
+    enabled: true, // Set to true to enable query watching.
     handler: createPrismaHandler({
       prisma,
-      provider: "mysql",
+      provider: "mysql", // Specify your database provider (e.g., "mysql", "postgresql").
     }),
   },
 
-  // (Optional) Enable request watcher (default: true)
+  // Optional: Enable or disable the request watcher. Defaults to `true`.
   requestWatcherEnabled: true,
 
-  // (Optional) Path for the Lens dashboard
-  path: "/lens", // Default: "/lens"
+  // Optional: Enable or disable the cache watcher. Defaults to `false`.
+  cacheWatcherEnabled: true,
 
-  // (Optional) Display name for your app in the dashboard
-  appName: "My Express App", // Default: "Lens"
+  // Optional: The URL path where the Lens dashboard will be accessible. Defaults to "/lens".
+  path: "/lens",
 
-  // (Optional) Store implementation (default: BetterSqliteStore)
+  // Optional: The display name for your application in the Lens dashboard. Defaults to "Lens".
+  appName: "My Express App",
+
+  // Optional: Custom store implementation for Lens data. Defaults to `BetterSqliteStore`.
   store: new BetterSqliteStore(),
 
-  // (Optional) Paths to ignore
+  // Optional: An array of regex patterns for routes that Lens should ignore.
   ignoredPaths: [/^\/health/, /^\/metrics/],
 
-  // (Optional) Paths to exclusively watch
+  // Optional: An array of regex patterns to exclusively watch. If provided, only routes matching these patterns will be monitored.
   onlyPaths: [/^\/api/],
 
-  // (Optional) Authentication check before accessing Lens
+  // Optional: An asynchronous function to determine if a user is authenticated to access the Lens dashboard.
   isAuthenticated: async (req) => {
     const jwtToken = req.headers["authorization"]?.split(" ")[1];
+    // Replace with your actual JWT validation logic
     return jwtToken === getValidJwtToken(jwtToken, jwtSecret);
   },
 
-  // (Optional) Attach user information to Lens events/logs
+  // Optional: An asynchronous function to resolve and attach user information to Lens events/logs.
   getUser: async (req) => {
+    // Replace with your actual user retrieval logic
     return {
       id: "123",
       name: "Jane Doe",

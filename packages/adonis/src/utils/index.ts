@@ -29,6 +29,18 @@ before creating a new Ignitor instance in:
   return cmd
 }
 
+export const assertCacheBindingRegistered = (app: ApplicationService) => {
+  if (!app.container.hasBinding('cache.manager')) {
+    const message = `
+${chalk.red.bold('✖ Cache binding not registered')}
+
+Make sure to install @adonisjs/cache package to use cache watcher.
+`
+
+    throw new Error(message)
+  }
+}
+
 export function allowedCommands() {
   const command = getRunningCommand()
 

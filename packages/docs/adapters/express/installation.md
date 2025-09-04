@@ -1,28 +1,24 @@
-# Express Adapter
+# Express Adapter Installation
 
-The **Express adapter** integrates LensJS into your Express app.
-
----
+The **Express adapter** seamlessly integrates LensJS into your Express application, allowing you to monitor requests, queries, and other events.
 
 ## 1. Install Packages
 
-Install the Express adapter:
+First, install the Express adapter package:
 
 ```bash
 npm install @lensjs/express
 ```
 
-👉 If you want to use pre-built watcher handlers (e.g., Prisma), also install:
+If you plan to use pre-built watcher handlers (e.g., for Prisma), you should also install the `@lensjs/watchers` package:
 
 ```bash
 npm install @lensjs/watchers
 ```
 
----
-
 ## 2. Minimal Setup (with Prisma Query Watcher)
 
-Since the query watcher is required, here’s a minimal setup using Prisma:
+Here's a minimal example demonstrating how to set up Lens with an Express application, including a Prisma query watcher:
 
 ```ts
 import { lens } from "@lensjs/express";
@@ -55,13 +51,12 @@ app.listen(port, () => {
 });
 ```
 
-### ✅ Try it out
-1. Start your app.  
-2. Visit `http://localhost:3000/hello-world` → logs a request + query.  
-3. Visit `http://localhost:3000/lens` → open the Lens dashboard.  
+### Try it out
 
----
+1.  Start your Express application.
+2.  Visit `http://localhost:3000/hello-world` in your browser. This will trigger a request and a database query, which Lens will log.
+3.  Navigate to `http://localhost:3000/lens` to open the Lens dashboard and view the monitored activity.
 
 ## 3. Next Steps
 
-- Explore more options in the [Configuration Guide](./configuration.md)  
+*   Explore more advanced configuration options in the [Configuration Guide](./configuration.md).  

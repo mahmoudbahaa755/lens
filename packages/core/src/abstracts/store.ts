@@ -5,6 +5,7 @@ import type {
   WatcherTypeEnum,
 } from "../types";
 
+type MinimalPaginatePromise = Promise<Paginator<Omit<LensEntry, "data">[]>>;
 export default abstract class Store {
   abstract initialize(): Promise<void>;
   abstract save(entry: {
@@ -15,19 +16,17 @@ export default abstract class Store {
     timestamp?: string;
     requestId?: string;
   }): Promise<void>;
-  abstract getAllRequests(
-    paginationParams: PaginationParams,
-  ): Promise<Paginator<Omit<LensEntry, "data">[]>>;
+  abstract getAllRequests(paginationParams: PaginationParams): MinimalPaginatePromise;
   abstract getAllQueries(
     paginationParams: PaginationParams,
   ): Promise<Paginator<LensEntry[]>>;
+  abstract getAllCacheEntries(
+    paginationParams: PaginationParams,
+  ): MinimalPaginatePromise;
   abstract allByRequestId(
     requestId: string,
     type: WatcherTypeEnum,
   ): Promise<LensEntry[]>;
-  abstract getAllCacheEntries(
-    paginationParams: PaginationParams,
-  ): Promise<Paginator<Omit<LensEntry, "data">[]>>;
   abstract find(type: WatcherTypeEnum, id: string): Promise<LensEntry | null>;
   abstract truncate(): Promise<void>;
   abstract paginate<T>(
@@ -36,6 +35,10 @@ export default abstract class Store {
   ): Promise<Paginator<T>>;
 
   abstract count(type: WatcherTypeEnum): Promise<number>;
+
+  getAllExceptions(_paginationParams: PaginationParams): MinimalPaginatePromise {
+    return this.defaultMinimalPaginate();
+  }
 
   protected stringifyData(data: Record<string, any> | string) {
     if (typeof data === "string") {
@@ -47,5 +50,16 @@ export default abstract class Store {
     } catch (e) {
       console.error(`Failed to stringify lens data: ${e}`);
     }
+  }
+
+  protected defaultMinimalPaginate(): MinimalPaginatePromise {
+    return Promise.resolve({
+      data: [],
+      meta: {
+        currentPage: 0,
+        lastPage: 0,
+        total: 0,
+      },
+    });
   }
 }

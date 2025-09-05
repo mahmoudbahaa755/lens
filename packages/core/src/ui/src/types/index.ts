@@ -89,6 +89,35 @@ export type GenericLensEntry<T> = {
   data: T;
 };
 
+export type ExceptionEntry = {
+  name: string;
+  message: string;
+  cause?: Record<string, any> | string | null;
+  trace?: string[];
+  requestId?: string;
+  createdAt: string;
+  fileInfo?: {
+    file: string;
+    function: string;
+  };
+  codeFrame?: {
+    file: string;
+    line: number;
+    column: number;
+    relativeLine: number;
+    relativeColumn: number;
+    context: {
+      pre: string[];
+      error: string;
+      post: string[];
+    };
+  } | null;
+  originalStack?: string | null;
+};
+
+export type ExceptionTableRow = GenericLensEntry<
+  Pick<ExceptionEntry, "name" | "message" | "createdAt">
+>;
 export type HasMoreType<T> = {
   data: T[];
   hasMore: boolean;

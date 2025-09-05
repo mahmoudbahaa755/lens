@@ -138,6 +138,18 @@ export default class Lens {
           await ApiController.getCacheEntry(data),
       },
       {
+        method: "GET" as const,
+        path: `${basePath}/api/exceptions`,
+        handler: async (data: RouteDefinitionHandler) =>
+          await ApiController.getExceptions(data),
+      },
+      {
+        method: "GET" as const,
+        path: `${basePath}/api/exceptions/:id`,
+        handler: async (data: RouteDefinitionHandler) =>
+          await ApiController.getException(data),
+      },
+      {
         method: "DELETE" as const,
         path: `${basePath}/api/truncate`,
         handler: async () => await ApiController.truncate(),

@@ -6,7 +6,7 @@ import {
   type LensEntry,
 } from "../types/index";
 import Database from "libsql";
-import { nowISO, sqlDateTime } from "@lensjs/date";
+import { nowISO } from "@lensjs/date";
 
 const TABLE_NAME = "lens_entries";
 
@@ -62,6 +62,12 @@ export default class BetterSqliteStore extends Store {
     pagination: PaginationParams,
   ) {
     return await this.paginate<T>(WatcherTypeEnum.CACHE, pagination);
+  }
+
+  override async getAllExceptions<T extends Omit<LensEntry, "data">[]>(
+    pagination: PaginationParams,
+  ) {
+    return await this.paginate<T>(WatcherTypeEnum.EXCEPTION, pagination);
   }
 
   public async allByRequestId(requestId: string, type: WatcherTypeEnum) {

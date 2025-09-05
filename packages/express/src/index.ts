@@ -1,5 +1,6 @@
 import {
   CacheWatcher,
+  ExceptionWatcher,
   Lens,
   lensUtils,
   LensWatcher,
@@ -8,6 +9,11 @@ import {
 } from "@lensjs/core";
 import { ExpressAdapterConfig, RequiredExpressAdapterConfig } from "./types";
 import ExpressAdapter from "./adapter";
+import { WatcherTypeEnum } from "@lensjs/core";
+import { lensContext } from "@lensjs/core";
+import { handleUncaughExceptions } from "@lensjs/core";
+import { lensExceptionUtils } from "@lensjs/core";
+import { Application, Request, Response, NextFunction } from "express";
 
 const defaultConfig = {
   appName: "Lens",
@@ -17,6 +23,7 @@ const defaultConfig = {
   onlyPaths: [],
   requestWatcherEnabled: true,
   cacheWatcherEnabled: false,
+  exceptionWatcherEnabled: true,
 };
 
 export const lens = async (config: ExpressAdapterConfig) => {
@@ -39,6 +46,10 @@ export const lens = async (config: ExpressAdapterConfig) => {
     {
       enabled: mergedConfig.queryWatcher?.enabled,
       watcher: new QueryWatcher(),
+    },
+    {
+      enabled: mergedConfig.exceptionWatcherEnabled,
+      watcher: new ExceptionWatcher(),
     },
   ];
 
@@ -63,4 +74,36 @@ export const lens = async (config: ExpressAdapterConfig) => {
     enabled: mergedConfig.enabled,
     basePath: normalizedPath,
   });
+
+  return {
+    handleExceptions: (app: Application) =>
+      handleExceptions({
+        app,
+        enabled: mergedConfig.exceptionWatcherEnabled,
+        watcher: watchers.find((w) => w.name === WatcherTypeEnum.EXCEPTION),
+      }),
+  };
 };
+
+export function handleExceptions({
+  app,
+  enabled,
+  watcher,
+}: {
+  app: Application;
+  enabled: boolean;
+  watcher?: ExceptionWatcher;
+}) {
+  if (!enabled || !watcher) return;
+
+  app.use(async (err: Error, _: Request, __: Response, next: NextFunction) => {
+    await watcher.log({
+      ...lensExceptionUtils.constructErrorObject(err),
+      requestId: lensContext.getStore()?.requestId,
+    });
+
+    next(err);
+  });
+
+  handleUncaughExceptions(watcher);
+}

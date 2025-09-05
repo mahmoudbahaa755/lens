@@ -38,6 +38,32 @@ export type CacheEntry =
       };
     };
 
+export type ExceptionEntry = {
+  name: string;
+  message: string;
+  cause?: Record<string, any> | string | null;
+  trace?: string[];
+  requestId?: string;
+  createdAt: string;
+  fileInfo?: {
+    file: string;
+    function: string;
+  };
+  codeFrame?: {
+    file: string;
+    line: number;
+    column: number;
+    relativeLine: number;
+    relativeColumn: number;
+    context: {
+      pre: string[];
+      error: string;
+      post: string[];
+    };
+  } | null;
+  originalStack?: string | null;
+};
+
 export type UserEntry = {
   id: number | string;
   name: string;
@@ -71,6 +97,7 @@ export enum WatcherTypeEnum {
   REQUEST = "request",
   QUERY = "query",
   CACHE = "cache",
+  EXCEPTION = "exception",
 }
 
 export type LensConfig = {

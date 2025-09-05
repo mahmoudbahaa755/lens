@@ -18,12 +18,14 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --clean"
+    "build": "tsup --clean",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@lensjs/typescript-config": "workspace:*",
     "kysely": "^0.28.5",
-    "prisma": "^6.15.0"
+    "prisma": "^6.15.0",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",

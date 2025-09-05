@@ -14,9 +14,15 @@ export function sqlDateTime(dateTime?: DateTime | null) {
 }
 
 export function convertToUTC(dateTime: string | Date | number) {
-  return DateTime.fromJSDate(new Date(dateTime))
-    .toUTC()
-    .toISO({ suppressMilliseconds: true }) as string;
+  let dt: DateTime;
+  if (typeof dateTime === 'string') {
+    dt = DateTime.fromISO(dateTime);
+  } else if (typeof dateTime === 'number') {
+    dt = DateTime.fromMillis(dateTime, { zone: 'utc' });
+  } else {
+    dt = DateTime.fromJSDate(dateTime);
+  }
+  return dt.toUTC().toISO({ suppressMilliseconds: true }) as string;
 }
 
 export function getCurrentTimezone(): string {
@@ -24,9 +30,7 @@ export function getCurrentTimezone(): string {
 }
 
 function parseBackendUTC(date: string | Date | number) {
-  return DateTime.fromJSDate(new Date(date), { zone: "utc" }).setZone(
-    getCurrentTimezone()
-  );
+  return DateTime.fromJSDate(new Date(date), { zone: "utc" });
 }
 
 export const humanDifferentDate = (date: string | Date) => {

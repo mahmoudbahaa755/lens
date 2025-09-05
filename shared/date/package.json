@@ -15,11 +15,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --clean"
+    "build": "tsup --clean",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@lensjs/typescript-config": "workspace:*",
-    "@types/luxon": "^3.7.1"
+    "@types/luxon": "^3.7.1",
+    "vitest": "^2.0.0"
   },
   "dependencies": {
     "luxon": "^3.7.1"

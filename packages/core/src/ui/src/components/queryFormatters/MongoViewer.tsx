@@ -3,43 +3,13 @@
 import { useState, useMemo } from "react";
 import { Check, Copy } from "lucide-react";
 import jsBeautify from "js-beautify";
+import { highlightMongo } from "../common/highlights/SqlHighlights";
 
 interface MongoViewerProps {
   query: string;
 }
 
 // MongoDB keywords and operators to highlight
-const MONGO_KEYWORDS = [
-  "db", "find", "insertOne", "insertMany", "updateOne", "updateMany",
-  "deleteOne", "deleteMany", "aggregate", "project", "match", "group",
-  "sort", "limit", "skip", "$match", "$project", "$group", "$sort",
-  "$limit", "$skip", "$and", "$or", "$eq", "$ne", "$in", "$nin",
-];
-
-function highlightMongo(query: string) {
-  const tokens = query.split(/(\s+|[{}[\]()=,:])/);
-
-  return tokens.map((token, i) => {
-    if (!token.trim()) return <span key={i}>{token}</span>;
-
-    if (/^['"`].*['"`]$/.test(token)) {
-      // Strings
-      return <span key={i} className="text-green-600 dark:text-green-400">{token}</span>;
-    }
-
-    if (/^\d+\.?\d*$/.test(token)) {
-      // Numbers
-      return <span key={i} className="text-orange-600 dark:text-orange-400">{token}</span>;
-    }
-
-    if (MONGO_KEYWORDS.includes(token)) {
-      // Keywords
-      return <span key={i} className="text-blue-600 dark:text-blue-400 font-semibold">{token}</span>;
-    }
-
-    return <span key={i}>{token}</span>;
-  });
-}
 
 function MongoViewer({ query }: MongoViewerProps) {
   const [copied, setCopied] = useState(false);
@@ -66,7 +36,10 @@ function MongoViewer({ query }: MongoViewerProps) {
     }
   };
 
-  const highlightedQuery = useMemo(() => highlightMongo(formattedQuery), [formattedQuery]);
+  const highlightedQuery = useMemo(
+    () => highlightMongo(formattedQuery),
+    [formattedQuery]
+  );
 
   return (
     <div className="bg-neutral-50 dark:bg-slate-900 rounded-lg p-4 font-mono text-sm overflow-x-auto relative">

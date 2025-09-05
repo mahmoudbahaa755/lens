@@ -1,11 +1,11 @@
 import { CacheEntry, lensContext, lensEmitter } from "@lensjs/core";
 import { nowISO } from "@lensjs/date";
 
-export const emitCacheEvent = (payload: Omit<CacheEntry, "requestId" | 'createdAt'>) => {
+export const emitCacheEvent = (data: Omit<CacheEntry, "requestId" | 'createdAt'>) => {
   lensEmitter.emit("cache", {
-    action: payload.action,
+    action: data.action,
     createdAt: nowISO(),
-    data: payload.data,
+    data: "value" in data ? (data.value as any) : {},
     requestId: lensContext.getStore()?.requestId,
   });
 };

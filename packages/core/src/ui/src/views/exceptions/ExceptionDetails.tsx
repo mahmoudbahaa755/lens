@@ -6,8 +6,8 @@ import DetailPanel from "../../components/DetailPanel";
 import TabbedDataViewer, {
   type TabItem,
 } from "../../components/tabs/TabbedDataViewer";
-import StackTraceViewer from "../../components/StackTraceViewer";
 import CodeFrameViewer from "../../components/CodeFrameViewer";
+import StackTraceViewer from "../../components/StackTraceViewer/StackTraceViewer";
 
 const ExceptionDetails = ({ data }: { data: OneException }) => {
   const details = [

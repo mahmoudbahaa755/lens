@@ -5,6 +5,7 @@ import useLensApi, { DEFAULT_META } from "./useLensApi";
 const defaultRequest: OneRequest = {
   queries: [],
   cacheEntries: [],
+  exceptions: [],
   request: {
     created_at: "",
     data: {
@@ -45,13 +46,14 @@ export default function useRequests() {
             request: res.data!,
             queries: [],
             cacheEntries: [],
+            exceptions: [],
           });
         })
         .finally(() => {
           setLoading(false);
         });
     },
-    [getRequestById],
+    [getRequestById]
   );
   const fetchRequests = useCallback(
     async (page?: number) => {
@@ -65,7 +67,7 @@ export default function useRequests() {
           setLoading(false);
         });
     },
-    [getAllRequests],
+    [getAllRequests]
   );
 
   const loadMoreRequests = useMemo(
@@ -75,7 +77,7 @@ export default function useRequests() {
       loading,
       fetchRawPage: getAllRequests,
     }),
-    [requests, meta, loading, getAllRequests],
+    [requests, meta, loading, getAllRequests]
   );
 
   return {

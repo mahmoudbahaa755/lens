@@ -5,7 +5,7 @@ export const emitCacheEvent = (data: Omit<CacheEntry, "requestId" | 'createdAt'>
   lensEmitter.emit("cache", {
     action: data.action,
     createdAt: nowISO(),
-    data: "value" in data ? (data.value as any) : {},
+    data: "data" in data ? (data.data as any) : {},
     requestId: lensContext.getStore()?.requestId,
   });
 };

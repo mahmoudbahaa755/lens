@@ -1,8 +1,10 @@
 import type {
   ApiResponse,
   CacheTableRow,
+  ExceptionTableRow,
   GenericLensEntry,
   OneCache,
+  OneException,
   OneQuery,
   PaginatorMeta,
   QueryTableRow,
@@ -99,6 +101,22 @@ const useLensApi = () => {
     return fetchJson<OneCache>(prepareApiUrl(`${config.api.cache}/${id}`));
   };
 
+  const getExceptions = async (page?: number) => {
+    return fetchJson<ExceptionTableRow[]>(
+      prepareApiUrl(
+        withQueryParams(config.api.exceptions, {
+          page,
+        }),
+      ),
+    );
+  };
+
+  const getExceptionById = async (id: string) => {
+    return fetchJson<OneException>(
+      prepareApiUrl(`${config.api.exceptions}/${id}`),
+    );
+  };
+
   return {
     getAllRequests,
     getRequestById,
@@ -106,6 +124,8 @@ const useLensApi = () => {
     getQueryById,
     getCacheEntries,
     getCacheEntryById,
+    getExceptions,
+    getExceptionById,
   };
 };
 

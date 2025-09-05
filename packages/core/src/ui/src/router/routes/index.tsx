@@ -1,4 +1,4 @@
-import { ArrowRightLeft, Database, Layers } from "lucide-react";
+import { ArrowRightLeft, Bug, Database, Layers } from "lucide-react";
 import { lazy } from "react";
 import { Navigate, type RouteObject } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
@@ -22,6 +22,12 @@ const CacheEntryContainer = lazy(
 const CacheEntryDetailsContainer = lazy(
   () => import("../../containers/cacheEntries/CacheEntryDetailsContainer"),
 );
+const ExceptionsContainer = lazy(
+  () => import("../../containers/exceptions/ExceptionContainer"),
+);
+const ExceptionDetailsContainer = lazy(
+  () => import("../../containers/exceptions/ExceptionDetailsContainer"),
+);
 
 export function getRoutesPaths(config: LensConfig) {
   return {
@@ -31,6 +37,8 @@ export function getRoutesPaths(config: LensConfig) {
     QUERY_DETAILS: `${config.path}/queries/:queryId`,
     CACHE_ENTRIES: `${config.path}/cache`,
     CACHE_ENTRY_DETAILS: `${config.path}/cache/:cacheId`,
+    EXCEPTIONS: `${config.path}/exceptions`,
+    EXCEPTION_DETAILS: `${config.path}/exceptions/:exceptionId`,
   };
 }
 
@@ -52,6 +60,11 @@ export function getSidebarRoutes(config: LensConfig) {
       path: paths.CACHE_ENTRIES,
       label: "Cache",
       icon: Layers,
+    },
+    {
+      path: paths.EXCEPTIONS,
+      label: "Exceptions",
+      icon: Bug,
     },
   ];
 }
@@ -95,6 +108,14 @@ export function getRoutes(config: LensConfig): RouteObject[] {
         {
           path: "cache/:id",
           element: <CacheEntryDetailsContainer />,
+        },
+        {
+          path: "exceptions",
+          element: <ExceptionsContainer />,
+        },
+        {
+          path: "exceptions/:id",
+          element: <ExceptionDetailsContainer />,
         },
         {
           path: "*",

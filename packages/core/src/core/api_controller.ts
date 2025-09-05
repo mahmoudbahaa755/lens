@@ -34,6 +34,7 @@ export class ApiController {
     const exceptions = await getStore().allByRequestId(
       request.id,
       WatcherTypeEnum.EXCEPTION,
+      false,
     );
 
     return this.resourceResponse({

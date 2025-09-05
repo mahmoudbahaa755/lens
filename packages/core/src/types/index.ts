@@ -53,8 +53,6 @@ export type ExceptionEntry = {
     file: string;
     line: number;
     column: number;
-    relativeLine: number;
-    relativeColumn: number;
     context: {
       pre: string[];
       error: string;

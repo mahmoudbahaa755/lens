@@ -5,6 +5,7 @@ export type LensConfig = {
     requests: string;
     queries: string;
     cache: string;
+    exceptions: string;
     truncate: string;
   };
 };
@@ -104,8 +105,6 @@ export type ExceptionEntry = {
     file: string;
     line: number;
     column: number;
-    relativeLine: number;
-    relativeColumn: number;
     context: {
       pre: string[];
       error: string;
@@ -115,9 +114,6 @@ export type ExceptionEntry = {
   originalStack?: string | null;
 };
 
-export type ExceptionTableRow = GenericLensEntry<
-  Pick<ExceptionEntry, "name" | "message" | "createdAt">
->;
 export type HasMoreType<T> = {
   data: T[];
   hasMore: boolean;
@@ -130,9 +126,14 @@ export type OneRequest = {
   request: GenericLensEntry<RequestEntry>;
   queries: GenericLensEntry<QueryEntry>[];
   cacheEntries: GenericLensEntry<CacheEntry>[];
+  exceptions: ExceptionTableRow[];
 };
 export type QueryTableRow = GenericLensEntry<QueryEntry>;
 export type OneQuery = GenericLensEntry<QueryEntry>;
 export type CacheTableRow = GenericLensEntry<CacheEntry>;
 export type OneCache = GenericLensEntry<CacheEntry>;
+export type ExceptionTableRow = GenericLensEntry<
+  Pick<ExceptionEntry, "name" | "message" | "createdAt">
+>;
+export type OneException = GenericLensEntry<ExceptionEntry>;
 export type QueryType = "sql" | "mongodb";

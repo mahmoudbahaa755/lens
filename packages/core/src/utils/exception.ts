@@ -91,8 +91,6 @@ export function extractCodeFrame({
     file: fullPath,
     line,
     column,
-    relativeLine,
-    relativeColumn: column,
     context: {
       pre: snippet.slice(0, relativeLine),
       error: errorLine,

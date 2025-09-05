@@ -16,7 +16,9 @@ export default abstract class Store {
     timestamp?: string;
     requestId?: string;
   }): Promise<void>;
-  abstract getAllRequests(paginationParams: PaginationParams): MinimalPaginatePromise;
+  abstract getAllRequests(
+    paginationParams: PaginationParams,
+  ): MinimalPaginatePromise;
   abstract getAllQueries(
     paginationParams: PaginationParams,
   ): Promise<Paginator<LensEntry[]>>;
@@ -26,6 +28,7 @@ export default abstract class Store {
   abstract allByRequestId(
     requestId: string,
     type: WatcherTypeEnum,
+    includeFullData?: boolean,
   ): Promise<LensEntry[]>;
   abstract find(type: WatcherTypeEnum, id: string): Promise<LensEntry | null>;
   abstract truncate(): Promise<void>;
@@ -36,7 +39,9 @@ export default abstract class Store {
 
   abstract count(type: WatcherTypeEnum): Promise<number>;
 
-  getAllExceptions(_paginationParams: PaginationParams): MinimalPaginatePromise {
+  getAllExceptions(
+    _paginationParams: PaginationParams,
+  ): MinimalPaginatePromise {
     return this.defaultMinimalPaginate();
   }
 

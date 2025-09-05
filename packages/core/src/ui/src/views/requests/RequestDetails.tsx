@@ -5,6 +5,7 @@ import TabbedDataViewer, {
 } from "../../components/tabs/TabbedDataViewer";
 import type { OneRequest } from "../../types";
 import getColumns from "../queries/columns";
+import getExceptionsColumns from "../exceptions/columns";
 import getCacheColumns from "../cache/columns";
 import BasicRequestDetails from "./BasicRequestDetails";
 
@@ -48,6 +49,14 @@ const RequestDetails = ({ request }: { request: OneRequest }) => {
       shouldShow: request.cacheEntries.length > 0,
       content: (
         <Table columns={getCacheColumns()} data={request.cacheEntries} />
+      ),
+    },
+    {
+      id: "request-exceptions",
+      label: `Exceptions (${request.exceptions.length})`,
+      shouldShow: request.exceptions.length > 0,
+      content: (
+        <Table columns={getExceptionsColumns()} data={request.exceptions} />
       ),
     },
   ];

@@ -67,17 +67,21 @@ export default class BetterSqliteStore extends Store {
   override async getAllExceptions<T extends Omit<LensEntry, "data">[]>(
     pagination: PaginationParams,
   ) {
-    return await this.paginate<T>(WatcherTypeEnum.EXCEPTION, pagination);
+    return await this.paginate<T>(WatcherTypeEnum.EXCEPTION, pagination, false);
   }
 
-  public async allByRequestId(requestId: string, type: WatcherTypeEnum) {
+  public async allByRequestId(
+    requestId: string,
+    type: WatcherTypeEnum,
+    includeFullData = true,
+  ) {
     const rows = this.connection
       .prepare(
-        `${this.getSelectedColumns()} FROM ${TABLE_NAME} WHERE type = $type AND lens_entry_id = $requestId ORDER BY created_at DESC`,
+        `${this.getSelectedColumns(includeFullData)} FROM ${TABLE_NAME} WHERE type = $type AND lens_entry_id = $requestId ORDER BY created_at DESC`,
       )
       .all({ type, requestId });
 
-    return this.mapRows(rows);
+    return this.mapRows(rows, includeFullData);
   }
 
   public async paginate<T>(

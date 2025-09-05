@@ -88,6 +88,7 @@ export default class Lens {
           requests: `/${config.basePath}/api/requests`,
           queries: `/${config.basePath}/api/queries`,
           cache: `/${config.basePath}/api/cache`,
+          exceptions: `/${config.basePath}/api/exceptions`,
           truncate: `/${config.basePath}/api/truncate`,
         },
       };

@@ -13,7 +13,7 @@ export interface TabbedDataProps {
 export interface TabItem {
   id: string;
   label: string;
-  data?: Record<string, any>;
+  data?: Record<string, any> | string | string[];
   content?: React.ReactNode;
   shouldShow?: boolean;
 }

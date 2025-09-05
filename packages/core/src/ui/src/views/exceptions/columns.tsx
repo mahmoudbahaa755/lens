@@ -11,12 +11,22 @@ const getColumns = (): TableColumn<ExceptionTableRow>[] => {
 
   return [
     {
-      name: "Name",
-      value: (row) => row.data.name || "__",
-    },
-    {
-      name: "Message",
-      value: (row) => row.data.message || "__",
+      name: "Type",
+      render: (row) => (
+        <div className="flex flex-col gap-1">
+          <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
+            {row.data.name || (
+              <span className="italic text-gray-400">Unknown</span>
+            )}
+          </span>
+          <span
+            className="text-xs text-red-600 dark:text-red-400 truncate max-w-xs"
+            title={row.data.message}
+          >
+            {row.data.message}
+          </span>
+        </div>
+      ),
     },
     {
       name: "Happened",

@@ -1,8 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
 import { createKyselyHandler } from '../src/query/kysely';
 import { watcherEmitter } from '../src/utils/emitter';
-import { lensUtils } from '@lensjs/core';
-import { nowISO } from '@lensjs/date';
 
 vi.mock('../src/utils/emitter', () => ({
   watcherEmitter: new (vi.fn(() => ({
@@ -23,7 +21,7 @@ vi.mock('@lensjs/date', () => ({
 }));
 
 describe('createKyselyHandler', () => {
-  let onQueryMock: vi.Mock;
+  let onQueryMock: Mock;
   let consoleErrorSpy: vi.SpyInstance;
 
   beforeEach(() => {
@@ -46,7 +44,7 @@ describe('createKyselyHandler', () => {
     };
 
     // Manually emit the event since watcherEmitter is mocked
-    (watcherEmitter.on as vi.Mock).mock.calls[0][1](payload);
+    (watcherEmitter.on as Mock).mock.calls[0][1](payload);
 
     expect(onQueryMock).toHaveBeenCalledTimes(1);
     expect(onQueryMock).toHaveBeenCalledWith({
@@ -72,7 +70,7 @@ describe('createKyselyHandler', () => {
       error: new Error('Database error'),
     };
 
-    (watcherEmitter.on as vi.Mock).mock.calls[0][1](errorPayload);
+    (watcherEmitter.on as Mock).mock.calls[0][1](errorPayload);
 
     expect(onQueryMock).not.toHaveBeenCalled();
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
@@ -99,7 +97,7 @@ describe('createKyselyHandler', () => {
       error: new Error('Constraint violation'),
     };
 
-    (watcherEmitter.on as vi.Mock).mock.calls[0][1](errorPayload);
+    (watcherEmitter.on as Mock).mock.calls[0][1](errorPayload);
 
     expect(onQueryMock).not.toHaveBeenCalled();
     expect(consoleErrorSpy).not.toHaveBeenCalled();

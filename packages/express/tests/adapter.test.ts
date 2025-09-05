@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
 import ExpressAdapter from '../src/adapter';
 import { Express, Request, Response as ExpressResponse } from "express";
 import { 
@@ -11,10 +11,8 @@ import {
   lensContext, 
   lensEmitter 
 } from '@lensjs/core';
-import * as path from 'node:path';
 import fs from 'node:fs';
 import express from 'express';
-import { nowISO } from '@lensjs/date';
 
 // Mock external dependencies
 vi.mock('@lensjs/core', async (importOriginal) => {
@@ -197,7 +195,7 @@ describe('ExpressAdapter', () => {
       const res = { json: vi.fn() } as unknown as ExpressResponse;
 
       // Extract the registered handler function
-      const registeredHandler = (mockApp.get as vi.Mock).mock.calls[0][1];
+      const registeredHandler = (mockApp.get as Mock).mock.calls[0][1];
       await registeredHandler(req, res);
 
       expect(mockHandler).toHaveBeenCalledWith({ params: {}, qs: {} });
@@ -218,7 +216,7 @@ describe('ExpressAdapter', () => {
 
       const req = {} as Request;
       const res = { sendFile: vi.fn() } as unknown as ExpressResponse;
-      const faviconHandler = (mockApp.get as vi.Mock).mock.calls[0][1];
+      const faviconHandler = (mockApp.get as Mock).mock.calls[0][1];
       faviconHandler(req, res);
       expect(res.sendFile).toHaveBeenCalledWith('/path/to/ui/favicon.ico');
     });
@@ -229,10 +227,10 @@ describe('ExpressAdapter', () => {
 
       const req = { path: '/lens/some/route' } as Request;
       const res = { sendFile: vi.fn(), download: vi.fn() } as unknown as Response;
-      const spaRouteHandler = (mockApp.get as vi.Mock).mock.calls[1][1];
+      const spaRouteHandler = (mockApp.get as Mock).mock.calls[1][1];
 
       // Mock isStaticFile to return false for SPA route
-      (lensUtils.isStaticFile as vi.Mock).mockReturnValue(false);
+      (lensUtils.isStaticFile as Mock).mockReturnValue(false);
 
       spaRouteHandler(req, res);
       expect(res.sendFile).toHaveBeenCalledWith('/path/to/ui/index.html');
@@ -245,11 +243,11 @@ describe('ExpressAdapter', () => {
 
       const req = { path: '/lens/assets/image.png' } as Request;
       const res = { sendFile: vi.fn(), download: vi.fn() } as unknown as Response;
-      const spaRouteHandler = (mockApp.get as vi.Mock).mock.calls[1][1];
+      const spaRouteHandler = (mockApp.get as Mock).mock.calls[1][1];
 
       // Mock isStaticFile to return true for static file
-      (lensUtils.isStaticFile as vi.Mock).mockReturnValue(true);
-      (lensUtils.stripBeforeAssetsPath as vi.Mock).mockReturnValue('assets/image.png');
+      (lensUtils.isStaticFile as Mock).mockReturnValue(true);
+      (lensUtils.stripBeforeAssetsPath as Mock).mockReturnValue('assets/image.png');
 
       spaRouteHandler(req, res);
       expect(res.download).toHaveBeenCalledWith('/path/to/ui/assets/image.png');
@@ -277,7 +275,7 @@ describe('ExpressAdapter', () => {
       adapter.setWatchers([mockCacheWatcher]);
       (adapter as any).watchCache(mockCacheWatcher);
 
-      const cacheEventHandler = (lensEmitter.on as vi.Mock).mock.calls[0][1];
+      const cacheEventHandler = (lensEmitter.on as Mock).mock.calls[0][1];
       const mockCacheData = { action: 'SET', key: 'test', value: 'data' };
       await cacheEventHandler(mockCacheData);
 
@@ -338,7 +336,7 @@ describe('ExpressAdapter', () => {
       adapter.setWatchers([mockRequestWatcher]);
       (adapter as any).watchRequests(mockRequestWatcher);
 
-      const middleware = (mockApp.use as vi.Mock).mock.calls[0][0];
+      const middleware = (mockApp.use as Mock).mock.calls[0][0];
       const req = { path: '/ignored' } as Request;
       const res = { on: vi.fn() } as unknown as Response;
       const next = vi.fn();
@@ -356,7 +354,7 @@ describe('ExpressAdapter', () => {
       adapter.setWatchers([mockRequestWatcher]);
       (adapter as any).watchRequests(mockRequestWatcher);
 
-      const middleware = (mockApp.use as vi.Mock).mock.calls[0][0];
+      const middleware = (mockApp.use as Mock).mock.calls[0][0];
       const req = { originalUrl: '/test', method: 'GET', headers: {}, body: {}, socket: { remoteAddress: '127.0.0.1' } } as Request;
       const res = { on: vi.fn(), json: vi.fn(), send: vi.fn(), getHeaders: vi.fn(() => ({})) } as unknown as Response;
       const next = vi.fn();
@@ -372,7 +370,7 @@ describe('ExpressAdapter', () => {
       expect(next).toHaveBeenCalled();
 
       // Simulate the 'finish' event
-      const finishHandler = (res.on as vi.Mock).mock.calls[0][1];
+      const finishHandler = (res.on as Mock).mock.calls[0][1];
       await finishHandler();
 
       expect(finalizeRequestLogSpy).toHaveBeenCalledWith(req, res, mockRequestWatcher, expect.any(Array));
@@ -380,8 +378,8 @@ describe('ExpressAdapter', () => {
   });
 
   describe('patchResponseMethods', () => {
-    let mockOriginalJson: vi.Mock;
-    let mockOriginalSend: vi.Mock;
+    let mockOriginalJson: Mock;
+    let mockOriginalSend: Mock;
     let mockRes: ExpressResponse;
 
     beforeEach(() => {
@@ -432,7 +430,7 @@ describe('ExpressAdapter', () => {
       mockOriginalSend.mockClear();
 
       // Test with file path (should be purged)
-      (fs.existsSync as vi.Mock).mockReturnValue(true);
+      (fs.existsSync as Mock).mockReturnValue(true);
       const filePathBody = '/path/to/secret.txt';
       mockRes.send(filePathBody);
       expect((mockRes as any)._body).toBe('Purged By Lens');
@@ -532,7 +530,7 @@ describe('ExpressAdapter', () => {
       const res = { statusCode: 200, _body: null, getHeaders: vi.fn(() => ({})) } as unknown as ExpressResponse;
       const start: [number, number] = [0, 0];
 
-      (lensContext.getStore as vi.Mock).mockReturnValue({ requestId: 'context-specific-id' });
+      (lensContext.getStore as Mock).mockReturnValue({ requestId: 'context-specific-id' });
 
       adapter.setConfig({ requestWatcherEnabled: true, queryWatcher: { enabled: false }, cacheWatcherEnabled: false });
 
@@ -550,8 +548,8 @@ describe('ExpressAdapter', () => {
       const res = { statusCode: 200, _body: null, getHeaders: vi.fn(() => ({})) } as unknown as ExpressResponse;
       const start: [number, number] = [0, 0];
 
-      (lensContext.getStore as vi.Mock).mockReturnValue(null); // Simulate no context store
-      (lensUtils.generateRandomUuid as vi.Mock).mockReturnValueOnce('new-generated-uuid');
+      (lensContext.getStore as Mock).mockReturnValue(null); // Simulate no context store
+      (lensUtils.generateRandomUuid as Mock).mockReturnValueOnce('new-generated-uuid');
 
       adapter.setConfig({ requestWatcherEnabled: true, queryWatcher: { enabled: false }, cacheWatcherEnabled: false });
 

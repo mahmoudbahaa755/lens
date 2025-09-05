@@ -1,9 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
 import BetterSqliteStore from '../../src/stores/better_sqlite';
-import { WatcherTypeEnum, PaginationParams, LensEntry, Paginator } from '../../src/types';
+import { WatcherTypeEnum, PaginationParams} from '../../src/types';
 import Database from 'libsql';
-import { nowISO, sqlDateTime } from '@lensjs/date';
-import { randomUUID } from 'crypto';
 
 // Mock the libsql, @lensjs/date, and crypto modules
 vi.mock('libsql', () => {
@@ -56,7 +54,7 @@ describe('BetterSqliteStore', () => {
   describe('truncate', () => {
     it('should delete all entries from the table', async () => {
       const runSpy = vi.fn();
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ run: runSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ run: runSpy });
 
       await store.truncate();
       expect(mockConnection.prepare).toHaveBeenCalledWith('DELETE FROM lens_entries;');
@@ -67,7 +65,7 @@ describe('BetterSqliteStore', () => {
   describe('save', () => {
     it('should save a new entry with generated ID and timestamp', async () => {
       const runSpy = vi.fn();
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ run: runSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ run: runSpy });
 
       const entry = {
         data: { foo: 'bar' },
@@ -88,7 +86,7 @@ describe('BetterSqliteStore', () => {
 
     it('should save an entry with provided ID, timestamp, and requestId', async () => {
       const runSpy = vi.fn();
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ run: runSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ run: runSpy });
 
       const entry = {
         id: 'custom-id',
@@ -112,7 +110,7 @@ describe('BetterSqliteStore', () => {
 
     it('should stringify data if it is an object', async () => {
       const runSpy = vi.fn();
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ run: runSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ run: runSpy });
 
       const entry = {
         data: { key: 'value' },
@@ -126,7 +124,7 @@ describe('BetterSqliteStore', () => {
 
     it('should not stringify data if it is already a string', async () => {
       const runSpy = vi.fn();
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ run: runSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ run: runSpy });
 
       const entry = {
         data: 'some string data',
@@ -173,7 +171,7 @@ describe('BetterSqliteStore', () => {
         { id: 'entry2', data: '{"key":"val2"}', minimal_data: '{"key":"val2"}', type: WatcherTypeEnum.QUERY, created_at: 'now', lens_entry_id: 'req1' },
       ];
       const allSpy = vi.fn(() => mockRows);
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ all: allSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ all: allSpy });
 
       const result = await store.allByRequestId('req1', WatcherTypeEnum.QUERY);
 
@@ -191,7 +189,7 @@ describe('BetterSqliteStore', () => {
       ];
       const allSpy = vi.fn(() => mockRows);
       const prepareSpy = vi.fn(() => ({ all: allSpy }));
-      (mockConnection.prepare as vi.Mock).mockImplementation((sql: string) => {
+      (mockConnection.prepare as Mock).mockImplementation((sql: string) => {
         if (sql.includes('SELECT count(*)')) {
           return { get: vi.fn(() => ({ count: 10 })) };
         }
@@ -217,7 +215,7 @@ describe('BetterSqliteStore', () => {
       ];
       const allSpy = vi.fn(() => mockRows);
       const prepareSpy = vi.fn(() => ({ all: allSpy }));
-      (mockConnection.prepare as vi.Mock).mockImplementation((sql: string) => {
+      (mockConnection.prepare as Mock).mockImplementation((sql: string) => {
         if (sql.includes('SELECT count(*)')) {
           return { get: vi.fn(() => ({ count: 1 })) };
         }
@@ -234,7 +232,7 @@ describe('BetterSqliteStore', () => {
   describe('count', () => {
     it('should return the count of entries for a given type', async () => {
       const getSpy = vi.fn(() => ({ count: 5 }));
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ get: getSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ get: getSpy });
 
       const result = await store.count(WatcherTypeEnum.REQUEST);
       expect(mockConnection.prepare).toHaveBeenCalledWith('SELECT count(*) as count FROM lens_entries WHERE type = ?');
@@ -247,7 +245,7 @@ describe('BetterSqliteStore', () => {
     it('should return an entry if found', async () => {
       const mockRow = { id: 'entry1', data: '{"key":"val1"}', minimal_data: '{"key":"val1"}', type: WatcherTypeEnum.REQUEST, created_at: 'now', lens_entry_id: null };
       const getSpy = vi.fn(() => mockRow);
-      (mockConnection.prepare as vi.Mock).mockReturnValueOnce({ get: getSpy });
+      (mockConnection.prepare as Mock).mockReturnValueOnce({ get: getSpy });
 
       const result = await store.find(WatcherTypeEnum.REQUEST, 'entry1');
 
@@ -258,7 +256,7 @@ describe('BetterSqliteStore', () => {
 
     it('should return null if entry not found', async () => {
       const getSpy = vi.fn(() => undefined);
-      (mockConnection.prepare as vi.Mock).mockImplementation((sql: string) => {
+      (mockConnection.prepare as Mock).mockImplementation((sql: string) => {
         if (sql.includes('SELECT count(*)')) {
           return { get: vi.fn(() => ({ count: 0 })) };
         } else if (sql.includes('FROM lens_entries WHERE id = ? AND type = ? LIMIT 1')) {

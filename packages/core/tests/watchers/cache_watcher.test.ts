@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
 import CacheWatcher from '../../src/watchers/cache_watcher';
 import { getStore } from '../../src/context/context';
 import Store from '../../src/abstracts/store';
@@ -29,7 +29,7 @@ describe('CacheWatcher', () => {
 
   beforeEach(() => {
     mockStore = new MockStore();
-    (getStore as vi.Mock).mockReturnValue(mockStore);
+    (getStore as Mock).mockReturnValue(mockStore);
     cacheWatcher = new CacheWatcher();
     vi.clearAllMocks();
   });
@@ -41,7 +41,7 @@ describe('CacheWatcher', () => {
   describe('log', () => {
     it('should save cache entry with minimal data and full data', async () => {
       const mockCacheEntry: CacheEntry = {
-        action: 'SET',
+        action: 'write',
         data: { key: 'user:1', value: { name: 'John Doe' } },
         requestId: 'req123',
         createdAt: '2023-01-01T12:00:00Z',
@@ -53,13 +53,13 @@ describe('CacheWatcher', () => {
         requestId: 'req123',
         type: WatcherTypeEnum.CACHE,
         data: {
-          action: 'SET',
+          action: 'write',
           data: { key: 'user:1', value: { name: 'John Doe' } },
           requestId: 'req123',
           createdAt: '2023-01-01T12:00:00Z',
         },
         minimal_data: {
-          action: 'SET',
+          action: 'write',
           key: 'user:1',
           createdAt: '2023-01-01T12:00:00Z',
         },
@@ -68,7 +68,7 @@ describe('CacheWatcher', () => {
 
     it('should handle cache entry without requestId', async () => {
       const mockCacheEntry: CacheEntry = {
-        action: 'GET',
+        action: 'delete',
         data: { key: 'product:5' },
         createdAt: '2023-01-01T12:05:00Z',
       };
@@ -79,13 +79,13 @@ describe('CacheWatcher', () => {
         requestId: '',
         type: WatcherTypeEnum.CACHE,
         data: {
-          action: 'GET',
+          action: 'delete',
           data: { key: 'product:5', value: '' },
           requestId: '',
           createdAt: '2023-01-01T12:05:00Z',
         },
         minimal_data: {
-          action: 'GET',
+          action: 'delete',
           key: 'product:5',
           createdAt: '2023-01-01T12:05:00Z',
         },
@@ -94,7 +94,7 @@ describe('CacheWatcher', () => {
 
     it('should normalize payload when data is empty object', async () => {
       const mockCacheEntry: CacheEntry = {
-        action: 'DELETE',
+        action: 'clear',
         data: {},
         requestId: 'req456',
         createdAt: '2023-01-01T12:10:00Z',
@@ -106,13 +106,13 @@ describe('CacheWatcher', () => {
         requestId: 'req456',
         type: WatcherTypeEnum.CACHE,
         data: {
-          action: 'DELETE',
+          action: 'clear',
           data: { key: '', value: '' },
           requestId: 'req456',
           createdAt: '2023-01-01T12:10:00Z',
         },
         minimal_data: {
-          action: 'DELETE',
+          action: 'clear',
           key: '',
           createdAt: '2023-01-01T12:10:00Z',
         },
@@ -121,7 +121,7 @@ describe('CacheWatcher', () => {
 
     it('should normalize payload when data is null or undefined', async () => {
       const mockCacheEntry: CacheEntry = {
-        action: 'FLUSH',
+        action: 'clear',
         requestId: 'req789',
         createdAt: '2023-01-01T12:15:00Z',
       };
@@ -132,13 +132,13 @@ describe('CacheWatcher', () => {
         requestId: 'req789',
         type: WatcherTypeEnum.CACHE,
         data: {
-          action: 'FLUSH',
+          action: 'clear',
           data: { key: '', value: '' },
           requestId: 'req789',
           createdAt: '2023-01-01T12:15:00Z',
         },
         minimal_data: {
-          action: 'FLUSH',
+          action: 'clear',
           key: '',
           createdAt: '2023-01-01T12:15:00Z',
         },
@@ -147,7 +147,7 @@ describe('CacheWatcher', () => {
 
     it('should normalize payload when data has no key or value', async () => {
       const mockCacheEntry: CacheEntry = {
-        action: 'SET',
+        action: 'clear',
         data: { someOtherField: 'value' },
         requestId: 'req101',
         createdAt: '2023-01-01T12:20:00Z',
@@ -159,13 +159,13 @@ describe('CacheWatcher', () => {
         requestId: 'req101',
         type: WatcherTypeEnum.CACHE,
         data: {
-          action: 'SET',
+          action: 'clear',
           data: { key: '', value: '' },
           requestId: 'req101',
           createdAt: '2023-01-01T12:20:00Z',
         },
         minimal_data: {
-          action: 'SET',
+          action: 'clear',
           key: '',
           createdAt: '2023-01-01T12:20:00Z',
         },

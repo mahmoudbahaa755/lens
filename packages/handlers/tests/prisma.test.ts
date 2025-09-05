@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
 import { createPrismaHandler } from '../src/query/prisma';
 import { lensUtils } from '@lensjs/core';
 
@@ -11,7 +11,7 @@ vi.mock('@lensjs/core', () => ({
 }));
 
 describe('createPrismaHandler', () => {
-  let onQueryMock: vi.Mock;
+  let onQueryMock: Mock;
   let prismaMock: any;
 
   beforeEach(() => {

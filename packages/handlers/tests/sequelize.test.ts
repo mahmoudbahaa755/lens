@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
 import { createSequelizeHandler } from '../src/query/sequelize';
 import { watcherEmitter } from '../src/utils/emitter';
 import { lensUtils } from '@lensjs/core';
-import { now } from '@lensjs/date';
 
 // Mock dependencies
 vi.mock('../src/utils/emitter', () => ({
@@ -24,7 +23,7 @@ vi.mock('@lensjs/date', () => ({
 }));
 
 describe('createSequelizeHandler', () => {
-  let onQueryMock: vi.Mock;
+  let onQueryMock: Mock;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -48,7 +47,7 @@ describe('createSequelizeHandler', () => {
     };
 
     // Manually trigger the registered listener
-    const listener = (watcherEmitter.on as vi.Mock).mock.calls[0][1];
+    const listener = (watcherEmitter.on as Mock).mock.calls[0][1];
     listener(sequelizeEvent);
 
     expect(lensUtils.interpolateQuery).toHaveBeenCalledWith(
@@ -77,7 +76,7 @@ describe('createSequelizeHandler', () => {
       timing: 5.0,
     };
 
-    const listener = (watcherEmitter.on as vi.Mock).mock.calls[0][1];
+    const listener = (watcherEmitter.on as Mock).mock.calls[0][1];
     listener(sequelizeEvent);
 
     expect(lensUtils.interpolateQuery).toHaveBeenCalledWith(
@@ -101,7 +100,7 @@ describe('createSequelizeHandler', () => {
       timing: 10,
     };
 
-    const listener = (watcherEmitter.on as vi.Mock).mock.calls[0][1];
+    const listener = (watcherEmitter.on as Mock).mock.calls[0][1];
     expect(() => listener(sequelizeEvent)).toThrow('payload.sql must be a string');
     expect(onQueryMock).not.toHaveBeenCalled();
   });
@@ -115,7 +114,7 @@ describe('createSequelizeHandler', () => {
       timing: 'abc', // Invalid type
     };
 
-    const listener = (watcherEmitter.on as vi.Mock).mock.calls[0][1];
+    const listener = (watcherEmitter.on as Mock).mock.calls[0][1];
     expect(() => listener(sequelizeEvent)).toThrow('payload.timing must be a number');
     expect(onQueryMock).not.toHaveBeenCalled();
   });
@@ -129,7 +128,7 @@ describe('createSequelizeHandler', () => {
       timing: 10,
     };
 
-    const listener = (watcherEmitter.on as vi.Mock).mock.calls[0][1];
+    const listener = (watcherEmitter.on as Mock).mock.calls[0][1];
     expect(() => listener(sequelizeEvent)).toThrow('Failed to extract params from query');
     expect(onQueryMock).not.toHaveBeenCalled();
   });

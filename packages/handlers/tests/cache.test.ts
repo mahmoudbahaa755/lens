@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, Mock} from "vitest";
 import { emitCacheEvent } from "../src/cache";
 import { lensEmitter, lensContext } from "@lensjs/core";
 import { nowISO } from "@lensjs/date";
@@ -23,8 +23,8 @@ describe("emitCacheEvent", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (nowISO as vi.Mock).mockReturnValue(MOCKED_NOW_ISO);
-    (lensContext.getStore as vi.Mock).mockReturnValue({
+    (nowISO as Mock).mockReturnValue(MOCKED_NOW_ISO);
+    (lensContext.getStore as Mock).mockReturnValue({
       requestId: MOCKED_REQUEST_ID,
     });
   });
@@ -74,7 +74,7 @@ describe("emitCacheEvent", () => {
   });
 
   it("should handle null or undefined requestId gracefully", () => {
-    (lensContext.getStore as vi.Mock).mockReturnValue(undefined); // No store, so no requestId
+    (lensContext.getStore as Mock).mockReturnValue(undefined); // No store, so no requestId
 
     const cacheData = {
       action: "get",

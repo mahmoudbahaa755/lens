@@ -1,0 +1,58 @@
+{
+  "name": "@lensjs/nestjs",
+  "version": "1.0.0",
+  "description": "NestJS adapter for Lens. Seamlessly integrate the Lens monitoring and debugging tool into your NestJS applications.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "nestjs",
+    "lens",
+    "monitoring",
+    "debugging",
+    "database",
+    "queries",
+    "requests",
+    "cache"
+  ],
+  "author": "Lens Team",
+  "license": "MIT",
+  "dependencies": {
+    "@lensjs/core": "workspace:*",
+    "@lensjs/date": "workspace:*"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/platform-express": "^10.0.0",
+    "@types/node": "^20.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.0.0 || ^10.0.0",
+    "@nestjs/core": "^9.0.0 || ^10.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}

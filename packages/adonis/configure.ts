@@ -36,9 +36,9 @@ const registerEnvValidation = async (codemods: Codemods) => {
 
 const registerMiddleware = async (codemods: Codemods) => {
   try {
-    codemods.registerMiddleware('router', [
+    codemods.registerMiddleware('server', [
       {
-        path: '@lens/adonis/lens_middleware',
+        path: '@lensjs/adonis/lens_middleware',
       },
     ])
   } catch (error) {
@@ -53,6 +53,6 @@ export async function configure(command: ConfigureCommand) {
   await registerMiddleware(codemods)
   await codemods.makeUsingStub(stubsRoot, 'config/lens.stub', {})
   await codemods.updateRcFile((rcFile) => {
-    rcFile.addProvider('@lens/adonis/lens_provider')
+    rcFile.addProvider('@lensjs/adonis/lens_provider')
   })
 }

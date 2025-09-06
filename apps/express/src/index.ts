@@ -43,18 +43,6 @@ const { handleExceptions } = await lens({
   },
 });
 
-process.on("uncaughtExceptionMonitor", async (err) => {
-  console.log("Uncaught Exception Monitoring:", err);
-});
-
-process.on("uncaughtException", async (err) => {
-  console.log("Uncaught Exception:", err);
-});
-
-process.on("unhandledRejection", async (err) => {
-  console.log("Unhandled Rejection:", err);
-});
-
 class User extends Model {
   declare id: number;
   declare name: string;

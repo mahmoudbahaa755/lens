@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, Mock} from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock} from 'vitest';
 import ExpressAdapter from '../src/adapter';
 import { Express, Request, Response as ExpressResponse } from "express";
 import { 
@@ -395,7 +395,7 @@ describe('ExpressAdapter', () => {
       } as unknown as ExpressResponse;
     });
 
-    it('should patch res.json to capture body', () => {
+    it('should patch res.json to capture body and call original json', () => {
       (adapter as any).patchResponseMethods(mockRes);
 
       const testBody = { message: 'hello' };
@@ -442,10 +442,22 @@ describe('ExpressAdapter', () => {
       expect((mockRes as any)._body).toBe('Purged By Lens');
       expect(mockOriginalSend).toHaveBeenCalledWith('Purged By Lens');
       mockOriginalSend.mockClear();
+
+      
     });
   });
 
   describe('finalizeRequestLog', () => {
+    let consoleErrorSpy: vi.SpyInstance;
+
+    beforeEach(() => {
+      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
+    });
+
     it('should log request details with user info if authenticated', async () => {
       const req = { originalUrl: '/final', method: 'GET', headers: {}, body: {}, socket: { remoteAddress: '127.0.0.1' } } as Request;
       const res = { statusCode: 200, _body: { result: 'ok' }, getHeaders: vi.fn(() => ({ 'Content-Type': 'application/json' })) } as unknown as Response;
@@ -515,14 +527,12 @@ describe('ExpressAdapter', () => {
       const start: [number, number] = [0, 0];
 
       mockRequestWatcher.log.mockRejectedValue(new Error('Log save failed'));
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       adapter.setConfig({ requestWatcherEnabled: true, queryWatcher: { enabled: false }, cacheWatcherEnabled: false });
 
       await (adapter as any).finalizeRequestLog(req, res, mockRequestWatcher, start);
 
       expect(consoleErrorSpy).toHaveBeenCalledWith('Error finalizing request log:', expect.any(Error));
-      consoleErrorSpy.mockRestore();
     });
 
     it('should use requestId from lensContext if available', async () => {
@@ -561,6 +571,68 @@ describe('ExpressAdapter', () => {
           id: 'new-generated-uuid',
         }),
       }));
+    });
+
+    it('should handle undefined req.body and req.socket.remoteAddress gracefully', async () => {
+      const req = { originalUrl: '/no-body-ip', method: 'POST', headers: {} } as Request;
+      const res = { statusCode: 200, _body: null, getHeaders: vi.fn(() => ({})) } as unknown as ExpressResponse;
+      const start: [number, number] = [0, 0];
+
+      adapter.setConfig({ requestWatcherEnabled: true, queryWatcher: { enabled: false }, cacheWatcherEnabled: false });
+
+      await (adapter as any).finalizeRequestLog(req, res, mockRequestWatcher, start);
+
+      expect(mockRequestWatcher.log).toHaveBeenCalledWith(expect.objectContaining({
+        request: expect.objectContaining({
+          body: {},
+          ip: '',
+        }),
+      }));
+    });
+
+    it('should log error if isAuthenticated throws', async () => {
+      const req = { originalUrl: '/auth-error', method: 'GET', headers: {}, body: {}, socket: { remoteAddress: '127.0.0.1' } } as Request;
+      const res = { statusCode: 200, _body: null, getHeaders: vi.fn(() => ({})) } as unknown as ExpressResponse;
+      const start: [number, number] = [0, 0];
+
+      const mockIsAuthenticated = vi.fn(() => Promise.reject(new Error('Auth check failed')));
+
+      adapter.setConfig({
+        requestWatcherEnabled: true,
+        queryWatcher: { enabled: false },
+        cacheWatcherEnabled: false,
+        isAuthenticated: mockIsAuthenticated,
+      });
+
+      await (adapter as any).finalizeRequestLog(req, res, mockRequestWatcher, start);
+
+      expect(mockIsAuthenticated).toHaveBeenCalledWith(req);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error finalizing request log:', expect.any(Error));
+      expect(mockRequestWatcher.log).not.toHaveBeenCalled(); // Log should not be called if an error occurs before it
+    });
+
+    it('should log error if getUser throws', async () => {
+      const req = { originalUrl: '/getuser-error', method: 'GET', headers: {}, body: {}, socket: { remoteAddress: '127.0.0.1' } } as Request;
+      const res = { statusCode: 200, _body: null, getHeaders: vi.fn(() => ({})) } as unknown as ExpressResponse;
+      const start: [number, number] = [0, 0];
+
+      const mockIsAuthenticated = vi.fn(() => Promise.resolve(true));
+      const mockGetUser = vi.fn(() => Promise.reject(new Error('Get user failed')));
+
+      adapter.setConfig({
+        requestWatcherEnabled: true,
+        queryWatcher: { enabled: false },
+        cacheWatcherEnabled: false,
+        isAuthenticated: mockIsAuthenticated,
+        getUser: mockGetUser,
+      });
+
+      await (adapter as any).finalizeRequestLog(req, res, mockRequestWatcher, start);
+
+      expect(mockIsAuthenticated).toHaveBeenCalledWith(req);
+      expect(mockGetUser).toHaveBeenCalledWith(req);
+      expect(consoleErrorSpy).toHaveBeenCalledWith('Error finalizing request log:', expect.any(Error));
+      expect(mockRequestWatcher.log).not.toHaveBeenCalled(); // Log should not be called if an error occurs before it
     });
   });
 

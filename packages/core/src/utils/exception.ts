@@ -35,7 +35,7 @@ export function getFileInfo(stack?: string) {
   };
 
   return {
-    file: fileInfo.file ?? "",
+    file: fileInfo.file ? path.resolve(process.cwd(), fileInfo.file) : "",
     line: fileInfo.line ?? 0,
     column: fileInfo.column ?? 0,
     function: fileInfo.function ?? "",
@@ -50,7 +50,6 @@ export function getStackTrace(stack?: string) {
 
   return cleanStack(stack)
     .split("\n")
-    .slice(1)
     .filter((frame): frame is NonNullable<typeof frame> => Boolean(frame));
 }
 
@@ -61,7 +60,7 @@ export function extractCodeFrame({
   file,
   line,
   column,
-  contextLines = 5,
+  contextLines = 6,
 }: {
   file: string;
   line: number;

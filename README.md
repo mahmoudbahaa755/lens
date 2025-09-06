@@ -7,6 +7,8 @@ Lens is a powerful debugging tool for your Node.js applications. It provides a b
 - **Framework Adapters:** Out-of-the-box support for Express and AdonisJS.
 - **Request Inspection:** Inspect incoming requests, their headers, and bodies.
 - **Query Monitoring:** Monitor database queries and their execution time.
+- **Cache Inspection:** Inspect cache entries.
+- **Exception Monitoring:** Automatically capture and log unhandled exceptions and errors.
 - **Extensible:** Create your own watchers to monitor other aspects of your application.
 - **Easy to Integrate:** Get started with a few lines of code.
 

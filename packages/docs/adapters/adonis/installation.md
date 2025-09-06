@@ -104,6 +104,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   LENS_ENABLE_QUERY_WATCHER: Env.schema.boolean.optional(),
   LENS_ENABLE_REQUEST_WATCHER: Env.schema.boolean.optional(),
   LENS_ENABLE_CACHE_WATCHER: Env.schema.boolean.optional(),
+  LENS_ENABLE_EXCEPTION_WATCHER: Env.schema.boolean.optional(),
 })
 ```
 
@@ -126,6 +127,7 @@ const lensConfig = defineConfig({
   watchers: {
     requests: env.get('LENS_ENABLE_REQUEST_WATCHER', true), // Enable or disable the request watcher.
     cache: env('LENS_ENABLE_CACHE_WATCHER', false),         // Enable or disable the cache watcher.
+    exceptions: env('LENS_ENABLE_EXCEPTION_WATCHER', true), // Enable or disable the exception watcher.
     queries: {
       enabled: env.get('LENS_ENABLE_QUERY_WATCHER', true), // Enable or disable the query watcher.
       provider: 'sqlite',                                 // The database provider for query watching (e.g., 'sqlite', 'mysql').

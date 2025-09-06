@@ -12,6 +12,7 @@ The core library for Lens, providing the fundamental architecture for monitoring
     *   `RequestWatcher`: Captures and logs details of incoming HTTP requests.
     *   `QueryWatcher`: Captures and logs database queries.
     *   `CacheWatcher`: Captures and logs cache interactions.
+    *   `ExceptionWatcher`: Captures and logs exceptions and errors.
 *   **`ApiController`**: Provides the API endpoints for the Lens UI to fetch monitoring data.
 *   **`lensEmitter`**: A global event emitter for internal communication between different parts of Lens.
 *   **`lensContext`**: Utilizes `AsyncLocalStorage` for managing asynchronous context, primarily to associate events with a specific request ID.
@@ -52,6 +53,7 @@ async function bootstrapLens(appInstance: any) {
       new RequestWatcher(),
       new QueryWatcher(),
       new CacheWatcher(),
+      new ExceptionWatcher(),
     ])
     .start({
       appName: 'My Application',

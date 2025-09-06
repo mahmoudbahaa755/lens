@@ -18,6 +18,9 @@ features:
     details: Gain insights into your database interactions by monitoring query performance and viewing detailed query information.
   - title: Cache
     details: Keep track of your caching layer with detailed monitoring of cache operations and their performance.
+  - title: Exception Handling
+    details: Monitor and report exceptions in real-time, providing detailed insights into errors within your application.
+    link: /handlers/exception/adonis
   - title: Extensible
     details: Tailor Lens to your specific needs by creating custom adapters for new frameworks, data stores, and watchers for unique events.
 ---

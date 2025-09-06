@@ -20,6 +20,7 @@ router.get('/', async () => {
 
 router.get('/create-user', [UsersController, 'create'])
 
+// Cache Routes
 router.get('set-cache', async () => {
   await cache.set({
     key: 'name',
@@ -29,7 +30,7 @@ router.get('set-cache', async () => {
 })
 
 router.get('get-cache', async () => {
-  await User.first();
+  await User.first()
   return await cache.get({
     key: 'name',
   })
@@ -48,4 +49,10 @@ router.get('delete-cache', async () => {
   return await cache.delete({
     key: 'test',
   })
+})
+
+// Throw Exception
+
+router.get('throw-error', async () => {
+  throw new Error('This is an error')
 })

@@ -48,7 +48,7 @@ export default defineConfig({
     () => import('@adonisjs/lucid/database_provider'),
     () => import('@adonisjs/auth/auth_provider'),
     () => import('@lensjs/adonis/lens_provider'),
-    () => import('@adonisjs/cache/cache_provider')
+    () => import('@adonisjs/cache/cache_provider'),
   ],
 
   /*

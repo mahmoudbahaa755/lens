@@ -20,6 +20,7 @@ export type LensConfig = {
     }
     cache: boolean
     requests: boolean
+    exceptions: boolean
   },
   isAuthenticated?: (ctx: HttpContext) => Promise<boolean>,
   getUser?: (ctx: HttpContext) => Promise<UserEntry>,

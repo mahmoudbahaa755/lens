@@ -50,9 +50,9 @@ const CodeFrameHeader: React.FC<{
         </span>
       </div>
       <div className="h-4 w-px bg-gray-300 dark:bg-gray-600"></div>
-      <span className="font-mono text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded text-xs truncate max-w-xs">
+      <div className="font-mono text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded text-xs truncate max-w-xs" title={file}>
         {file || "Unknown file"}
-      </span>
+      </div>
       <span className="text-gray-500 dark:text-gray-400 text-xs">
         Line {line || "?"}:{column || "?"}
       </span>

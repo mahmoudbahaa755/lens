@@ -26,6 +26,7 @@ const registerEnvValidation = async (codemods: Codemods) => {
         LENS_ENABLE_QUERY_WATCHER: 'Env.schema.boolean.optional()',
         LENS_ENABLE_REQUEST_WATCHER: 'Env.schema.boolean.optional()',
         LENS_ENABLE_CACHE_WATCHER: 'Env.schema.boolean.optional()',
+        LENS_ENABLE_EXCEPTION_WATCHER: 'Env.schema.boolean.optional()',
       },
     })
   } catch (error) {

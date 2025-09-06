@@ -1,25 +1,26 @@
 import { LensConfig } from "./define-config.js";
 import * as path from "node:path";
 import * as fs from "node:fs";
-import { LensAdapter } from "@lensjs/core";
+import {
+  LensAdapter,
+  WatcherTypeEnum,
+  RouteDefinition,
+  RequestWatcher,
+  QueryWatcher,
+  CacheWatcher,
+  lensUtils,
+  lensContext,
+  lensEmitter,
+  RequestEntry,
+  QueryEntry,
+  RouteHttpMethod
+} from "@lensjs/core";
+import { nowISO } from "@lensjs/date";
 
 // Use any types for NestJS and Express since they're peer dependencies
 type INestApplication = any;
 type Request = any;
 type Response = any;
-
-// Define minimal interfaces to avoid core dependency issues during build
-interface RouteDefinition {
-  path: string;
-  method: string;
-  handler: (params: { params: any; qs: any }) => Promise<any>;
-}
-
-enum WatcherType {
-  REQUEST = "REQUEST",
-  QUERY = "QUERY",
-  CACHE = "CACHE",
-}
 
 export default class NestJSAdapter extends LensAdapter {
   protected app!: INestApplication;
@@ -38,19 +39,19 @@ export default class NestJSAdapter extends LensAdapter {
   setup(): void {
     for (const watcher of this.getWatchers()) {
       switch ((watcher as any).name) {
-        case WatcherType.REQUEST:
+        case WatcherTypeEnum.REQUEST:
           if (this.config.watchers.requests) {
-            this.watchRequests(watcher);
+            this.watchRequests(watcher as RequestWatcher);
           }
           break;
-        case WatcherType.QUERY:
+        case WatcherTypeEnum.QUERY:
           if (this.config.watchers.queries.enabled) {
-            void this.watchQueries(watcher);
+            void this.watchQueries(watcher as QueryWatcher);
           }
           break;
-        case WatcherType.CACHE:
+        case WatcherTypeEnum.CACHE:
           if (this.config.watchers.cache) {
-            void this.watchCache(watcher);
+            void this.watchCache(watcher as CacheWatcher);
           }
           break;
       }
@@ -128,18 +129,18 @@ export default class NestJSAdapter extends LensAdapter {
     });
   }
 
-  protected watchRequests(requestWatcher: any): void {
+  protected watchRequests(requestWatcher: RequestWatcher): void {
     // This will be handled by the LensInterceptor
     // The interceptor will capture request data and call requestWatcher.log()
   }
 
-  protected async watchQueries(queryWatcher: any): Promise<void> {
+  protected async watchQueries(queryWatcher: QueryWatcher): Promise<void> {
     // Query watching would depend on the ORM/database library being used
     // This is a placeholder - implementation would vary based on TypeORM, Prisma, etc.
     // Users would need to implement query logging in their ORM configuration
   }
 
-  protected async watchCache(cacheWatcher: any): Promise<void> {
+  protected async watchCache(cacheWatcher: CacheWatcher): Promise<void> {
     // Cache watching would depend on the caching library being used
     // This is a placeholder - implementation would vary based on the cache manager
     // Users would need to implement cache event logging in their cache configuration

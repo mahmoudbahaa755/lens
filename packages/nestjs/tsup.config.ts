@@ -1,10 +1,15 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: ["src/**/*.ts"],
+  outDir: "dist",
   format: ["esm", "cjs"],
   dts: true,
+  bundle: true,
+  target: "node18",
+  splitting: false,
   clean: true,
-  sourcemap: true,
+  shims: true,
+  skipNodeModulesBundle: true,
   external: ["@nestjs/common", "@nestjs/core", "reflect-metadata", "rxjs"],
 });

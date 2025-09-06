@@ -2,6 +2,7 @@
   "name": "@lensjs/nestjs",
   "version": "1.0.0",
   "description": "NestJS adapter for Lens. Seamlessly integrate the Lens monitoring and debugging tool into your NestJS applications.",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -33,7 +34,8 @@
   "license": "MIT",
   "dependencies": {
     "@lensjs/core": "workspace:*",
-    "@lensjs/date": "workspace:*"
+    "@lensjs/date": "workspace:*",
+    "@lensjs/typescript-config": "workspace:*"
   },
   "devDependencies": {
     "@nestjs/common": "^10.0.0",

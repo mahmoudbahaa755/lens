@@ -8,6 +8,17 @@
   "publishConfig": {
     "access": "public"
   },
+  "keywords": [
+    "express",
+    "lens",
+    "monitoring",
+    "debugging",
+    "logging",
+    "database",
+    "queries",
+    "requests",
+    "cache"
+  ],
   "exports": {
     ".": {
       "require": "./dist/index.cjs",

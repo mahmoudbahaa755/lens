@@ -5,7 +5,7 @@ import type { JSX } from "react";
 import { useState } from "react";
 
 interface JsonViewerProps {
-  data: Record<string, any>;
+  data: Record<string, any> | string | string[];
 }
 
 function generateRandomKey(prefix = "key") {
@@ -76,7 +76,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ data }) => {
             {indentStr}{" "}
           </span>,
         );
-        elements.push(...formatJson(item, indent + 1));
+        elements.push(...formatData(item, indent + 1));
         if (index < obj.length - 1) {
           elements.push(
             <span
@@ -138,45 +138,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ data }) => {
             :{" "}
           </span>,
         );
-        if (typeof value === "string") {
-          elements.push(
-            <span
-              key={generateRandomKey("value-string")}
-              className="text-green-600 dark:text-green-400"
-            >
-              "{value}"
-            </span>,
-          );
-        } else if (typeof value === "number") {
-          elements.push(
-            <span
-              key={generateRandomKey("value-number")}
-              className="text-orange-600 dark:text-orange-400"
-            >
-              {value}
-            </span>,
-          );
-        } else if (typeof value === "boolean") {
-          elements.push(
-            <span
-              key={generateRandomKey("value-boolean")}
-              className="text-purple-600 dark:text-purple-400"
-            >
-              {value.toString()}
-            </span>,
-          );
-        } else if (value === null) {
-          elements.push(
-            <span
-              key={generateRandomKey("value-null")}
-              className="text-neutral-500 dark:text-neutral-400"
-            >
-              null
-            </span>,
-          );
-        } else {
-          elements.push(...formatJson(value, indent + 1));
-        }
+        elements.push(...formatData(value, indent + 1));
         if (index < entries.length - 1) {
           elements.push(
             <span
@@ -208,13 +170,83 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ data }) => {
     }
     return elements;
   };
-
-  function formatData(data: any) {
+  function formatData(data: any, indent = 0): JSX.Element[] {
+    // Single string
     if (typeof data === "string") {
-      return <span className="text-green-600 dark:text-green-400">{data}</span>;
+      return [
+        <span
+          key={generateRandomKey("string")}
+          className="text-green-600 dark:text-green-400"
+        >
+          "{data}"
+        </span>,
+      ];
     }
 
-    return formatJson(data);
+    // Array of strings (pretty printed, one per line)
+    if (Array.isArray(data) && data.every((item) => typeof item === "string")) {
+      const elements: JSX.Element[] = [];
+      const indentStr = "  ".repeat(indent);
+
+      elements.push(
+        <span
+          key={generateRandomKey("open-bracket")}
+          className="text-neutral-600 dark:text-neutral-400"
+        >
+          [
+        </span>,
+      );
+
+      data.forEach((str, i) => {
+        elements.push(<br key={generateRandomKey("br")} />);
+        elements.push(
+          <span key={generateRandomKey("indent")} className="text-transparent">
+            {indentStr}{" "}
+          </span>,
+        );
+        elements.push(
+          <span
+            key={generateRandomKey("string-item")}
+            className="text-green-600 dark:text-green-400"
+          >
+            "{str}"
+          </span>,
+        );
+        if (i < data.length - 1) {
+          elements.push(
+            <span
+              key={generateRandomKey("comma")}
+              className="text-neutral-600 dark:text-neutral-400"
+            >
+              ,
+            </span>,
+          );
+        }
+      });
+
+      elements.push(<br key={generateRandomKey("br-close")} />);
+      elements.push(
+        <span
+          key={generateRandomKey("indent-close")}
+          className="text-transparent"
+        >
+          {indentStr}
+        </span>,
+      );
+      elements.push(
+        <span
+          key={generateRandomKey("close-bracket")}
+          className="text-neutral-600 dark:text-neutral-400"
+        >
+          ]
+        </span>,
+      );
+
+      return elements;
+    }
+
+    // Fallback: objects, numbers, booleans, nested arrays/objects
+    return formatJson(data, indent);
   }
 
   return (

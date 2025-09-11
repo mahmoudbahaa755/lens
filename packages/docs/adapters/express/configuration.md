@@ -58,6 +58,9 @@ await lens({
   // Optional: Enable or disable the request watcher. Defaults to `true`.
   requestWatcherEnabled: true,
 
+  // Optional: Enable or disable the exception watcher. defaults to `true`.
+  exceptionWatcherEnabled: true,
+
   // Optional: Enable or disable the cache watcher. Defaults to `false`.
   cacheWatcherEnabled: true,
 

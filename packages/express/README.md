@@ -9,6 +9,7 @@ Express.js adapter for Lens. This package provides middleware and integration po
 *   **Request Watching**: Automatically captures incoming request details (method, path, headers, body, status, duration, IP) and logs them.
 *   **Query Watching**: Integrates with `@lensjs/watchers` to capture database queries from various ORMs (Kysely, Prisma, Sequelize) if configured.
 *   **Cache Watching**: Integrates with `@lensjs/watchers` to capture cache events if configured.
+*   **Exception Watching**: Captures and logs unhandled exceptions and errors within your Express application.
 *   **UI Serving**: Serves the Lens UI within your Express application at a configurable path.
 *   **Configurable Paths**: Allows specifying base paths, ignored paths, and only paths for request watching.
 *   **Body Purging**: Prevents sensitive information from being logged in responses by purging certain body types (e.g., file paths, binary data).
@@ -57,6 +58,7 @@ lens({
   path: '/lens-dashboard', // Access Lens UI at /lens-dashboard
   requestWatcherEnabled: true,
   cacheWatcherEnabled: true,
+  exceptionWatcherEnabled: true,
   queryWatcher: {
     enabled: true,
     handler: createKyselyHandler({ provider: 'sqlite' }), // Or createPrismaHandler, createSequelizeHandler

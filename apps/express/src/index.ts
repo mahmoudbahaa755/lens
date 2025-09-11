@@ -24,7 +24,7 @@ app.use(
   }),
 );
 
-await lens({
+const { handleExceptions } = await lens({
   app,
   cacheWatcherEnabled: true,
   queryWatcher: {
@@ -117,6 +117,23 @@ app.get("/clear-cache", async (_, res) => {
     result: await cache.clear(),
   });
 });
+
+// Exception Routes
+class MyRandomClass {
+  public throwsErrors() {
+    [1, 2].forEach((i) => {
+      if (i === 1) {
+        throw new Error("Something went wrong");
+      }
+    });
+  }
+}
+
+app.get("/throw-error", async (_, res) => {
+  new MyRandomClass().throwsErrors();
+});
+
+handleExceptions(app);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

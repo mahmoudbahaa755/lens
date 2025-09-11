@@ -98,6 +98,7 @@ describe('ApiController', () => {
       mockStore.allByRequestId.mockImplementation((requestId, type) => {
         if (requestId === 'req1' && type === WatcherTypeEnum.QUERY) return Promise.resolve(mockQueries);
         if (requestId === 'req1' && type === WatcherTypeEnum.CACHE) return Promise.resolve(mockCacheEntries);
+        if (requestId === 'req1' && type === WatcherTypeEnum.EXCEPTION) return Promise.resolve([]); // Added for exceptions
         return Promise.resolve([]);
       });
 
@@ -113,6 +114,7 @@ describe('ApiController', () => {
           request: mockRequest,
           queries: mockQueries,
           cacheEntries: mockCacheEntries,
+          exceptions: [], // Added this line
         },
       });
     });

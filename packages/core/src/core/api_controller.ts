@@ -25,15 +25,23 @@ export class ApiController {
       request.id,
       WatcherTypeEnum.QUERY,
     );
+
     const cacheEntries = await getStore().allByRequestId(
       request.id,
       WatcherTypeEnum.CACHE,
+    );
+
+    const exceptions = await getStore().allByRequestId(
+      request.id,
+      WatcherTypeEnum.EXCEPTION,
+      false,
     );
 
     return this.resourceResponse({
       request,
       queries,
       cacheEntries,
+      exceptions,
     });
   }
 
@@ -75,6 +83,25 @@ export class ApiController {
     return this.resourceResponse(cacheEntry);
   }
 
+  static async getExceptions({ qs }: RouteDefinitionHandler) {
+    return this.paginatedResponse(
+      await getStore().getAllExceptions(this.extractPaginationParams(qs)),
+    );
+  }
+
+  static async getException({ params }: RouteDefinitionHandler) {
+    const exception = await getStore().find(
+      WatcherTypeEnum.EXCEPTION,
+      params.id,
+    );
+
+    if (!exception) {
+      return this.notFoundResponse();
+    }
+
+    return this.resourceResponse(exception);
+  }
+
   static async truncate() {
     await getStore().truncate();
 
@@ -114,7 +141,7 @@ export class ApiController {
     return this.baseResponse<T>(null, 404, message);
   }
 
-  private static paginatedResponse<T extends Object>(
+  public static paginatedResponse<T extends Object>(
     data: Paginator<T>,
   ): ApiResponse<T> {
     return this.baseResponse<T>(data, 200, "Data fetched successfully");

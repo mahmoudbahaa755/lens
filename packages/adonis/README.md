@@ -11,6 +11,7 @@ AdonisJS adapter for Lens. This package provides a service provider and middlewa
 *   **Request Watching**: Captures detailed information about HTTP requests, including method, URL, headers, body, status code, duration, and associated user (if configured).
 *   **Query Watching**: Hooks into AdonisJS's database query events to log SQL queries, their bindings, duration, and type.
 *   **Cache Watching**: Listens to AdonisJS cache events (read, write, hit, miss, delete, clear) to log cache interactions.
+*   **Exception Watching**: Captures and logs exceptions and errors within your AdonisJS application.
 *   **UI Serving**: Serves the Lens UI within your AdonisJS application at a configurable path.
 *   **Configurable Watchers**: Allows enabling or disabling specific watchers (requests, queries, cache) via the Lens configuration.
 *   **Authentication/User Context**: Supports optional `isAuthenticated` and `getUser` functions in the configuration to associate request logs with authenticated users.
@@ -42,6 +43,7 @@ export default defineConfig({
     },
     cache: true,
     requests: true,
+    exceptions: true,
   },
   // Optional: Integrate with your authentication system
   isAuthenticated: async (ctx) => {

@@ -1,10 +1,10 @@
 {
   "name": "example-express",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch src --ext ts,tsx --exec 'tsx src/index.ts'"
+    "dev": "pnpm dlx tsx src/index.ts"
   },
   "dependencies": {
     "@lensjs/core": "workspace:*",

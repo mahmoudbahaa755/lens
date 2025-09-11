@@ -1,6 +1,6 @@
 {
   "name": "@lensjs/core",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,18 +25,20 @@
   },
   "devDependencies": {
     "@lensjs/typescript-config": "workspace:*",
-    "@tailwindcss/vite": "^4.1.12",
+    "@tailwindcss/vite": "^4.1.13",
     "@types/luxon": "^3.7.1",
+    "@types/stack-utils": "^2.0.3",
     "cross-env": "^10.0.0",
     "vitest": "^3.2.4"
   },
   "dependencies": {
     "@lensjs/date": "workspace:*",
     "emittery": "^1.2.0",
-    "libsql": "^0.5.20",
-    "luxon": "^3.7.1",
+    "libsql": "^0.5.22",
+    "luxon": "^3.7.2",
     "rimraf": "^6.0.1",
-    "sql-formatter": "^15.6.6",
+    "sql-formatter": "^15.6.8",
+    "stack-utils": "^2.0.6",
     "tailwind-merge": "^3.3.1"
   },
   "gitHead": "a229fde5700970ec290ff31f1e3b7d84cc56d325"

@@ -74,6 +74,20 @@ export default defineConfig({
               },
             ],
           },
+          {
+            text: "Exception",
+            collapsed: true,
+            items: [
+              {
+                text: "Express",
+                link: "/handlers/exception/express",
+              },
+              {
+                text: "AdonisJS",
+                link: "/handlers/exception/adonis",
+              },
+            ],
+          },
         ],
       },
     ],
